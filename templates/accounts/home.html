@@ -1,10 +1,17 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    <title>HOME | Simple E-Commerce</title>
 </head>
 <body>
-$END$
+    <h2>Home</h2>
+    {% comment %} prints Login User{% endcomment %}
+    <p>Welcome {{ customer_name }}</p>
+    <a href="{% url 'accounts:login' %}">Login</a>
+    {% comment %}<a href="{% url 'accounts:logout' %}">Logout</a>{% endcomment %}
+    <a href="{% url 'accounts:customer_register' %}">Register</a>
 </body>
 </html>
