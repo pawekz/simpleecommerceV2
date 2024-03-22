@@ -14,7 +14,7 @@ def customer_register(request):
             return redirect('accounts:home')
     else:
         form = CustomerRegistrationForm()
-    return render(request, 'accounts/customer_registration.html', {'form': form})
+    return render(request, 'accounts/temp/customer_registration.html', {'form': form})
 
 
 def seller_register(request):
@@ -25,11 +25,11 @@ def seller_register(request):
             return redirect('accounts:home')
     else:
         form = SellerRegistrationForm()
-    return render(request, 'accounts/seller_registration.html', {'form': form})
+    return render(request, 'accounts/temp/seller_registration.html', {'form': form})
 
 
 def terms_and_conditions(request):
-    return render(request, 'accounts/terms_and_conditions.html')
+    return render(request, 'accounts/temp/terms_and_conditions.html')
 
 
 def home(request):
@@ -50,12 +50,12 @@ def login_view(request):
                 form.add_error(None, 'Invalid username or password')
     else:
         form = AuthenticationForm()
-    return render(request, 'accounts/login.html', {'form': form})
+    return render(request, 'accounts/temp/login.html', {'form': form})
 
 
 def logout_view(request):
     logout(request)
-    return redirect('accounts:logout')
+    return redirect('accounts:home')
 
 
 def profile_view(request):
@@ -86,7 +86,7 @@ def profile_view(request):
 
 
 def home_dashboard(request):
-    return render(request, 'accounts/home_dashboard.html')
+    return render(request, 'accounts/temp/home_dashboard.html')
 
 
 def customer_profile(request):
@@ -101,7 +101,7 @@ def customer_profile(request):
     else:
         form = CustomerProfileForm(instance=request.user)
         password_form = PasswordChangeForm(request.user)
-    return render(request, 'accounts/customer_profile.html', {'form': form, 'password_form': password_form})
+    return render(request, 'accounts/temp/customer_profile.html', {'form': form, 'password_form': password_form})
 
 
 def seller_profile(request):
@@ -116,4 +116,4 @@ def seller_profile(request):
     else:
         form = SellerProfileForm(instance=request.user)
         password_form = PasswordChangeForm(request.user)
-    return render(request, 'accounts/seller_profile.html', {'form': form, 'password_form': password_form})
+    return render(request, 'accounts/temp/seller_profile.html', {'form': form, 'password_form': password_form})

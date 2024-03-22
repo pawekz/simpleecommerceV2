@@ -1,9 +1,7 @@
+{% extends 'accounts/home.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
+{% block content %}
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
     <title>Login | Simple E-Commerce</title>
 </head>
 <body>
@@ -20,4 +18,5 @@
         </ul>
     {% endif %}
 </body>
-</html>
+
+{% endblock %}
