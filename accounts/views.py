@@ -68,7 +68,7 @@ def profile_view(request):
         template_name = 'accounts/seller_profile.html'
         instance = request.user.seller
     else:
-        return redirect('accounts:home')  # Or handle this case differently
+        return redirect('accounts:home_dashboard')  # Or handle this case differently
 
     if request.method == 'POST':
         form = ProfileForm(request.POST, instance=instance)
@@ -77,7 +77,7 @@ def profile_view(request):
             form.save()
             user = password_form.save()
             update_session_auth_hash(request, user)  # Important!
-            return redirect('accounts:home')
+            return redirect('accounts:home_dashboard')
     else:
         form = ProfileForm(instance=instance)
         password_form = PasswordChangeForm(request.user)
