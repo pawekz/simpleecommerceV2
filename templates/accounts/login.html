@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+    <title>Login | Simple E-Commerce</title>
+</head>
+<body>
+<section class="image-section">
+    <h1>Rocket Basket: Shop Fast, Ship Faster</h1>
+    <img src="{% static 'img/rb.png' %}" alt="RocketBasketLogo">
+</section>
+
+<section class="text-section">
+    <br><br>
+    {% comment %} prints Login User{% endcomment %}
+    <p>Welcome {{ customer_name }}</p>
+
+    {% comment %}<a href="{% url 'accounts:logout' %}">Logout</a>{% endcomment %}
+    <a class="button" href="{% url 'accounts:login' %}">Login</a>
+    <a class="button" href="{% url 'accounts:customer_register' %}">Register</a>
+    <div class="card">
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Login">
+    </form>
+    {% if form.non_field_errors %}
+        <ul>
+            {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    </div>
+</section>
+</body>
+</html>

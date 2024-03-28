@@ -7,7 +7,6 @@
     <title>HOME | Simple E-Commerce</title>
 </head>
 <body>
-    <body>
     <section class="image-section">
         <h1>Rocket Basket: Shop Fast, Ship Faster</h1>
         <img src="{% static 'img/rb.png' %}" alt="RocketBasketLogo">
@@ -21,13 +20,8 @@
         {% comment %}<a href="{% url 'accounts:logout' %}">Logout</a>{% endcomment %}
         <a class="button" href="{% url 'accounts:login' %}">Login</a>
         <a class="button" href="{% url 'accounts:customer_register' %}">Register</a>
-        <div class="card">
-        {% block content %} {% endblock %}
-        </div>
     </section>
 
-
-</body>
 
 </body>
 </html>
