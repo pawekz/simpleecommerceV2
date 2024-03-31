@@ -95,25 +95,32 @@
     }
   </style>
      <script>
-    function validateForm() {
-      var password = document.getElementById("password").value;
-      var confirmPassword = document.getElementById("confirmpassword").value;
-      if (password !== confirmPassword) {
-        alert("Passwords do not match.");
-        return false;
-      }
-      return true;
-    }
+        function validateForm() {
+            var newPassword = document.getElementById("new_password").value;
+            var confirmPassword = document.getElementById("confirm_password").value;
 
-    function togglePasswordVisibility(fieldId) {
-      var passwordField = document.getElementById(fieldId);
-      if (passwordField.type === "password") {
-        passwordField.type = "text";
-      } else {
-        passwordField.type = "password";
-      }
-    }
-  </script>
+            if ((newPassword && !confirmPassword) || (!newPassword && confirmPassword)) {
+                alert("Both New Password and Confirm New Password fields must be filled.");
+                return false;
+            }
+
+            if (newPassword !== confirmPassword) {
+                alert("Passwords do not match.");
+                return false;
+            }
+
+            return true;
+        }
+
+        function togglePasswordVisibility(fieldId) {
+            var passwordField = document.getElementById(fieldId);
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+            } else {
+                passwordField.type = "password";
+            }
+        }
+        </script>
 </head>
 <body>
   <div class="container">
@@ -133,10 +140,10 @@
          <input type="text" id="username" name="username" value="{{ form.username.value }}" required>
         </div>
 
-        <div class="form-group">
-          <label for="fullname">Full Name</label>
-           <input type="text" id="fullname" name="full_name" value="{{ seller.seller_name }}" required>
-        </div>
+           <div class="form-group">
+                <label for="sellername">Seller Name</label>
+                <input type="text" id="sellername" name="seller_name" value="{{ seller.seller_name }}" required>
+            </div>
 
             <div class="form-group">
                 <label for="old_password">Old Password</label>
@@ -144,16 +151,15 @@
             </div>
 
         <div class="form-group">
-          <label for="contactnumber">Contact Number</label>
-            <input type="text" id="contactnumber" name="contact_number" value="{{ seller.contact_no }}" required>
+            <label for="contact_no">Contact Number</label>
+            <input type="text" id="contact_no" name="contact_no" value="{{ seller.contact_no }}" required>
         </div>
 
-            <div class="form-group">
-          <label for="password">New Password</label>
-          <input type="password" id="password" name="password" value="{{ CustomUser.password }}">
-          <button type="button" onclick="togglePasswordVisibility('password');">Show Password</button>
+          <div class="form-group">
+            <label for="new_password">New Password</label>
+            <input type="password" id="new_password" name="new_password">
+            <button type="button" onclick="togglePasswordVisibility('new_password');">Show Password</button>
         </div>
-
 
 
         <div class="form-group">
@@ -162,12 +168,10 @@
         </div>
 
 
-
-         <div class="form-group">
-          <label for="confirmpassword">Confirm New Password</label>
-          <input type="password" id="confirmpassword">
-          <button type="button" onclick="togglePasswordVisibility('confirmpassword');">Show Password</button>
-
+       <div class="form-group">
+            <label for="confirm_password">Confirm New Password</label>
+            <input type="password" id="confirm_password" name="confirm_password">
+            <button type="button" onclick="togglePasswordVisibility('confirm_password');">Show Password</button>
         </div>
       </div>
                <div style="text-align: center;">

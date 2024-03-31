@@ -1,7 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import Customer, Seller, CustomUser
 from django.contrib.auth.forms import AuthenticationForm, UserChangeForm, PasswordChangeForm
+from .models import Customer, Seller
+
 
 
 class CustomerRegistrationForm(UserCreationForm):
@@ -49,19 +50,35 @@ class LoginForm(AuthenticationForm):
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
 
-class CustomerProfileForm(UserChangeForm):
-    password = None  # This will remove the password field from the form
-    username = forms.CharField(max_length=20, disabled=True)
+
+class CustomerProfileUpdateForm(forms.ModelForm):
+    old_password = forms.CharField(widget=forms.PasswordInput(), required=True)
+    new_password = forms.CharField(widget=forms.PasswordInput(), required=False)
+    confirm_password = forms.CharField(widget=forms.PasswordInput(), required=False)
 
     class Meta:
         model = Customer
-        fields = ['username', 'customer_name', 'contact_no', 'address']
+        fields = ['customer_name', 'username', 'contact_no', 'address', 'old_password', 'new_password', 'confirm_password']
 
 
-class SellerProfileForm(UserChangeForm):
-    password = None  # This will remove the password field from the form
-    username = forms.CharField(max_length=20, disabled=True)
+
+
+class SellerProfileUpdateForm(forms.ModelForm):
+    old_password = forms.CharField(widget=forms.PasswordInput())
+    new_password = forms.CharField(widget=forms.PasswordInput(), required=False)
+    confirm_password = forms.CharField(widget=forms.PasswordInput(), required=False)
 
     class Meta:
         model = Seller
-        fields = ['username', 'seller_name', 'stall_name', 'contact_no', 'address']
+        fields = ['username', 'seller_name', 'contact_no', 'address', 'stall_name', 'old_password', 'new_password', 'confirm_password']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        new_password = cleaned_data.get("new_password")
+        confirm_password = cleaned_data.get("confirm_password")
+
+        if new_password or confirm_password:
+            if new_password != confirm_password:
+                raise forms.ValidationError(
+                    "New password and confirm password do not match"
+                )
