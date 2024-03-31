@@ -118,41 +118,50 @@
 <body>
   <div class="container">
     <div class="header">
-      <p>Rocket Basket: Shop Fast, Ship Faster - Customer Information Update </p>
+      <p>Rocket Basket: Shop Fast, Ship Faster - Seller Information Update </p>
     </div>
     <form method="POST" onsubmit="return validateForm();">
         {% csrf_token %}
       <div class="form-container">
-        <div class="form-group">
-          <label for="fullname">Full Name</label>
-           <input type="text" id="fullname" name="full_name" value="{{ customer.customer_name }}" required>
-        </div>
-        <div class="form-group">
+          <div class="form-group">
+              <label for="stallname">Stall Name</label>
+              <input type="text" id="stallname" name="stall_name" value="{{ seller.stall_name }}" required>
+            </div>
+
+           <div class="form-group">
           <label for="username">Username</label>
          <input type="text" id="username" name="username" value="{{ form.username.value }}" required>
         </div>
+
         <div class="form-group">
-          <label for="contactnumber">Contact Number</label>
-            <input type="text" id="contactnumber" name="contact_number" value="{{ customer.contact_no }}" required>
+          <label for="fullname">Full Name</label>
+           <input type="text" id="fullname" name="full_name" value="{{ seller.seller_name }}" required>
         </div>
 
-                  <div class="form-group">
+            <div class="form-group">
                 <label for="old_password">Old Password</label>
-                <input type="password" id="old_password" name="old_password">
+                <input type="password" id="old_password" name="old_password"  required>
             </div>
+
+        <div class="form-group">
+          <label for="contactnumber">Contact Number</label>
+            <input type="text" id="contactnumber" name="contact_number" value="{{ seller.contact_no }}" required>
+        </div>
+
+            <div class="form-group">
+          <label for="password">New Password</label>
+          <input type="password" id="password" name="password" value="{{ CustomUser.password }}">
+          <button type="button" onclick="togglePasswordVisibility('password');">Show Password</button>
+        </div>
+
 
 
         <div class="form-group">
           <label for="address">Address</label>
-          <input type="text" id="address" name="address" value="{{ customer.address }}" required>
+          <input type="text" id="address" name="address" value="{{ seller.address }}" required>
         </div>
 
-           <div class="form-group">
-          <label for="password">New Password</label>
-          <input type="password" id="password" name="password" value="{{ CustomUser.password }}">
-          <button type="button" onclick="togglePasswordVisibility('password');">Show Password</button>
 
-        </div>
 
          <div class="form-group">
           <label for="confirmpassword">Confirm New Password</label>
@@ -163,14 +172,7 @@
       </div>
                <div style="text-align: center;">
             <p> Please enter your old password to confirm the changes </p>
-                   {% if messages %}
-                        <ul class="messages">
-                            {% for message in messages %}
-                                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-            <button type="submit" class="submit" formaction="{% url 'accounts:customer_profile' %}">
+            <button type="submit" class="submit" href="{% url 'accounts:seller_profile' %}"    >
                 UPDATE
                 <img src="{% static 'img/smiley.png' %}" alt="update Icon" class="smile-icon">
             </button>

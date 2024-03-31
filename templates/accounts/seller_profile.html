@@ -1,20 +1,294 @@
 {% load static %}
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
+     <title>Customer - Profile Information Page</title>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
-    <title>Seller Profile Page | Simple E-Commerce</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container{
+            justify-content: center;
+            margin-left: 100px;
+            margin-right:100px;
+
+
+        }
+        .container-profile {
+            display: flex;
+            justify-content: space-between;
+            align-items: stretch; /* Align items to stretch vertically */
+            margin: 20px;
+
+        }
+        .left-side {
+            width: 45%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%; /* Make the form container take up full height */
+        }
+        .profile-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            margin-top:10px;
+        }
+        .profile-icon img {
+            width: 120px;
+            height: 120px;
+        }
+        .form-group {
+            margin-bottom: 10px;
+            width: 120%;
+        }
+        .form-group label {
+            display: block;
+            padding-bottom: 10px;
+            font-size: 18px;
+        }
+        .form-group input {
+            width: 350px;
+            padding: 15px;
+            font-size:16px;
+            box-sizing: border-box;
+            margin-bottom: 35px;
+            background-color: lightgray;
+            border-radius: 5px;
+            border: none;
+        }
+        .buttons-container {
+            display: flex;
+            justify-content: space-between;
+            width: 50%;
+            margin-top: 1px; /* Add margin to create space between form and buttons */
+            margin-left: 7%; /* Adjust the margin here */
+        }
+
+        .edit-profile-container,
+        .logout-container {
+            width:100%;
+        }
+
+        .edit-profile-btn {
+            background-color: #007bff; /* Blue color */
+            color: white;
+            padding: 20px;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 25px;
+            transition-duration: 0.4s;
+            width: 85%;
+            border-radius: 5px;
+            margin-left:-10%;
+        }
+        .edit-profile-btn:hover {
+            background-color: darkblue; /* Darker blue color on hover */
+            color: white;
+        }
+        .logout-btn {
+            background-color: #dc3545; /* Red color */
+            color: white;
+            padding: 20px;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 25px;
+            transition-duration: 0.4s;
+            width: 85%;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .logout-btn:hover {
+            background-color: darkred; /* Darker red color on hover */
+            color: white;
+        }
+        .logout.icon {
+            width: 45px;
+            height: 35px;
+            margin-left: 7px;
+        }
+
+        .pencil {
+            width: 45px;
+            height: 35px;
+            margin-left: 7px;
+        }
+
+         .right-side {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%; /
+            margin-left: 20px;
+            margin-bottom: 20px; /* Adjust the margin-bottom for spacing */
+
+        }
+
+        .recent-activity {
+            border: 3px solid #f0f0f0;
+            margin-bottom: 2px;
+            padding: 20px 20px 70px;
+        }
+        .recent-activity h2 {
+            margin-bottom: -15px;
+            margin-top: -15px;
+        }
+        .recent-activity-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .recent-activity-container > div {
+            width: 48%; /* Adjust the width as needed */
+        }
+        .item-details {
+            margin-top: 10px;
+        }
+        .item-details p {
+            margin: 5px 0;
+        }
+        .additional-icons img.basket {
+            width: 40px;
+            height: 40px;
+            margin-left: 10px;
+        }
+        .additional-icons img.rocket {
+            width: 30px;
+            height: 30px;
+            margin-left: 10px;
+        }
+        .gallery-container {
+            display: flex;
+            justify-content: space-between; /* Align items with space between them */
+        }
+        .gallery-item {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+            border: 1px solid #f0f0f0; /* Add border to each image */
+        }
+        .gallery-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+    </style>
 </head>
+
 <body>
- <h1>Rocket Basket: Shop Fast, Ship Faster - Seller Profile</h1>
-    <form method="post" class="form-container">
-    {% csrf_token %}
-            {% csrf_token %}
-    {{ form.as_p }}
-    {{ password_form.as_p }}
-    <input type="submit" value="Save">
-</form>
-    <a href="{% url 'accounts:logout' %}">Logout</a>
+      <p style="text-align:left; margin-left:320px;padding-right: 1px; font-size:25px">Rocket Basket: Shop Fast, Ship Faster - Seller Profile
+        <span class="additional-icons"><img src="{% static 'img/rocket.png' %}" alt="Rocket Icon" class="rocket">
+            <img src="{% static 'img/basket.png' %}" alt="rocket basket Icon" class="basket"></span>
+    </p>
+      <div class="container">
+
+    <div class="container-profile">
+        <div class="left-side">
+            <div class="profile-icon">
+                <img src="{% static 'img/profile.png' %}" alt="Profile Icon">
+            </div>
+            <form>
+                <div class="form-group">
+                  <label for="name">Name</label>
+                  <input type="text" id="name" name="full_name" value="{{ seller.seller_name }}" disabled>
+                </div>
+                <div class="form-group">
+                  <label for="contact-number">Contact Number</label>
+                  <input type="text" id="contact-number" name="contact_number" value="{{ seller.contact_no }}" disabled>
+                </div>
+                <div class="form-group">
+                  <label for="address">Address</label>
+                  <input type="text" id="address" name="address" value="{{ seller.address }}" disabled>
+                </div>
+              </form>
+        </div>
+
+        <div class="right-side">
+            <div class="recent-activity">
+                <h2 class="recent">RECENT ACTIVITY</h2>
+                <div class="recent-activity-container">
+                    <div>
+                        <p style="font-size:20px">Added in your stall:</p>
+                        <div class="gallery-container">
+                            <div class="gallery-item">
+                               <img src="https://www.graff.com/dw/image/v2/BFNT_PRD/on/demandware.static/-/Sites-master-catalog/default/dw86510d5e/RGP789_GP37438_detail.jpg?sw=800&sh=800"
+                                    alt="item-image" style="height: 200px;" >
+                                <div class="item-details">
+                                    <p>Diamond Pendant</p>
+                                    <p>Price: $299</p>
+                                </div>
+                            </div>
+                            <div class="gallery-item">
+                                <img src="https://www.thewatchcompany.com/media/tm_blog/p/o/7/1322/post_7_1322.jpg" alt="item-image" style="height: 200px;">
+                                <div class="item-details">
+                                    <p>Chronograph Watch</p>
+                                    <p>Price: $199</p>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#" style="display: block; margin-top: 10px;">Don't Be Shy, Peek Inside (More)</a>
+                    </div>
+                    <div>
+                        <p style="font-size:20px">Best Seller:</p>
+                        <div class="gallery-container">
+                            <div class="gallery-item">
+                                <img src="https://mydiamond.com.ph/cdn/shop/products/MD02228_MD02926_600x.jpg?v=1589514281" alt="item-image" style="height: 200px;">
+                                <div class="item-details">
+                                    <p>Diamond Bracelet</p>
+                                    <p>Price: $299</p>
+                                </div>
+                            </div>
+                            <div class="gallery-item">
+                                <img src="https://www.thewatchcompany.com/media/tm_blog/p/o/7/1322/post_7_1322.jpg" alt="item-image" style="height: 200px;">
+                                <div class="item-details">
+                                    <p>Chronograph Watch</p>
+                                    <p>Price: $199</p>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#" style="display: block; margin-top: 10px;">From Cart to Checkout (More)</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Buttons container -->
+    <div class="buttons-container">
+        <!-- Edit Profile button -->
+        <div class="edit-profile-container">
+            <a class="edit-profile-btn" href="{% url 'accounts:seller_updateregpage' %}">
+                EDIT PROFILE
+                <img src="{% static 'img/pencil.png' %}" alt="Edit Icon" class="pencil">
+            </a>
+        </div>
+        <!-- Logout button -->
+                <div class="logout-container">
+                          <a class="logout-btn" href="{% url 'accounts:logout' %}">
+                LOGOUT
+                <img src="{% static 'img/logout.png' %}" alt="Logout Icon" class="logout icon">
+            </a>
+        </div>
+
+    </div>
+    </div>
 </body>
 </html>

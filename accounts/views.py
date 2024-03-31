@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from .forms import CustomerRegistrationForm, SellerRegistrationForm, CustomerProfileForm, SellerProfileForm
-
+from django.contrib import messages
 
 def customer_register(request):
     if request.method == 'POST':
@@ -46,7 +46,10 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('accounts:customer_profile')  # Redirect to a success page.
+                if user.is_seller:  # Check if the user is a seller
+                    return redirect('accounts:seller_profile')  # Redirect to the seller profile page
+                else:
+                    return redirect('accounts:customer_profile')  # Redirect to the customer profile page
             else:
                 form.add_error(None, 'Invalid username or password')
     else:
@@ -59,40 +62,10 @@ def logout_view(request):
     return redirect('accounts:home')
 
 
-def profile_view(request):
-    if request.user.is_customer:
-        ProfileForm = CustomerProfileForm
-        template_name = 'accounts/customer_profile.html'
-        instance = request.user.customer
-    elif request.user.is_seller:
-        ProfileForm = SellerProfileForm
-        template_name = 'accounts/seller_profile.html'
-        instance = request.user.seller
-    else:
-        return redirect('accounts:home_dashboard')  # Or handle this case differently
-
-    if request.method == 'POST':
-        form = ProfileForm(request.POST, instance=instance)
-        password_form = PasswordChangeForm(request.user, request.POST)
-        if form.is_valid() and password_form.is_valid():
-            form.save()
-            user = password_form.save()
-            update_session_auth_hash(request, user)  # Important!
-            return redirect('accounts:home_dashboard')
-    else:
-        form = ProfileForm(instance=instance)
-        password_form = PasswordChangeForm(request.user)
-
-    return render(request, template_name, {'form': form, 'password_form': password_form})
-
-
-def home_dashboard(request):
-    return render(request, 'accounts/home_dashboard.html')
-
 
 def customer_profile(request):
     if not request.user.is_customer:
-        return redirect('accounts:home_dashboard')  # Redirect non-customers
+        return redirect('accounts:login')  # Redirect non-customers
 
     customer = request.user.customer  # Fetch the Customer instance
 
@@ -103,7 +76,7 @@ def customer_profile(request):
             form.save()
             user = password_form.save()
             update_session_auth_hash(request, user)  # Important!
-            return redirect('accounts:home_dashboard')
+            return redirect('accounts:customer_profile')
     else:
         form = CustomerProfileForm(instance=customer)
         password_form = PasswordChangeForm(request.user)
@@ -111,36 +84,73 @@ def customer_profile(request):
     return render(request, 'accounts/customer_profile.html', {'form': form, 'password_form': password_form, 'customer': customer})
 
 
+
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib import messages
+from .forms import CustomerProfileForm
+from django.shortcuts import render, redirect
+
 def customer_updateregpage(request):
     if not request.user.is_customer:
-        return redirect('accounts:customer_profile')  # Redirect non-customers
+        return redirect('accounts:login')  # Redirect non-customers
 
     customer = request.user.customer  # Fetch the Customer instance
 
     if request.method == 'POST':
         form = CustomerProfileForm(request.POST, instance=customer)
         password_form = PasswordChangeForm(request.user, request.POST)
-        if form.is_valid() and password_form.is_valid():
+        if form.is_valid():
             form.save()
-            user = password_form.save()
-            update_session_auth_hash(request, user)  # Important!
+            if password_form.is_valid():  # Check if the PasswordChangeForm is filled
+                user = password_form.save()
+                update_session_auth_hash(request, user)  # Important!
             return redirect('accounts:customer_profile')  # Redirect to the customer profile page after update
+        else:
+            messages.error(request, 'Error updating profile. Please check your input.')  # Add this line
     else:
         form = CustomerProfileForm(instance=customer)  # Pre-fill the form with the current customer's information
         password_form = PasswordChangeForm(request.user)
 
     return render(request, 'accounts/customer_updateregpage.html', {'form': form, 'password_form': password_form, 'customer': customer})
 
+
 def seller_profile(request):
+    if not request.user.is_seller:
+        return redirect('accounts:seller_profile')  # Redirect non-sellers
+
+    seller = request.user.seller  # Fetch the Seller instance
+
     if request.method == 'POST':
-        form = SellerProfileForm(request.POST, instance=request.user)
+        form = SellerProfileForm(request.POST, instance=seller)
         password_form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid() and password_form.is_valid():
             form.save()
             user = password_form.save()
             update_session_auth_hash(request, user)  # Important!
-            return redirect('accounts:home_dashboard')
+            return redirect('accounts:seller_profile')
     else:
-        form = SellerProfileForm(instance=request.user)
+        form = SellerProfileForm(instance=seller)
         password_form = PasswordChangeForm(request.user)
-    return render(request, 'accounts/seller_profile.html', {'form': form, 'password_form': password_form})
+
+    return render(request, 'accounts/seller_profile.html', {'form': form, 'password_form': password_form, 'seller': seller})
+
+def seller_updateregpage(request):
+    if not request.user.is_seller:
+        return redirect('accounts:seller_profile')  # Redirect non-sellers
+
+    seller = request.user.seller  # Fetch the Seller instance
+
+    if request.method == 'POST':
+        form = SellerProfileForm(request.POST, instance=seller)
+        password_form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid() and password_form.is_valid():
+            form.save()
+            user = password_form.save()
+            update_session_auth_hash(request, user)  # Important!
+            return redirect('accounts:seller_profile')  # Redirect to the seller profile page after update
+    else:
+        form = SellerProfileForm(instance=seller)  # Pre-fill the form with the current seller's information
+        password_form = PasswordChangeForm(request.user)
+
+    return render(request, 'accounts/seller_updateregpage.html', {'form': form, 'password_form': password_form, 'seller': seller})
