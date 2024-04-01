@@ -1,11 +1,15 @@
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.forms import AuthenticationForm
+from .forms import CustomerRegistrationForm, SellerRegistrationForm
 from django.contrib.auth.forms import PasswordChangeForm
-from django.shortcuts import render, redirect
-from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth import update_session_auth_hash
-from .forms import CustomerRegistrationForm, SellerRegistrationForm, CustomerProfileForm, SellerProfileForm
 from django.contrib import messages
+from .forms import CustomerProfileUpdateForm, SellerProfileUpdateForm
+from django.shortcuts import render, redirect
+from .models import Customer, Seller
+from django.contrib.auth.hashers import check_password
+from django.contrib.auth import update_session_auth_hash
+
+
 
 def customer_register(request):
     if request.method == 'POST':
@@ -64,93 +68,112 @@ def logout_view(request):
 
 
 def customer_profile(request):
-    if not request.user.is_customer:
-        return redirect('accounts:login')  # Redirect non-customers
+    if not request.user.is_authenticated:
+        return redirect('accounts:login')  # Redirect non-authenticated users
 
-    customer = request.user.customer  # Fetch the Customer instance
+    customer = Customer.objects.get(username=request.user.username)  # Fetch the latest data from the database
 
-    if request.method == 'POST':
-        form = CustomerProfileForm(request.POST, instance=customer)
-        password_form = PasswordChangeForm(request.user, request.POST)
-        if form.is_valid() and password_form.is_valid():
-            form.save()
-            user = password_form.save()
-            update_session_auth_hash(request, user)  # Important!
-            return redirect('accounts:customer_profile')
-    else:
-        form = CustomerProfileForm(instance=customer)
-        password_form = PasswordChangeForm(request.user)
+    context = {
+        'customer': customer,
+    }
 
-    return render(request, 'accounts/customer_profile.html', {'form': form, 'password_form': password_form, 'customer': customer})
+    return render(request, 'accounts/customer_profile.html', context)
 
-
-
-from django.contrib.auth import update_session_auth_hash
-from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib import messages
-from .forms import CustomerProfileForm
-from django.shortcuts import render, redirect
 
 def customer_updateregpage(request):
-    if not request.user.is_customer:
-        return redirect('accounts:login')  # Redirect non-customers
+    if not request.user.is_authenticated:
+        return redirect('accounts:login')  # Redirect non-authenticated users
 
-    customer = request.user.customer  # Fetch the Customer instance
+    customer = Customer.objects.get(username=request.user.username)  # Fetch the latest data from the database
 
     if request.method == 'POST':
-        form = CustomerProfileForm(request.POST, instance=customer)
-        password_form = PasswordChangeForm(request.user, request.POST)
-        if form.is_valid():
+        form = CustomerProfileUpdateForm(request.POST, instance=customer)
+        old_password = request.POST.get('old_password')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+
+        if not check_password(old_password, request.user.password):
+            form.add_error('old_password', 'Incorrect password')
+            print("Incorrect old password")  # Debug print statement
+        elif new_password and confirm_password:
+            if new_password != confirm_password:
+                form.add_error('new_password', 'New password and confirm password do not match')
+                print("New password and confirm password do not match")  # Debug print statement
+            else:
+                request.user.set_password(new_password)
+                request.user.save()
+                update_session_auth_hash(request, request.user)  # Important!
+                print("Password updated successfully")  # Debug print statement
+                return redirect('accounts:login')  # Redirect to the login page after password update
+        elif form.is_valid():
             form.save()
-            if password_form.is_valid():  # Check if the PasswordChangeForm is filled
-                user = password_form.save()
-                update_session_auth_hash(request, user)  # Important!
-            return redirect('accounts:customer_profile')  # Redirect to the customer profile page after update
+            messages.success(request, 'Your profile has been updated successfully.')
+            print("Form is valid, redirecting to customer_profile")  # Debug print statement
+            return redirect('accounts:customer_profile')  # Redirect back to the customer_profile view
         else:
-            messages.error(request, 'Error updating profile. Please check your input.')  # Add this line
+            print("Form is not valid")  # Debug print statement
+            print(form.errors)  # Print form errors
     else:
-        form = CustomerProfileForm(instance=customer)  # Pre-fill the form with the current customer's information
-        password_form = PasswordChangeForm(request.user)
+        form = CustomerProfileUpdateForm(instance=customer)
 
-    return render(request, 'accounts/customer_updateregpage.html', {'form': form, 'password_form': password_form, 'customer': customer})
+    context = {
+        'form': form,
+        'customer': customer,
+    }
 
+    return render(request, 'accounts/customer_updateregpage.html', context)
 
 def seller_profile(request):
-    if not request.user.is_seller:
-        return redirect('accounts:seller_profile')  # Redirect non-sellers
+    if not request.user.is_authenticated:
+        return redirect('accounts:login')  # Redirect non-authenticated users
 
-    seller = request.user.seller  # Fetch the Seller instance
+    seller = Seller.objects.get(username=request.user.username)  # Fetch the latest data from the database
 
-    if request.method == 'POST':
-        form = SellerProfileForm(request.POST, instance=seller)
-        password_form = PasswordChangeForm(request.user, request.POST)
-        if form.is_valid() and password_form.is_valid():
-            form.save()
-            user = password_form.save()
-            update_session_auth_hash(request, user)  # Important!
-            return redirect('accounts:seller_profile')
-    else:
-        form = SellerProfileForm(instance=seller)
-        password_form = PasswordChangeForm(request.user)
+    context = {
+        'seller': seller,
+    }
 
-    return render(request, 'accounts/seller_profile.html', {'form': form, 'password_form': password_form, 'seller': seller})
+    return render(request, 'accounts/seller_profile.html', context)
 
 def seller_updateregpage(request):
-    if not request.user.is_seller:
-        return redirect('accounts:seller_profile')  # Redirect non-sellers
+    if not request.user.is_authenticated:
+        return redirect('accounts:login')  # Redirect non-authenticated users
 
-    seller = request.user.seller  # Fetch the Seller instance
+    seller = Seller.objects.get(username=request.user.username)  # Fetch the latest data from the database
 
     if request.method == 'POST':
-        form = SellerProfileForm(request.POST, instance=seller)
-        password_form = PasswordChangeForm(request.user, request.POST)
-        if form.is_valid() and password_form.is_valid():
-            form.save()
-            user = password_form.save()
-            update_session_auth_hash(request, user)  # Important!
-            return redirect('accounts:seller_profile')  # Redirect to the seller profile page after update
-    else:
-        form = SellerProfileForm(instance=seller)  # Pre-fill the form with the current seller's information
-        password_form = PasswordChangeForm(request.user)
+        form = SellerProfileUpdateForm(request.POST, instance=seller)
+        old_password = request.POST.get('old_password')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
 
-    return render(request, 'accounts/seller_updateregpage.html', {'form': form, 'password_form': password_form, 'seller': seller})
+        if not check_password(old_password, request.user.password):
+            form.add_error('old_password', 'Incorrect password')
+            print("Incorrect old password")  # Debug print statement
+        elif new_password and confirm_password:
+            if new_password != confirm_password:
+                form.add_error('new_password', 'New password and confirm password do not match')
+                print("New password and confirm password do not match")  # Debug print statement
+            else:
+                request.user.set_password(new_password)
+                request.user.save()
+                update_session_auth_hash(request, request.user)  # Important!
+                print("Password updated successfully")  # Debug print statement
+                return redirect('accounts:login')  # Redirect to the login page after password update
+        elif form.is_valid():
+            form.save()
+            messages.success(request, 'Your profile has been updated successfully.')
+            print("Form is valid, redirecting to seller_profile")  # Debug print statement
+            return redirect('accounts:seller_profile')  # Redirect back to the seller_profile view
+        else:
+            print("Form is not valid")  # Debug print statement
+            print(form.errors)  # Print form errors
+    else:
+        form = SellerProfileUpdateForm(instance=seller)
+
+    context = {
+        'form': form,
+        'seller': seller,
+    }
+
+    return render(request, 'accounts/seller_updateregpage.html', context)
