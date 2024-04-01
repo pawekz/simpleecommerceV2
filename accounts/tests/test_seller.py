@@ -25,7 +25,7 @@ class SellerRegistrationTest(TestCase):
         response = self.client.post(self.register_url, data)
 
         # Check if user was redirected to 'home' after successful registration
-        self.assertRedirects(response, reverse('home'))
+        self.assertRedirects(response, reverse('accounts:home_dashboard'))
 
         # Check if user was created
         user_exists = CustomUser.objects.filter(username='testuser').exists()
