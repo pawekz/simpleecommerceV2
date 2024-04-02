@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    <title>Payment Details | Simple E-Commerce</title>
+</head>
+<body>
+    <h2>Payment Options - Rocket Basket</h2>
+    <div class="payment-options">
+        <div class="payment-option">
+            <h3>Pay with Credit Card</h3>
+            <p>Pay with your credit card</p>
+            <a href="{% url 'transaction:credit_card' %}">Pay with Credit Card</a>
+        </div>
+        <div class="payment-option">
+            <h3>Pay with PayPal</h3>
+            <p>Pay with your PayPal account</p>
+            <a href="{% url 'transaction:paypal' %}">Pay with PayPal</a>
+        </div>
+        </div>
+</body>
+</html>

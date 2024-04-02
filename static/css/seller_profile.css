@@ -1,0 +1,180 @@
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container{
+            justify-content: center;
+            margin-left: 100px;
+            margin-right:100px;
+
+
+        }
+        .container-profile {
+            display: flex;
+            justify-content: space-between;
+            align-items: stretch; /* Align items to stretch vertically */
+            margin: 20px;
+
+        }
+        .left-side {
+            width: 45%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%; /* Make the form container take up full height */
+        }
+        .profile-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            margin-top:10px;
+        }
+        .profile-icon img {
+            width: 120px;
+            height: 120px;
+        }
+        .form-group {
+            margin-bottom: 10px;
+            width: 120%;
+        }
+        .form-group label {
+            display: block;
+            padding-bottom: 10px;
+            font-size: 18px;
+        }
+        .form-group input {
+            width: 350px;
+            padding: 15px;
+            font-size:16px;
+            box-sizing: border-box;
+            margin-bottom: 35px;
+            background-color: lightgray;
+            border-radius: 5px;
+            border: none;
+        }
+        .buttons-container {
+            display: flex;
+            justify-content: space-between;
+            width: 50%;
+            margin-top: 1px; /* Add margin to create space between form and buttons */
+            margin-left: 7%; /* Adjust the margin here */
+        }
+
+        .edit-profile-container,
+        .logout-container {
+            width:100%;
+        }
+
+        .edit-profile-btn {
+            background-color: #007bff; /* Blue color */
+            color: white;
+            padding: 20px;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 25px;
+            transition-duration: 0.4s;
+            width: 85%;
+            border-radius: 5px;
+            margin-left:-10%;
+        }
+        .edit-profile-btn:hover {
+            background-color: darkblue; /* Darker blue color on hover */
+            color: white;
+        }
+        .logout-btn {
+            background-color: #dc3545; /* Red color */
+            color: white;
+            padding: 20px;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 25px;
+            transition-duration: 0.4s;
+            width: 85%;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .logout-btn:hover {
+            background-color: darkred; /* Darker red color on hover */
+            color: white;
+        }
+        .logout.icon {
+            width: 45px;
+            height: 35px;
+            margin-left: 7px;
+        }
+
+        .pencil {
+            width: 45px;
+            height: 35px;
+            margin-left: 7px;
+        }
+
+         .right-side {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%; /
+            margin-left: 20px;
+            margin-bottom: 20px; /* Adjust the margin-bottom for spacing */
+
+        }
+
+        .recent-activity {
+            border: 3px solid #f0f0f0;
+            margin-bottom: 2px;
+            padding: 20px 20px 70px;
+        }
+        .recent-activity h2 {
+            margin-bottom: -15px;
+            margin-top: -15px;
+        }
+        .recent-activity-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .recent-activity-container > div {
+            width: 48%; /* Adjust the width as needed */
+        }
+        .item-details {
+            margin-top: 10px;
+        }
+        .item-details p {
+            margin: 5px 0;
+        }
+        .additional-icons img.basket {
+            width: 40px;
+            height: 40px;
+            margin-left: 10px;
+        }
+        .additional-icons img.rocket {
+            width: 30px;
+            height: 30px;
+            margin-left: 10px;
+        }
+        .gallery-container {
+            display: flex;
+            justify-content: space-between; /* Align items with space between them */
+        }
+        .gallery-item {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+            border: 1px solid #f0f0f0; /* Add border to each image */
+        }
+        .gallery-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
