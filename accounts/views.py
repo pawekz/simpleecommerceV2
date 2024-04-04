@@ -8,6 +8,25 @@ from django.shortcuts import render, redirect
 from .models import Customer, Seller
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth import update_session_auth_hash
+from django.shortcuts import render
+from products.models import Product
+from accounts.forms import SearchForm
+from django.contrib.auth import login
+from .forms import UserRegistrationForm
+from cart.models import Cart
+
+
+def register(request):
+    if request.method == 'POST':
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            Cart.objects.create(user=user)  # create a Cart object for the new user
+            return redirect('main_menu')
+    else:
+        form = UserRegistrationForm()
+    return render(request, 'accounts/register.html', {'form': form})
 
 
 
@@ -123,14 +142,20 @@ def customer_updateregpage(request):
 
     return render(request, 'accounts/customer_updateregpage.html', context)
 
+
+
 def seller_profile(request):
     if not request.user.is_authenticated:
         return redirect('accounts:login')  # Redirect non-authenticated users
 
     seller = Seller.objects.get(username=request.user.username)  # Fetch the latest data from the database
 
+    # Fetch the two most recent products added by the current seller
+    recent_products = Product.objects.filter(SellerID=seller).order_by('-date_added')[:2]
+
     context = {
         'seller': seller,
+        'recent_products': recent_products,
     }
 
     return render(request, 'accounts/seller_profile.html', context)
@@ -177,3 +202,19 @@ def seller_updateregpage(request):
     }
 
     return render(request, 'accounts/seller_updateregpage.html', context)
+
+
+
+
+
+def main_menu(request):
+    form = SearchForm(request.GET)
+    products = Product.objects.all()  # Fetch all products
+    if form.is_valid():
+        query = form.cleaned_data['query']
+        products = products.filter(ProductName__icontains=query)
+    return render(request, 'accounts/main_menu.html', {'form': form, 'products': products})
+
+
+
+

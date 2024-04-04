@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; padding: 0; background-color: #f5f5f5;">
+    <div class="centered-content" style="text-align: center;">
+        <h1>Rocket Basket: Shop Fast, Ship Faster</h1>
+        <p>Welcome, {% block username %}{% endblock %}</p>
+        <form method="post" enctype="multipart/form-data" style="display: flex; justify-content: space-between; width: 60%; margin: 50px auto; border: 1px solid #ddd; padding: 20px; border-radius: 5px; font-size: 16px;">
+            {% csrf_token %}
+            {% block form %}{% endblock %}
+        </form>
+        {% block content %}{% endblock %}
+        <script>
+        {% block script %}{% endblock %}
+        </script>
+    </div>
+</body>
+</html>

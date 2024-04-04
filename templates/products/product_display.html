@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/product_display.css' %}">
     <title>Sellers Product | Simple E-Commerce</title>
 </head>
 <body>
@@ -64,8 +64,56 @@
         <div class="alert alert-{{ message.tags }}">
             {{ message }}
         </div>
+
+
     {% endfor %}
 {% endif %}
+
+
+
 </form>
+
+
+<div class="product-grid">
+{% for product in products %}
+    <div class="card-container">
+        <img src="{{ product.image.url }}" alt="{{ product.ProductName }}">
+        <h3>{{ product.ProductName }}</h3>
+        <p>{{ product.Description }}</p>
+        <p class="price">Price Per Unit(php): {{ product.PricePerUnit }}</p>
+        <p>Quantity: {{ product.Quantity }}</p>
+        <a href="{% url 'products:edit_product' product.ProductID %}">Edit</a>
+        <form method="POST" action="{% url 'products:delete_product' product.ProductID %}" id="delete_product_{{ product.ProductID }}" style="display: inline;">
+            {% csrf_token %}
+        </form>
+        <a href="#" onclick="deleteProduct({{ product.ProductID }})">Delete</a>
+    </div>
+{% endfor %}
+</div>
+
+<script>
+function deleteProduct(productID) {
+    if (confirm('Are you sure you want to delete this product?')) {
+        fetch('/products/delete_product/' + productID + '/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({})
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Product deleted successfully!');
+                location.reload();
+            } else {
+                alert('Product deletion failed!');
+            }
+        });
+    }
+}
+</script>
+
 </body>
 </html>

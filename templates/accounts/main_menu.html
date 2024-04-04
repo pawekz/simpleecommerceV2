@@ -1,0 +1,85 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main_menu.css' %}">
+<title>Rocket Basket</title>
+</head>
+<body>
+
+<header class="header">
+    <p class="header-text">
+        <span class="additional-icons">
+            <img src="{% static 'img/basket.png' %}" alt="rocket basket Icon" class="icon basket">
+        </span>
+        Rocket Basket: Shop Fast, Ship Faster
+        <span class="additional-icons">
+            <img src="{% static 'img/rocket.png' %}" alt="Rocket Icon" class="icon rocket">
+        </span>
+    </p>
+    <p class="shop-text">Shop for 100’s of items</p>
+    <div class="header-icons">
+        {% if user.is_authenticated %}
+            <a href="{% url 'accounts:customer_profile' %}">
+                <img src="{% static 'img/account_icon.png' %}" alt="Account Icon" class="icon account">
+            </a>
+        {% else %}
+            <a href="{% url 'accounts:login' %}">
+                <img src="{% static 'img/account_icon.png' %}" alt="Account Icon" class="icon account">
+            </a>
+        {% endif %}
+        <a href="{% url 'cart:cart' %}">
+            <img src="{% static 'img/basket.png' %}" alt="Cart Icon" class="icon cart">
+        </a>
+    </div>
+</header>
+
+
+
+  <main class="content">
+    <form method="get" action="{% url 'accounts:main_menu' %}">
+    <div class="search-box">
+        <input type="text" class="search-input" placeholder="Search" name="query">
+        <button type="submit" class="search-button">Search</button>
+    </div>
+    </form>
+    <div class="filter-box">
+        <form method="get">
+            <label for="category">Category:</label>
+            <select name="category" id="category">
+                <option value="">All</option>
+                {% for category in categories %}
+                    <option value="{{ category.id }}" {% if category.id == form.category.value %}selected{% endif %}>{{ category.name }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Filter</button>
+        </form>
+
+
+    <div class="product-grid">
+       {% for product in products %}
+            <div class="card-container">
+                <img class="product-image" src="{{ product.image.url }}" alt="{{ product.ProductName }}">
+                <h3>{{ product.ProductName }}</h3>
+                <p>{{ product.Description }}</p>
+                <p class="price">Price: ${{ product.PricePerUnit }}</p>
+                <p>Quantity: {{ product.Quantity }}</p>
+                <form method="post" action="{% url 'cart:add_to_cart' %}">
+                {% csrf_token %}
+                <input type="hidden" name="product_id" value="{{ product.ProductID }}">
+                <input type="submit" value="Add to Cart">
+            </form>
+            </div>
+        {% endfor %}
+
+    </div> <!-- End of product-grid -->
+  </main>
+
+
+
+</body>
+</html>

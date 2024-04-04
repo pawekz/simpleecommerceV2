@@ -57,3 +57,54 @@ button:hover {
     color: red;
     font-size: 0.8em;
 }
+
+.product-grid div {
+    border: 1px solid #ccc;
+    padding: 20px;
+    box-shadow: 2px 2px 6px 0px  rgba(0,0,0,0.20);
+}
+
+.card-container {
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+  width: 200px; /* The width of the container */
+  height: 270px; /* Adjust the height of the container */
+  text-align: center;
+}
+
+.card-container h3 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.card-container p {
+  font-size: 0.9rem;
+  margin: 5px 0;
+}
+
+.card-container .price {
+  color: #333;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.card-container img {
+  width: 100%; /* The image will take the full width of the container */
+  height: 150px; /* Set a fixed height for the image */
+  object-fit: contain; /* The image will scale while maintaining its aspect ratio */
+  border-radius: 5px 5px 0 0;
+  margin: auto;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 50px; /* Use the gap property instead of grid-gap */
+    align-items: start;
+}
+

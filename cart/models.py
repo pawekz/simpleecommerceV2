@@ -1,9 +1,16 @@
+from django.contrib.auth.models import User
+from products.models import Product
+from products.models import Product
 from django.db import models
+from accounts.models import Customer
+from products.models import Product
+
+from django.db import models
+from accounts.models import Customer
+from products.models import Product
 
 
-# Create your models here.
+
 class Cart(models.Model):
-    CartID = models.IntegerField(primary_key=True)
-    ProductID = models.IntegerField()
-    QuantityPerProduct = models.IntegerField()
-    TransactionID = models.IntegerField()
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True)
+    products = models.ManyToManyField(Product)
