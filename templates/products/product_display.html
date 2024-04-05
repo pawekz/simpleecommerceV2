@@ -9,7 +9,7 @@
 </head>
 <body>
  <h1>Rocket Basket: Shop Fast, Ship Faster - Add Product</h1>
- <p>Welcome, {{ request.user.seller.seller_name }}</p>
+ <p>Welcome, <strong>{{ request.user.seller.seller_name }}</strong></p>
     <form method="post" enctype="multipart/form-data" class="form-container">
     {% csrf_token %}
         <div class="form-left input">
