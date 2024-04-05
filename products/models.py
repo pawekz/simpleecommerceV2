@@ -5,6 +5,7 @@ from django.db import models
 from PIL import Image
 from accounts.models import Seller
 from datetime import datetime
+from django.utils import timezone
 
 
 def rename_image(instance, filename):
@@ -21,6 +22,7 @@ class Product(models.Model):
     SellerID = models.ForeignKey(Seller, on_delete=models.CASCADE)
     Quantity = models.IntegerField()
     image = models.ImageField(upload_to=rename_image)
+    date_added = models.DateTimeField(default=timezone.now)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)

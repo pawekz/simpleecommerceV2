@@ -2,8 +2,13 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import AuthenticationForm, UserChangeForm, PasswordChangeForm
 from .models import Customer, Seller
+from django.contrib.auth.models import User
 
 
+class UserRegistrationForm(UserCreationForm):
+    class Meta(UserCreationForm.Meta):
+        model = User
+        fields = UserCreationForm.Meta.fields
 
 class CustomerRegistrationForm(UserCreationForm):
     customer_name = forms.CharField(label='Customer Name')
@@ -82,3 +87,7 @@ class SellerProfileUpdateForm(forms.ModelForm):
                 raise forms.ValidationError(
                     "New password and confirm password do not match"
                 )
+
+
+class SearchForm(forms.Form):
+        query = forms.CharField(max_length=100)
