@@ -62,3 +62,7 @@ def delete_product(request, product_id):
         return JsonResponse({'success': True})
     return JsonResponse({'success': False})
 
+def inventory(request):
+    #products = Product.objects.filter(SellerID=request.user.seller)
+    #return render(request, 'products/inventory.html', {'products': products})
+    return render(request, 'products/inventory.html')

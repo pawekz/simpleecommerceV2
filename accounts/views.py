@@ -248,7 +248,8 @@ def customer_homepage(request):
 def seller_homepage(request):
     if request.user.is_authenticated:  # Check authentication first
         form = SearchForm(request.GET)
-        products = Product.objects.all()  # Fetch all products
+        # Fetch all products that belong to the current seller
+        products = Product.objects.filter(SellerID=request.user.seller)
 
         if form.is_valid():
             query = form.cleaned_data['query']
@@ -260,3 +261,4 @@ def seller_homepage(request):
 
         return render(request, 'accounts/seller_homepage.html', {'form': form, 'products': products})
     return render(request, 'accounts/seller_homepage.html')
+

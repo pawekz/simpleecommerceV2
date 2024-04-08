@@ -12,7 +12,7 @@
 <body>
 
 <header class="header">
-    <h1><img src="{% static 'img/basket.png' %}" alt="BasketLogo" class="icon">Rocket Basket: Shop Fast, Ship Faster <img src="{% static 'img/Rockettt.png' %}" alt="RocketLogo" class="icon">      <img id="myImage" src="{% static 'img/account_icon.png' %}" alt="Image" style="width:50px"><img src="{% static 'img/basket.png' %}" alt="RocketLogo" class="icon"></h1>
+    <h1><img src="{% static 'img/basket.png' %}" alt="BasketLogo" class="icon">Rocket Basket: Shop Fast, Ship Faster <img src="{% static 'img/Rockettt.png' %}" alt="RocketLogo" class="icon">      <img id="myImage" src="{% static 'img/account_icon.png' %}" alt="Image" style="width:50px"><a href="{% url 'products:inventory' %}"><img src="{% static 'img/inventory.png' %}" alt="RocketLogo" class="icon"></a></h1>
 
 
     <div id="myPopup" class="popup">
@@ -90,31 +90,23 @@ window.onclick = function(event) {
                     <form method="post" action="{% url 'cart:add_to_cart' %}">
                         {% csrf_token %}
                         <input type="hidden" name="product_id" value="{{ product.ProductID }}">
-                        <input type="submit" value="Add to Cart">
                     </form>
                 </div>
             {% endfor %}
         </div> <!-- End of product-grid -->
-    <div class="product-grid">
+
 
                 <div class="card-container">
                     <a href="{% url 'products:add_product' %}"><img src="{% static 'img/AddMoreProduct.png' %}" alt="BasketLogo" class="icon">
-                    <h4>Click the image to add more products</h4>
                 </div>
 
-        </div>
+
 
     <!-- End of product-grid -->
     </div>
   </main>
- <div class="product-grid">
 
-                <div class="card-container">
-                    <a href="{% url 'products:add_product' %}"><img src="{% static 'img/AddMoreProduct.png' %}" alt="BasketLogo" class="icon">
-                    <h4>Click the image to add more products</h4>
-                </div>
 
-        </div>
 
 
 </body>

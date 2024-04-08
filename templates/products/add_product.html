@@ -9,8 +9,8 @@
 </head>
 <body>
 <header class="header">
-    <h1><a href="{% url 'accounts:seller_profile' %}">←</a>Rocket Basket: Shop Fast, Ship Faster - Add Product</h1>
- <p>Welcome, {{ request.user.seller.seller_name }}</p>
+    <h1><a href="{% url 'accounts:seller_profile' %}"><img src="{% static 'img/back.png' %}" alt="back-icon" style="height: 30px; width: 30px;"></a>Rocket Basket: Shop Fast, Ship Faster - Add Product</h1>
+ <h4>Hi, {{ request.user.seller.seller_name }}. Happy Selling!</h4>
 </header>
     <form method="post" enctype="multipart/form-data" class="form-container">
     {% csrf_token %}
