@@ -7,7 +7,9 @@ app_name = 'accounts'
 # http://127.0.0.1/accounts/register/customer/
 # http://127.0.0.1/accounts/login/
 urlpatterns = [
-    path('main_menu/', views.main_menu, name='main_menu'),
+
+    path('seller_homepage/', views.seller_homepage, name='seller_homepage'),
+    path('customer_homepage/', views.customer_homepage, name='customer_homepage'),
     path('register/customer/', views.customer_register, name='customer_register'),
     path('customer_profile/', views.customer_profile, name='customer_profile'),
     path('customer_updateregpage/', views.customer_updateregpage, name='customer_updateregpage'),
@@ -17,5 +19,6 @@ urlpatterns = [
     path('terms_and_conditions/', views.terms_and_conditions, name='terms_and_conditions'),
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
-    path('', views.home, name='home'),
+    path('', views.main_menu, name='main_menu'),
+    #path('', views.home, name='home'),
 ]

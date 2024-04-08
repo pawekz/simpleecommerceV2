@@ -91,3 +91,5 @@ class SellerProfileUpdateForm(forms.ModelForm):
 
 class SearchForm(forms.Form):
         query = forms.CharField(max_length=100)
+        # this is the search bar in the main menu page, customer home page that allows users to search for products
+

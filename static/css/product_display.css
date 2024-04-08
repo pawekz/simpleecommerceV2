@@ -108,3 +108,33 @@ button:hover {
     align-items: start;
 }
 
+.icon {
+    width: 50px; /* Adjust the width as needed */
+    height: 50px;
+}/* Adjust the height as needed */
+.header {
+    text-align: center;
+    padding: 20px;
+    background-color: #f8f9fa;
+}
+
+.header-text {
+    text-align: left;
+    margin-left: 500px;
+    padding-right: 1px;
+    font-size: 25px;
+}
+
+.header-icons {
+    position: absolute;
+    right: 320px;
+    top: 60px;
+}
+
+.icon.basket {
+    width: 55px;
+    height: 55px;
+    margin-left: 10px;
+}
+
+

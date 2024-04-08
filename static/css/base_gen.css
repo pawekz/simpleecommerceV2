@@ -1,0 +1,37 @@
+.bgenbody{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+.centered-content{
+    text-align: center;
+}
+
+.bgenform{
+    display: flex;
+    justify-content: space-between;
+    width: 60%;
+    margin: 50px auto;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.card {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    max-width: 300px;
+    margin: 0 auto;
+    text-align: center;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.card:hover {
+    background-color: #f5f5f5;
+}

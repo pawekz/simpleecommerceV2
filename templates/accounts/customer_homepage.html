@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'css/main_menu.css' %}">
-<title>Rocket Basket</title>
+<title>Customer Home Page</title>
 </head>
 <body>
 
@@ -19,8 +19,8 @@
         <div class="popup-content">
             <span class="close">&times;</span>
             <div class="popup-links">
-                <a class="popup-link" href="{% url 'accounts:login' %}">Login</a>
-                <a class="popup-link" href="{% url 'accounts:customer_register' %}">Register</a>
+                <a class="popup-link" href="{% url 'accounts:customer_profile' %}">See Profile</a>
+                <a class="popup-link" href="{% url 'accounts:login' %}">Logout</a>
             </div>
         </div>
     </div>
@@ -49,15 +49,17 @@ window.onclick = function(event) {
     }
 }
 </script>
-    <h4>Shop for 100's of items</h4>
+    <h4>Hi, {{ request.user.customer.customer_name }}. Happy Shopping!</h4>
 </header>
 
 
 
   <main class="content">
-    <form method="get" action="{% url 'accounts:main_menu' %}">
+    <form method="get" action="{% url 'accounts:customer_homepage' %}">
         <div class="search-box">
-            <input type="text" class="search-input" placeholder="Search" name="query">
+            <label>
+                <input type="text" class="search-input" placeholder="Search" name="query">
+            </label>
             <button type="submit" class="search-button">Search</button>
         </div>
         {% if messages %}
@@ -89,8 +91,9 @@ window.onclick = function(event) {
                     <p>{{ product.Description }}</p>
                     <p class="price">Price: ${{ product.PricePerUnit }}</p>
                     <p>Quantity: {{ product.Quantity }}</p>
-                    <form method="post" action="{% url 'accounts:login' %}">
+                    <form method="post" action="{% url 'cart:add_to_cart' %}">
                         {% csrf_token %}
+                        <input type="hidden" name="product_id" value="{{ product.ProductID }}">
                         <input type="submit" value="Add to Cart">
                     </form>
                 </div>

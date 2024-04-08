@@ -16,6 +16,7 @@ from .forms import UserRegistrationForm
 from cart.models import Cart
 
 
+
 def register(request):
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
@@ -35,7 +36,7 @@ def customer_register(request):
         form = CustomerRegistrationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('accounts:home')
+            return redirect('accounts:main_menu')
     else:
         form = CustomerRegistrationForm()
     return render(request, 'accounts/customer_registration.html', {'form': form})
@@ -46,7 +47,7 @@ def seller_register(request):
         form = SellerRegistrationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('accounts:home')
+            return redirect('accounts:main_menu')
     else:
         form = SellerRegistrationForm()
     return render(request, 'accounts/seller_registration.html', {'form': form})
@@ -56,8 +57,17 @@ def terms_and_conditions(request):
     return render(request, 'accounts/terms_and_conditions.html')
 
 
-def home(request):
-    return render(request, 'accounts/home.html')
+#def home(request):
+#    form = SearchForm(request.GET)
+#    products = Product.objects.all()  # Fetch all products
+#    if form.is_valid():
+#        query = form.cleaned_data['query']
+#        products = products.filter(ProductName__icontains=query)
+#        if not products.exists():
+#            messages.warning(request, 'No products found for your query.')
+#    return render(request, 'accounts/main_menu.html', {'form': form, 'products': products})
+
+
 
 
 def login_view(request):
@@ -70,9 +80,9 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 if user.is_seller:  # Check if the user is a seller
-                    return redirect('accounts:seller_profile')  # Redirect to the seller profile page
+                    return redirect('accounts:seller_homepage')  # Redirect to the seller profile page
                 else:
-                    return redirect('accounts:customer_profile')  # Redirect to the customer profile page
+                    return redirect('accounts:customer_homepage')  # Redirect to the customer profile page
             else:
                 form.add_error(None, 'Invalid username or password')
     else:
@@ -82,7 +92,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('accounts:home')
+    return redirect('accounts:main_menu')
 
 
 
@@ -213,8 +223,40 @@ def main_menu(request):
     if form.is_valid():
         query = form.cleaned_data['query']
         products = products.filter(ProductName__icontains=query)
-    return render(request, 'accounts/main_menu.html', {'form': form, 'products': products})
+        if not products:
+            messages.info(request, f"No products found for '{query}'.")
+            return render(request, 'accounts/main_menu.html', {'form': form, 'products': products})
 
 
+    return render(request, 'accounts/main_menu.html', {'products': products})
+def customer_homepage(request):
+    if request.user.is_authenticated:  # Check authentication first
+        form = SearchForm(request.GET)
+        products = Product.objects.all()  # Fetch all products
 
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            products = products.filter(ProductName__icontains=query)
+            if not products:
+                messages.info(request, f"No products found for '{query}'.")
+                return render(request, 'accounts/customer_homepage.html', {'form': form, 'products': products})
+        # No need to check authentication again as it's done at the beginning
 
+        return render(request, 'accounts/customer_homepage.html', {'form': form, 'products': products})
+    return render(request, 'accounts/customer_homepage.html')
+
+def seller_homepage(request):
+    if request.user.is_authenticated:  # Check authentication first
+        form = SearchForm(request.GET)
+        products = Product.objects.all()  # Fetch all products
+
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            products = products.filter(ProductName__icontains=query)
+            if not products:
+                messages.info(request, f"No products found for '{query}'.")
+                return render(request, 'accounts/seller_homepage.html', {'form': form, 'products': products})
+        # No need to check authentication again as it's done at the beginning
+
+        return render(request, 'accounts/seller_homepage.html', {'form': form, 'products': products})
+    return render(request, 'accounts/seller_homepage.html')

@@ -11,12 +11,12 @@ from django.http import JsonResponse
 
 # Create your views here.
 def home(request):
-    return render(request, 'products/product_display.html')
+    return render(request, 'products/add_product.html')
 
 
 
 
-def product_display(request):
+def add_product(request):
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES)
         form.instance.SellerID = Seller.objects.get(username=request.user.username)
@@ -25,7 +25,7 @@ def product_display(request):
                 product = form.save()
                 # Fetch products that belong to the authenticated seller
                 products = Product.objects.filter(SellerID=request.user.seller)
-                return render(request, 'products/product_display.html', {'form': form, 'product': product, 'products': products})
+                return render(request, 'products/add_product.html', {'form': form, 'product': product, 'products': products})
             except Exception as e:
                 messages.error(request, f"Error saving product: {e}")
         else:
@@ -34,7 +34,7 @@ def product_display(request):
         form = ProductForm()
         # Fetch products that belong to the authenticated seller
         products = Product.objects.filter(SellerID=request.user.seller)
-    return render(request, 'products/product_display.html', {'form': form, 'products': products})
+    return render(request, 'products/add_product.html', {'form': form, 'products': products})
 
 
 def product_terms_and_conditions(request):
