@@ -1,11 +1,119 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Product Display</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/product_display.css' %}">
+    <title>Sellers Product | Simple E-Commerce</title>
 </head>
 <body>
+ <h1>Rocket Basket: Shop Fast, Ship Faster - Add Product</h1>
+ <p>Welcome, <strong>{{ request.user.seller.seller_name }}</strong></p>
+    <form method="post" enctype="multipart/form-data" class="form-container">
+    {% csrf_token %}
+        <div class="form-left input">
+            <div>
+                {{ form.ProductName.label_tag }}
+                {{ form.ProductName }}
+                {% if form.ProductName.errors %}
+                    <div class="error">{{ form.ProductName.errors }}</div>
+                {% endif %}
+            </div>
+            <div>
+                {{ form.Description.label_tag }}
+                {{ form.Description }}
+                {% if form.Description.errors %}
+                    <div class="error">{{ form.Description.errors }}</div>
+                {% endif %}
+            </div>
+            <div>
+                {{ form.PricePerUnit.label_tag }}
+                {{ form.PricePerUnit }}
+                {% if form.PricePerUnit.errors %}
+                    <div class="error">{{ form.PricePerUnit.errors }}</div>
+                {% endif %}
+            </div>
+        </div> {% comment %}end of form left{% endcomment %}
+
+        <div class="form-right input">
+            <div>
+                {{ form.Quantity.label_tag }}
+                {{ form.Quantity }}
+                {% if form.Quantity.errors %}
+                    <div class="error">{{ form.Quantity.errors }}</div>
+                {% endif %}
+            </div>
+            <div>
+                {{ form.image.label_tag }}
+                {{ form.image }}
+                {% if form.image.errors %}
+                    <div class="error">{{ form.image.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <label for="terms">By clicking "SUBMIT", you agree with the <a href="{% url 'products:terms_and_conditions'%}" target="_blank">Terms and Conditions</a>.</label>
+            </div>
+
+            <div class="submit-button">
+            <button type="submit">SUBMIT</button>
+            </div>
+        </div> {% comment %}end of form right{% endcomment %}
+    {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+
+
+    {% endfor %}
+{% endif %}
+
+
+
+</form>
+
+
+<div class="product-grid">
+{% for product in products %}
+    <div class="card-container">
+        <img src="{{ product.image.url }}" alt="{{ product.ProductName }}">
+        <h3>{{ product.ProductName }}</h3>
+        <p>{{ product.Description }}</p>
+        <p class="price">Price Per Unit(php): {{ product.PricePerUnit }}</p>
+        <p>Quantity: {{ product.Quantity }}</p>
+        <a href="{% url 'products:edit_product' product.ProductID %}">Edit</a>
+        <form method="POST" action="{% url 'products:delete_product' product.ProductID %}" id="delete_product_{{ product.ProductID }}" style="display: inline;">
+            {% csrf_token %}
+        </form>
+        <a href="#" onclick="deleteProduct({{ product.ProductID }})">Delete</a>
+    </div>
+{% endfor %}
+</div>
+
+<script>
+function deleteProduct(productID) {
+    if (confirm('Are you sure you want to delete this product?')) {
+        fetch('/products/delete_product/' + productID + '/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({})
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Product deleted successfully!');
+                location.reload();
+            } else {
+                alert('Product deletion failed!');
+            }
+        });
+    }
+}
+</script>
 
 </body>
 </html>
