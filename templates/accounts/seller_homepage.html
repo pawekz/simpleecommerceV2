@@ -67,7 +67,8 @@ window.onclick = function(event) {
         </div>
     {% endfor %}
 {% endif %}
-    </form>
+    <br>
+    {% comment %}</form>
     <div class="filter-box">
         <form method="get">
             <label for="category">Category:</label>
@@ -78,7 +79,7 @@ window.onclick = function(event) {
                 {% endfor %}
             </select>
             <button type="submit">Filter</button>
-        </form>
+        </form>{% endcomment %}
         <div class="product-grid">
             {% for product in products %}
                 <div class="card-container">
@@ -103,7 +104,7 @@ window.onclick = function(event) {
 
 
     <!-- End of product-grid -->
-    </div>
+    </form>
   </main>
 
 
