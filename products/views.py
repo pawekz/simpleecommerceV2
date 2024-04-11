@@ -63,6 +63,20 @@ def delete_product(request, product_id):
     return JsonResponse({'success': False})
 
 def inventory(request):
-    #products = Product.objects.filter(SellerID=request.user.seller)
-    #return render(request, 'products/inventory.html', {'products': products})
+    if request.user.is_authenticated:  # Check authentication first
+        # Fetch all products that belong to the current seller
+        products = Product.objects.filter(SellerID=request.user.seller)
+        return render(request, 'products/inventory.html', {'products': products})
     return render(request, 'products/inventory.html')
+
+def mark_as_sold(request, product_id):
+    if request.method == 'POST':
+        product = get_object_or_404(Product, ProductID=product_id)
+        product.is_sold = True  # Assuming you have an `is_sold` field in your Product model
+        product.save()
+
+        # Notify the seller here. The implementation depends on how you want to notify them.
+
+        return JsonResponse({'success': True})
+
+    return JsonResponse({'success': False})
