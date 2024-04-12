@@ -91,16 +91,52 @@ window.onclick = function(event) {
                     <h3>{{ product.ProductName }}</h3>
                     <p>{{ product.Description }}</p>
                     <p class="price">Price: ${{ product.PricePerUnit }}</p>
-                    <p>Quantity: {{ product.Quantity }}</p>
+                    {% comment %}<p>Quantity: {{ product.Quantity }}</p>{% endcomment %}
                     <form method="post" action="{% url 'cart:add_to_cart' %}">
                         {% csrf_token %}
                         <input type="hidden" name="product_id" value="{{ product.ProductID }}">
                         <input type="submit" value="Add to Cart">
                     </form>
+
+<form method="get" action="{% url 'products:checkout' product.ProductID %}">
+    <input type="number" id="quantity-{{ product.ProductID }}" name="quantity" value="1" min="1" max="5">
+    <button type="button" onclick="increaseQuantity({{ product.ProductID }}, {{ product.PricePerUnit }})">+</button>
+    <button type="button" onclick="decreaseQuantity({{ product.ProductID }}, {{ product.PricePerUnit }})">-</button>
+    <input type="submit" value="Buy">
+</form>
+                <script>
+function increaseQuantity(productId, pricePerUnit) {
+    var quantityInput = document.getElementById('quantity-' + productId);
+    quantityInput.value = parseInt(quantityInput.value) + 1;
+}
+
+function decreaseQuantity(productId, pricePerUnit) {
+    var quantityInput = document.getElementById('quantity-' + productId);
+    if (quantityInput.value > 1) {
+        quantityInput.value = parseInt(quantityInput.value) - 1;
+    }
+}
+</script>
                 </div>
             {% endfor %}
         </div> <!-- End of product-grid -->
+
     </form>
+  <script>
+function increaseQuantity(productId, pricePerUnit) {
+    var quantityInput = document.getElementById('quantity-' + productId);
+    if (quantityInput.value < 5) {
+        quantityInput.value = parseInt(quantityInput.value) + 1;
+    }
+}
+
+function decreaseQuantity(productId, pricePerUnit) {
+    var quantityInput = document.getElementById('quantity-' + productId);
+    if (quantityInput.value > 1) {
+        quantityInput.value = parseInt(quantityInput.value) - 1;
+    }
+}
+</script>
   </main>
 
 

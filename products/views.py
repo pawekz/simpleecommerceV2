@@ -80,3 +80,16 @@ def mark_as_sold(request, product_id):
         return JsonResponse({'success': True})
 
     return JsonResponse({'success': False})
+
+
+def checkout(request, product_id):
+    quantity = int(request.GET.get('quantity', 1))  # Convert quantity to int
+    product = get_object_or_404(Product, ProductID=product_id)
+    product.Quantity = quantity  # Set the quantity
+    product.TotalPrice = product.PricePerUnit * quantity  # Calculate the total price
+    delivery_fee = 69
+    total_amount = product.TotalPrice + delivery_fee
+    return render(request, 'payment/checkoutpage.html', {'product': product, 'delivery_fee': delivery_fee, 'total_amount': total_amount})
+def proceed_to_payment(request):
+    # Implement your payment logic here
+    return render(request, 'payment/options.html')
