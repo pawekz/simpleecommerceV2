@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:hover {background-color: #f5f5f5;}
+        .fee-details th, td{
+            border-bottom: none;
+        }
+        .fee-details th{
+            background-color: white;
+            color: black;
+            border-bottom: 1px solid #ddd;
+        }
+        .payment-details-header{
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .total-payment {
+            font-weight: bold;
+            font-size: 20px;
+        }
+        .total-payment .total-amount{
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Checkout</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Product Name</th>
+                <th>Description</th>
+                <th>Price Per Unit</th>
+                <th>Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{ product.ProductName }}</td>
+            <td>{{ product.Description }}</td>
+            <td>{{ product.PricePerUnit }}</td>
+            <td>{{ product.Quantity }}</td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+ <div class="fee-details">
+     <table>
+        <thead>
+            <tr>
+                <th class="payment-details-header"><strong>Payment Details</strong></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td></td>
+            <td></td>
+            <td>Product Subtotal</td>
+            <td>${{ product.TotalPrice }}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td>Delivery Fee</td>
+            <td>${{ delivery_fee }}.00</td>
+        </tr>
+        <tr class="total-payment">
+            <td></td>
+            <td></td>
+            <td >Total Payment</td>
+            <td class="total-amount">${{ total_amount }}</td>
+        </tr>
+        <tr>
+            <td><a href="{% url 'accounts:customer_homepage' %}"><button type="button">Cancel</button></a></td>
+            <td></td>
+            <td></td>
+            <td><a href="{% url 'products:proceed_to_payment' %}">Proceed to Payment</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
