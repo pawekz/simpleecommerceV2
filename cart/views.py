@@ -5,18 +5,32 @@ from products.models import Product
 from .models import Cart
 from accounts.models import Customer, CustomUser
 
-
 def cart_view(request):
     if not request.user.is_authenticated:
         return redirect('accounts:login')  # Redirect non-authenticated users
 
-    cart_items = Cart.objects.filter(user=request.user)  # Fetch all items in the user's cart
+    # Get the Customer object for the current user
+    customer = Customer.objects.get(customuser_ptr=request.user)
+
+    # Fetch all items in the customer's cart
+    cart_items = Cart.objects.filter(customer=customer)
 
     context = {
         'cart_items': cart_items,
     }
 
     return render(request, 'cart/cart.html', context)
+#def cart_view(request):
+#    if not request.user.is_authenticated:
+#        return redirect('accounts:login')  # Redirect non-authenticated users
+#
+#    cart_items = Cart.objects.filter(user=request.user)  # Fetch all items in the user's cart
+#
+#    context = {
+#       'cart_items': cart_items,
+#    }
+#
+ #   return render(request, 'cart/cart.html', context)
 
 
 

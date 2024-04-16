@@ -8,8 +8,8 @@ app_name = 'accounts'
 # http://127.0.0.1/accounts/login/
 urlpatterns = [
 
-    path('seller_homepage/', views.seller_homepage, name='seller_homepage'),
-    path('customer_homepage/', views.customer_homepage, name='customer_homepage'),
+    #path('seller_homepage/', views.seller_homepage, name='seller_homepage'),
+    #path('customer_homepage/', views.customer_homepage, name='customer_homepage'),
     path('register/customer/', views.customer_register, name='customer_register'),
     path('customer_profile/', views.customer_profile, name='customer_profile'),
     path('customer_updateregpage/', views.customer_updateregpage, name='customer_updateregpage'),

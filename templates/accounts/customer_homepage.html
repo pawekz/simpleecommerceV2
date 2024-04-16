@@ -63,13 +63,13 @@ window.onclick = function(event) {
             <button type="submit" class="search-button">Search</button>
         </div>
         {% if messages %}
-    {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}">
-            {{ message }}
-        </div>
-    {% endfor %}
-{% endif %}
-    <br>
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        <br>
     {% comment %}</form>
     <div class="filter-box">
         <form method="get">
