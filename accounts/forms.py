@@ -11,9 +11,9 @@ class UserRegistrationForm(UserCreationForm):
         fields = UserCreationForm.Meta.fields
 
 class CustomerRegistrationForm(UserCreationForm):
-    customer_name = forms.CharField(label='Customer Name')
-    contact_no = forms.CharField(label='Contact Number')
-    address = forms.CharField(label='Address')
+    customer_name = forms.CharField(label='Customer Name', max_length=63, error_messages={'required': 'Please input your Full Name'})
+    contact_no = forms.CharField(label='Contact Number', max_length=11, error_messages={'required': 'Please input your Contact Number in this format 09xxxxxxxxx'})
+    address = forms.CharField(label='Address', max_length=255, error_messages={'required': 'Please input your Complete Address'})
 
     class Meta(UserCreationForm.Meta):
         model = Customer
@@ -30,10 +30,10 @@ class CustomerRegistrationForm(UserCreationForm):
 
 
 class SellerRegistrationForm(UserCreationForm):
-    seller_name = forms.CharField(label='Seller Name')
-    stall_name = forms.CharField(label='Stall Name')
-    contact_no = forms.CharField(label='Contact Number')
-    address = forms.CharField(label='Address')
+    seller_name = forms.CharField(label='Seller Name', max_length=63, error_messages={'required': 'Please input your Full Name'})
+    stall_name = forms.CharField(label='Stall Name', max_length=63, error_messages={'required': 'Please input your Stall Name'})
+    contact_no = forms.CharField(label='Contact Number', max_length=11, error_messages={'required': 'Please input your Contact Number in this format 09xxxxxxxxx'})
+    address = forms.CharField(label='Address', max_length=255, error_messages={'required': 'Please input your Complete Address'})
 
     class Meta(UserCreationForm.Meta):
         model = Seller
@@ -77,17 +77,15 @@ class SellerProfileUpdateForm(forms.ModelForm):
         model = Seller
         fields = ['username', 'seller_name', 'contact_no', 'address', 'stall_name', 'old_password', 'new_password', 'confirm_password']
 
+
+    #reworked the clean method to check if the new password and confirm password match
     def clean(self):
         cleaned_data = super().clean()
         new_password = cleaned_data.get("new_password")
         confirm_password = cleaned_data.get("confirm_password")
 
-        if new_password or confirm_password:
-            if new_password != confirm_password:
-                raise forms.ValidationError(
-                    "New password and confirm password do not match"
-                )
-
+        if new_password != confirm_password:
+            raise forms.ValidationError("New password and confirm password do not match")
 
 class SearchForm(forms.Form):
         query = forms.CharField(max_length=100)

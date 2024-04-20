@@ -1,6 +1,4 @@
 {% load static %}
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -54,7 +52,7 @@ window.onclick = function(event) {
 
 
 
-  <main class="content">
+<main class="content">
     <form method="get" action="{% url 'accounts:customer_homepage' %}">
         <div class="search-box">
             <label>
@@ -70,7 +68,7 @@ window.onclick = function(event) {
             {% endfor %}
         {% endif %}
         <br>
-    {% comment %}</form>
+<!--    {% comment %}</form>
     <div class="filter-box">
         <form method="get">
             <label for="category">Category:</label>
@@ -81,7 +79,7 @@ window.onclick = function(event) {
                 {% endfor %}
             </select>
             <button type="submit">Filter</button>
-        </form>{% endcomment %}
+        </form>{% endcomment %}-->
 
 
         <div class="product-grid">
@@ -138,8 +136,5 @@ function decreaseQuantity(productId, pricePerUnit) {
 }
 </script>
   </main>
-
-
-
 </body>
 </html>

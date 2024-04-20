@@ -3,6 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'css/product_display.css' %}">
     <title>Customer Registration Page | Simple E-Commerce</title>
 </head>
@@ -14,14 +15,23 @@
             <div>
                 {{ form.customer_name.label_tag }}
                 {{ form.customer_name }}
+                {% if form.customer_name.errors %}
+                    <div class="error">{{ form.customer_name.errors }}</div>
+                {% endif %}
             </div>
             <div>
                 {{ form.contact_no.label_tag }}
                 {{ form.contact_no }}
+                {% if form.contact_no.errors %}
+                    <div class="error">{{ form.contact_no.errors }}</div>
+                {% endif %}
             </div>
             <div>
                 {{ form.address.label_tag }}
                 {{ form.address }}
+                {% if form.address.errors %}
+                    <div class="error">{{ form.address.errors }}</div>
+                {% endif %}
             </div>
         </div>
 
@@ -29,6 +39,9 @@
             <div>
                 {{ form.username.label_tag }}
                 {{ form.username }}
+                {% if form.username.errors %}
+                    <div class="error">{{ form.username.errors }}</div>
+                {% endif %}
             </div>
             <div>
                 {{ form.password1.label_tag }}

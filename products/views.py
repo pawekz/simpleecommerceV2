@@ -8,12 +8,9 @@ from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 
 
-
 # Create your views here.
 def home(request):
     return render(request, 'products/add_product.html')
-
-
 
 
 def add_product(request):
@@ -25,7 +22,8 @@ def add_product(request):
                 product = form.save()
                 # Fetch products that belong to the authenticated seller
                 products = Product.objects.filter(SellerID=request.user.seller)
-                return render(request, 'products/add_product.html', {'form': form, 'product': product, 'products': products})
+                return render(request, 'products/add_product.html',
+                              {'form': form, 'product': product, 'products': products})
             except Exception as e:
                 messages.error(request, f"Error saving product: {e}")
         else:
@@ -41,7 +39,6 @@ def product_terms_and_conditions(request):
     return render(request, 'products/product_terms_and_conditions.html')
 
 
-
 def edit_product(request, product_id):
     product = get_object_or_404(Product, ProductID=product_id)
     if request.method == 'POST':
@@ -54,13 +51,13 @@ def edit_product(request, product_id):
     return render(request, 'products/edit_product.html', {'form': form})
 
 
-
 def delete_product(request, product_id):
     product = get_object_or_404(Product, ProductID=product_id)
     if request.method == 'POST':
         product.delete()
         return JsonResponse({'success': True})
     return JsonResponse({'success': False})
+
 
 def inventory(request):
     if request.user.is_authenticated:  # Check authentication first
@@ -69,13 +66,12 @@ def inventory(request):
         return render(request, 'products/inventory.html', {'products': products})
     return render(request, 'products/inventory.html')
 
+
 def mark_as_sold(request, product_id):
     if request.method == 'POST':
         product = get_object_or_404(Product, ProductID=product_id)
         product.is_sold = True  # Assuming you have an `is_sold` field in your Product model
         product.save()
-
-        # Notify the seller here. The implementation depends on how you want to notify them.
 
         return JsonResponse({'success': True})
 
@@ -89,7 +85,10 @@ def checkout(request, product_id):
     product.TotalPrice = product.PricePerUnit * quantity  # Calculate the total price
     delivery_fee = 69
     total_amount = product.TotalPrice + delivery_fee
-    return render(request, 'payment/checkoutpage.html', {'product': product, 'delivery_fee': delivery_fee, 'total_amount': total_amount})
+    return render(request, 'payment/checkoutpage.html',
+                  {'product': product, 'delivery_fee': delivery_fee, 'total_amount': total_amount})
+
+
 def proceed_to_payment(request):
     # Implement your payment logic here
     return render(request, 'payment/options.html')

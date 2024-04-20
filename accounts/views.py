@@ -1,20 +1,19 @@
-from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from django.contrib.auth.forms import AuthenticationForm
-from .forms import CustomerRegistrationForm, SellerRegistrationForm
-from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
-from .forms import CustomerProfileUpdateForm, SellerProfileUpdateForm
-from django.shortcuts import render, redirect
-from .models import Customer, Seller
-from django.contrib.auth.hashers import check_password
-from django.contrib.auth import update_session_auth_hash
-from django.shortcuts import render
-from products.models import Product
-from accounts.forms import SearchForm
+from django.contrib.auth import authenticate, logout
 from django.contrib.auth import login
-from .forms import UserRegistrationForm
-from cart.models import Cart
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.hashers import check_password
+from django.shortcuts import redirect
+from django.shortcuts import render
 
+from accounts.forms import SearchForm
+from cart.models import Cart
+from products.models import Product
+from .forms import CustomerProfileUpdateForm, SellerProfileUpdateForm
+from .forms import CustomerRegistrationForm, SellerRegistrationForm
+from .forms import UserRegistrationForm
+from .models import Customer, Seller
 
 
 def register(request):

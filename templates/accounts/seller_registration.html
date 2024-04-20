@@ -3,6 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'css/product_display.css' %}">
     <title>Seller Registration Page | Simple E-Commerce</title>
 </head>
@@ -14,18 +15,30 @@
             <div>
                 {{ form.stall_name.label_tag }}
                 {{ form.stall_name }}
+                {% if form.stall_name.errors %}
+                    <div class="error">{{ form.stall_name.errors }}</div>
+                {% endif %}
             </div>
             <div>
                 {{ form.seller_name.label_tag }}
                 {{ form.seller_name }}
+                {% if form.seller_name.errors %}
+                    <div class="error">{{ form.seller_name.errors }}</div>
+                {% endif %}
             </div>
             <div>
                 {{ form.contact_no.label_tag }}
                 {{ form.contact_no }}
+                {% if form.contact_no.errors %}
+                    <div class="error">{{ form.contact_no.errors }}</div>
+                {% endif %}
             </div>
             <div>
                 {{ form.address.label_tag }}
                 {{ form.address }}
+                {% if form.address.errors %}
+                    <div class="error">{{ form.address.errors }}</div>
+                {% endif %}
             </div>
         </div>
 
@@ -33,10 +46,14 @@
             <div>
                 {{ form.username.label_tag }}
                 {{ form.username }}
+                {% if form.username.errors %}
+                    <div class="error">{{ form.username.errors }}</div>
+                {% endif %}
             </div>
             <div>
                 {{ form.password1.label_tag }}
                 {{ form.password1 }}
+
             </div>
             <div>
                 {{ form.password2.label_tag }}
