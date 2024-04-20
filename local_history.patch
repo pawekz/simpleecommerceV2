@@ -1,0 +1,68 @@
+Index: templates/accounts/customer_homepage.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/templates/accounts/customer_homepage.html b/templates/accounts/customer_homepage.html
+--- a/templates/accounts/customer_homepage.html	
++++ b/templates/accounts/customer_homepage.html	(date 1713620744536)
+@@ -85,36 +85,14 @@
+         <div class="product-grid">
+             {% for product in products %}
+                 <div class="card-container">
+-                    <img class="product-image" src="{{ product.image.url }}" alt="{{ product.ProductName }}">
+-                    <h3>{{ product.ProductName }}</h3>
+-                    <p>{{ product.Description }}</p>
+-                    <p class="price">Price: ${{ product.PricePerUnit }}</p>
+-                    {% comment %}<p>Quantity: {{ product.Quantity }}</p>{% endcomment %}
+-                    <form method="post" action="{% url 'cart:add_to_cart' %}">
+-                        {% csrf_token %}
+-                        <input type="hidden" name="product_id" value="{{ product.ProductID }}">
+-                        <input type="submit" value="Add to Cart">
+-                    </form>
++                    <!-- ... Rest of the product card HTML code ... -->
+ 
+ <form method="get" action="{% url 'products:checkout' product.ProductID %}">
+     <input type="number" id="quantity-{{ product.ProductID }}" name="quantity" value="1" min="1" max="5">
+-    <button type="button" onclick="increaseQuantity({{ product.ProductID }}, {{ product.PricePerUnit }})">+</button>
+-    <button type="button" onclick="decreaseQuantity({{ product.ProductID }}, {{ product.PricePerUnit }})">-</button>
++    <button type="button" class="increase-btn" data-product-id="{{ product.ProductID }}" data-price-per-unit="{{ product.PricePerUnit }}">+</button>
++    <button type="button" class="decrease-btn" data-product-id="{{ product.ProductID }}" data-price-per-unit="{{ product.PricePerUnit }}">-</button>
+     <input type="submit" value="Buy">
+ </form>
+-                <script>
+-function increaseQuantity(productId, pricePerUnit) {
+-    var quantityInput = document.getElementById('quantity-' + productId);
+-    quantityInput.value = parseInt(quantityInput.value) + 1;
+-}
+-
+-function decreaseQuantity(productId, pricePerUnit) {
+-    var quantityInput = document.getElementById('quantity-' + productId);
+-    if (quantityInput.value > 1) {
+-        quantityInput.value = parseInt(quantityInput.value) - 1;
+-    }
+-}
+-</script>
+                 </div>
+             {% endfor %}
+         </div> <!-- End of product-grid -->
+@@ -134,6 +112,19 @@
+         quantityInput.value = parseInt(quantityInput.value) - 1;
+     }
+ }
++
++// Add event listeners to the increase and decrease buttons
++document.querySelectorAll('.increase-btn').forEach(function(btn) {
++    btn.addEventListener('click', function() {
++        increaseQuantity(this.dataset.productId, this.dataset.pricePerUnit);
++    });
++});
++
++document.querySelectorAll('.decrease-btn').forEach(function(btn) {
++    btn.addEventListener('click', function() {
++        decreaseQuantity(this.dataset.productId, this.dataset.pricePerUnit);
++    });
++});
+ </script>
+   </main>
+ </body>

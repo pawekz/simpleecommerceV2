@@ -99,7 +99,7 @@ window.onclick = function(event) {
                     </form>
 
 <form method="get" action="{% url 'products:checkout' product.ProductID %}">
-    <input type="number" id="quantity-{{ product.ProductID }}" name="quantity" value="1" min="1" max="5">
+    <label for="quantity-{{ product.ProductID }}"></label><input type="number" id="quantity-{{ product.ProductID }}" name="quantity" value="1" min="1" max="5">
     <button type="button" onclick="increaseQuantity({{ product.ProductID }}, {{ product.PricePerUnit }})">+</button>
     <button type="button" onclick="decreaseQuantity({{ product.ProductID }}, {{ product.PricePerUnit }})">-</button>
     <input type="submit" value="Buy">
