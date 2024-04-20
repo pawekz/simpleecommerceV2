@@ -85,10 +85,10 @@ def checkout(request, product_id):
     product.TotalPrice = product.PricePerUnit * quantity  # Calculate the total price
     delivery_fee = 69
     total_amount = product.TotalPrice + delivery_fee
-    return render(request, 'payment/checkoutpage.html',
+    return render(request, 'transaction/payment/../templates/cart/checkoutpage.html',
                   {'product': product, 'delivery_fee': delivery_fee, 'total_amount': total_amount})
 
 
 def proceed_to_payment(request):
     # Implement your payment logic here
-    return render(request, 'payment/options.html')
+    return render(request, 'transaction/payment/../templates/transaction/options.html')
