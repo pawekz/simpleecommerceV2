@@ -7,15 +7,23 @@
      <title>Customer - Profile Information Page</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'css/seller_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'css/customer_profile.css' %}">
     <title>Customer Profile</title>
 
 </head>
 
 <body>
-<p style="text-align:left; margin-left:320px;padding-right: 1px; font-size:25px"><a href="{% url 'accounts:main_menu' %}"><img src="{% static 'img/back.png' %}" alt="rocket basket Icon" style="height: 30px; width: 30px;"></a>              Rocket Basket: Shop Fast, Ship Faster - Customer Profile
-        <span class="additional-icons"><img src="{% static 'img/Rockettt.png' %}" alt="Rocket Icon" class="rocket">
-            <a href="{% url 'cart:cart' %}"><img src="{% static 'img/basket.png' %}" alt="rocket basket Icon" class="basket"></span>
+    <p class="header-text">
+        <a href="{% url 'accounts:main_menu' %}">
+            <img src="{% static 'img/back.png' %}" alt="rocket basket Icon" class="icon-back">
+        </a>
+        Rocket Basket: Shop Fast, Ship Faster - Customer Profile
+        <span class="additional-icons">
+            <img src="{% static 'img/Rockettt.png' %}" alt="Rocket Icon" class="icon-rocket">
+            <a href="{% url 'cart:cart' %}">
+                <img src="{% static 'img/basket.png' %}" alt="rocket basket Icon" class="icon-basket">
+            </a>
+        </span>
     </p>
       <div class="container">
 
@@ -47,23 +55,17 @@
                     <div>
                         <p style="font-size:20px">Added in your cart:</p>
                         <div class="gallery-container">
-                            <div class="gallery-item">
-                               <img src="https://www.graff.com/dw/image/v2/BFNT_PRD/on/demandware.static/-/Sites-master-catalog/default/dw86510d5e/RGP789_GP37438_detail.jpg?sw=800&sh=800"
-                                    alt="item-image" style="height: 200px;" >
-                                <div class="item-details">
-                                    <p>Diamond Pendant</p>
-                                    <p>Price: $299</p>
+                            {% for item in recent_cart_items %}
+                                <div class="gallery-item">
+                                    <img src="{{ item.product.image.url }}" alt="{{ item.product.ProductName }}" style="height: 200px;">
+                                    <div class="item-details">
+                                        <p>{{ item.product.ProductName }}</p>
+                                        <p>Price: ${{ item.product.PricePerUnit }}</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="gallery-item">
-                                <img src="https://www.thewatchcompany.com/media/tm_blog/p/o/7/1322/post_7_1322.jpg" alt="item-image" style="height: 200px;">
-                                <div class="item-details">
-                                    <p>Chronograph Watch</p>
-                                    <p>Price: $199</p>
-                                </div>
-                            </div>
+                            {% endfor %}
                         </div>
-                        <a href="#" style="display: block; margin-top: 10px;">Don't Be Shy, Peek Inside (More)</a>
+                       <a href="{% url 'cart:cart' %}" style="display: block; margin-top: 10px;">Add more to your cart</a>
                     </div>
                     <div>
                         <p style="font-size:20px">Recently Bought:</p>
@@ -83,7 +85,7 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="#" style="display: block; margin-top: 10px;">Let's See What We Snagged (More)</a>
+                        <a href="#" style="display: block; margin-top: 10px;">Let's See What We Snagged (Order History)</a>
                     </div>
                 </div>
             </div>

@@ -1,19 +1,20 @@
-from django.contrib import messages
-from django.contrib.auth import authenticate, logout
-from django.contrib.auth import login
-from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.hashers import check_password
-from django.shortcuts import redirect
-from django.shortcuts import render
-
-from accounts.forms import SearchForm
-from cart.models import Cart
-from products.models import Product
-from .forms import CustomerProfileUpdateForm, SellerProfileUpdateForm
 from .forms import CustomerRegistrationForm, SellerRegistrationForm
-from .forms import UserRegistrationForm
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib import messages
+from .forms import CustomerProfileUpdateForm, SellerProfileUpdateForm
+from django.shortcuts import render, redirect
 from .models import Customer, Seller
+from django.contrib.auth.hashers import check_password
+from django.contrib.auth import update_session_auth_hash
+from django.shortcuts import render
+from products.models import Product
+from accounts.forms import SearchForm
+from django.contrib.auth import login
+from .forms import UserRegistrationForm
+from cart.models import Cart, CartItem
+
 
 
 def register(request):
@@ -94,15 +95,19 @@ def logout_view(request):
     return redirect('accounts:login')
 
 
-
 def customer_profile(request):
-    if not request.user.is_authenticated:
-        return redirect('accounts:login')  # Redirect non-authenticated users
+    # Get the Customer object for the current user
+    customer = Customer.objects.get(customuser_ptr=request.user)
 
-    customer = Customer.objects.get(username=request.user.username)  # Fetch the latest data from the database
+    # Fetch the cart for the current customer
+    cart = Cart.objects.get(customer=customer)
+
+    # Fetch the recent 2 items added to the cart
+    recent_cart_items = CartItem.objects.filter(cart=cart).order_by('-id')[:2]
 
     context = {
         'customer': customer,
+        'recent_cart_items': recent_cart_items,
     }
 
     return render(request, 'accounts/customer_profile.html', context)

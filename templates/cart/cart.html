@@ -1,16 +1,148 @@
-{% extends 'base_generic.html' %}
+{% load static %}
 
-{% block content %}
-  <h2>Your Cart</h2>
-  <ul>
-    {% for item in cart_items %}
-      <li>
-        <h3>{{ item.product.name }}</h3>
-        <p>Quantity: {{ item.quantity }}</p>
-        <p>Price: ${{ item.product.price }}</p>
-      </li>
-    {% empty %}
-      <li>Your cart is empty.</li>
-    {% endfor %}
-  </ul>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/cart.css' %}">
+    <title>Your Cart</title>
+</head>
+<body>
+
+<header class="header">
+ <div class="header-content">
+
+    <p>
+        <a class="back-text" href="{% url 'accounts:main_menu' %}">
+            <img src="{% static 'img/back.png' %}" alt="rocket basket Icon" class="icon-back" >
+        </a>
+        Rocket Basket: Shop Fast, Ship Faster - Customer Cart <img src="{% static 'img/Rockettt.png' %}" alt="RocketLogo" class="rocket_icon">
+        <img src="{% static 'img/basket.png' %}" alt="BasketLogo" class="basket_icon">
+        <img id="myImage" src="{% static 'img/account_icon.png' %}" alt="Image"  class="profile-icon">
+
+    </p>
+
+    <div id="myPopup" class="popup">
+    <div class="popup-content">
+        <span class="close">&times;</span>
+        <div class="popup-links">
+            {% if request.user.is_authenticated %}
+                {% if request.user.is_seller %}
+                    <a class="popup-link" href="{% url 'accounts:seller_profile' %}">See Profile</a>
+                    <a class="popup-link" href="{% url 'accounts:logout' %}">Logout</a>
+                {% else %}
+                    <a class="popup-link" href="{% url 'accounts:customer_profile' %}">See Profile</a>
+                    <a class="popup-link" href="{% url 'accounts:logout' %}">Logout</a>
+                {% endif %}
+            {% else %}
+                <a class="popup-link" href="{% url 'accounts:login' %}">Login</a>
+                <a class="popup-link" href="{% url 'accounts:customer_register' %}">Register</a>
+            {% endif %}
+        </div>
+    </div>
+    </div>
+<script>
+// Get the modal
+var modal = document.getElementById("myPopup");
+
+// Get the image and insert it inside the modal
+var img = document.getElementById("myImage");
+img.onclick = function(){
+ modal.style.display = "block";
+}
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+ modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+</script>
+ </div>
+</header>
+
+
+
+
+<div class="cart-border">
+
+    <table>
+        <thead>
+            <tr>
+            <h2>INSIDE YOUR CART</h2>
+                <tr>
+                    <th class="common-class">PRODUCT</th>
+                    <th class="common-class">NAME</th>
+                    <th class="common-class">PRICE PER UNIT</th>
+                    <th class="common-class">QUANTITY</th>
+                    <th class="common-class">AMOUNT</th>
+                    <th class="common-class">REMOVE</th>
+                </tr>
+        </thead>
+        <tbody>
+            {% for item in cart_items %}
+                <tr>
+                    <td class="common-class">
+                        <div style="display: flex; align-items: center;">
+                            <img src="{{ item.product.image.url }}" alt="{{ item.product.ProductName }}" class="product-image">
+                        </div>
+                    </td>
+                    <td class="common-class">{{ item.product.ProductName }}</td>
+                    <td class="common-class"> ₱ {{ item.product.PricePerUnit }}</td>
+
+                    <td class="common-class">
+                        <form method="POST" action="{% url 'cart:increase_quantity' item.product.ProductID %}">
+                            {% csrf_token %}
+                            <button type="submit" style="background: none; border: none;">
+                                <img class="increase-icon" src="{% static 'img/increase_icon.png' %}" alt="Increase">
+                            </button>
+                        </form>
+                        {{ item.quantity }}
+                        <form method="POST" action="{% url 'cart:decrease_quantity' item.product.ProductID %}">
+                            {% csrf_token %}
+                            <button type="submit" style="background: none; border: none;">
+                                <img class="decrease-icon" src="{% static 'img/decrease_icon.png' %}" alt="Decrease">
+                            </button>
+                        </form>
+                    </td>
+
+                    <td class="common-class"> ₱ {{ item.total_amount }}</td>
+                    <td>
+                        <form method="POST" action="{% url 'cart:remove_from_cart' item.product.ProductID %}">
+                            {% csrf_token %}
+                            <button type="submit" style="background: none; border: none;">
+                                <img class="trash-icon" src="{% static 'img/trash_icon.png' %}" alt="Remove">
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% empty %}
+
+                <tr>
+                    <td colspan="5">Your cart is empty.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+    <div class="subtotal">
+        <strong>SUBTOTAL:</strong> ₱ {{ subtotal }}
+    </div>
+
+    <div class="delivery-option">
+    <a href="{% url 'accounts:main_menu' %}">
+         <button class="back-button">BACK</button>
+    </a>
+    <button class="choose-delivery-option">CHOOSE DELIVERY <br> OPTION</button>
+</div>
+</body>
+</html>
