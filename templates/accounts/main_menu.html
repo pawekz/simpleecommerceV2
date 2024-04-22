@@ -141,12 +141,12 @@ window.onclick = function(event) {
                                 <p>Out of stock</p>
                             {% endif %}
 
-                                <form method="get" action="{% url 'products:checkout' product.ProductID %}">
-                                    <input type="number" id="quantity-{{ product.ProductID }}" name="quantity" value="1" min="1" max="5">
-                                    <button type="button" onclick="increaseQuantity({{ product.ProductID }})">+</button>
-                                    <button type="button" onclick="decreaseQuantity({{ product.ProductID }})">-</button>
-                                    <input type="submit" value="Buy">
-                                </form>
+{#                                <form method="get" action="{% url 'products:checkout' product.ProductID %}">#}
+{#                                    <input type="number" id="quantity-{{ product.ProductID }}" name="quantity" value="1" min="1" max="5">#}
+{#                                    <button type="button" onclick="increaseQuantity({{ product.ProductID }})">+</button>#}
+{#                                    <button type="button" onclick="decreaseQuantity({{ product.ProductID }})">-</button>#}
+{#                                    <input type="submit" value="Buy">#}
+{#                                </form>#}
                             </div>
                         {% endfor %}
                     </div>
