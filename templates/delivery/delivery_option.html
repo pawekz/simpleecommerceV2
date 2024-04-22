@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/delivery_option.css' %}">
+    <title>Rocket Basket Delivery Options</title>
+</head>
+<body>
+<header class="header">
+
+ <div class="header-content">
+
+    <p>
+        <a class="back-text" href="{% url 'cart:cart' %}">
+            <img src="{% static 'img/back.png' %}" alt="rocket basket Icon" class="icon-back" >
+        </a>
+        Rocket Basket: Shop Fast, Ship Faster - Customer Cart <img src="{% static 'img/Rockettt.png' %}" alt="RocketLogo" class="rocket_icon">
+        <img src="{% static 'img/basket.png' %}" alt="BasketLogo" class="basket_icon">
+        <img id="myImage" src="{% static 'img/account_icon.png' %}" alt="Image"  class="profile-icon">
+
+    </p>
+
+    <div id="myPopup" class="popup">
+    <div class="popup-content">
+        <span class="close">&times;</span>
+        <div class="popup-links">
+            {% if request.user.is_authenticated %}
+                {% if request.user.is_seller %}
+                    <a class="popup-link" href="{% url 'accounts:seller_profile' %}">See Profile</a>
+                    <a class="popup-link" href="{% url 'accounts:logout' %}">Logout</a>
+                {% else %}
+                    <a class="popup-link" href="{% url 'accounts:customer_profile' %}">See Profile</a>
+                    <a class="popup-link" href="{% url 'accounts:logout' %}">Logout</a>
+                {% endif %}
+            {% else %}
+                <a class="popup-link" href="{% url 'accounts:login' %}">Login</a>
+                <a class="popup-link" href="{% url 'accounts:customer_register' %}">Register</a>
+            {% endif %}
+        </div>
+    </div>
+    </div>
+<script>
+// Get the modal
+var modal = document.getElementById("myPopup");
+
+// Get the image and insert it inside the modal
+var img = document.getElementById("myImage");
+img.onclick = function(){
+ modal.style.display = "block";
+}
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+ modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+</script>
+ </div>
+</header>
+
+
+
+
+ <div class="container">
+    <p class="delivery-option-title">CHOOSE DELIVERY</p>
+     <p class="delivery-option-subtitle">CHOOSE DELIVERY OPTION BELOW</p>
+    <div class="delivery-options-container">
+        <div class="delivery-option">
+          <input type="radio" id="standard-delivery" name="delivery-option">
+          <label for="standard-delivery">
+            <p>STANDARD DELIVERY</p>
+            <p class="price">PHP 40.00</p>
+          </label>
+        </div>
+        <div class="delivery-option">
+          <input type="radio" id="next-day-delivery" name="delivery-option">
+          <label for="next-day-delivery">
+            <p>NEXT DAY DELIVERY</p>
+            <p class="price">PHP 120.00</p>
+          </label>
+        </div>
+        <div class="delivery-option">
+          <input type="radio" id="express-delivery" name="delivery-option">
+          <label for="express-delivery">
+            <p>EXPRESS DELIVERY</p>
+            <p class="price">PHP 80.00</p>
+          </label>
+        </div>
+    </div>
+</div>
+  <div class="button-container">
+    <a href="{% url 'cart:cart' %}" class="button back-to-cart">BACK TO CART</a>
+    <button class="button choose-payment">CHOOSE PAYMENT OPTION</button>
+  </div>
+</body>
+</html>

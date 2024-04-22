@@ -1,0 +1,257 @@
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+/* CSS for the header */
+.header {
+    text-align: center;
+    padding: 5px;
+    margin-bottom: 2px;
+    background-color: #f8f9fa;
+    font-size: 30px;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.icon-back, .rocket_icon, .basket_icon, .profile-icon {
+    height: 30px;
+    width: 30px;
+}
+
+
+
+.back-text{
+    text-align: left;
+    margin-left: 100px;
+    padding-right: 1px;
+    font-size: 25px;
+
+}
+
+.icon-back {
+    height: 50px;
+    width: 50px;
+    margin-left: 40px;
+}
+
+
+.rocket_icon {
+  width: 50px; /* Adjust the width as needed */
+  height: 50px; /* Adjust the height as needed */
+  margin-left: 40px;
+}
+
+.basket_icon {
+  width: 80px; /* Adjust the width as needed */
+  height: 80px; /* Adjust the height as needed */
+}
+
+
+.profile-icon {
+  width: 50px; /* Adjust the width as needed */
+  height: 50px;
+  margin-left: 100px; /* Add margin for spacing */
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+/* Pop-up content */
+.popup-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 30%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+/* Close button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Pop-up links */
+.popup-links {
+    display: flex;
+    flex-direction: column; /* for a vertical list */
+    gap: 10px; /* space between items */
+    align-items: center; /* center items horizontally */
+    align-content: center; /* center items vertically */
+}
+
+.popup-link {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    width: 50%; /* make each link take full width of the container */
+    text-align: center; /* center the text */
+}
+
+.popup-link:hover {
+    background-color:darkseagreen;
+}
+
+.title {
+  font-size: 24px;
+  margin-bottom: 0;
+}
+
+.delivery-option-title {
+  font-size: 20px;
+  margin: 20px 0;
+  text-align: center;
+  font-weight: bold;
+}
+
+.delivery-option-subtitle {
+  font-size: 16px;
+  margin: 10px 0;
+  text-align: center;
+}
+
+
+
+.delivery-option {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+  margin: 10px 0;
+  padding: 10px 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.delivery-option p {
+  font-size: 18px;
+  margin: 0;
+}
+
+.price {
+  font-weight: bold;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+  margin-top: 20px;
+}
+
+.button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+
+.choose-payment {
+  background-color: #4CAF50;
+  color: white;
+}
+.delivery-options-container {
+    display: flex;
+    justify-content: space-between;
+}
+/* CSS for the header */
+.header {
+    background-color: #f1f1f1;
+    padding: 20px;
+    text-align: center;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.icon-back, .rocket_icon, .basket_icon, .profile-icon {
+    height: 30px;
+    width: 30px;
+}
+
+/* CSS for the popup modal */
+.popup {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.popup-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.popup-link {
+    display: block;
+    margin-bottom: 10px;
+    color: #0000EE;
+    text-decoration: none;
+}
+
+.popup-link:hover {
+    color: #551A8B;
+}
+
+.back-to-cart {
+  background-color: indianred;
+}

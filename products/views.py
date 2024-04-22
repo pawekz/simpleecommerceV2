@@ -91,4 +91,4 @@ def checkout(request, product_id):
 
 def proceed_to_payment(request):
     # Implement your payment logic here
-    return render(request, 'transaction/payment/../templates/transaction/options.html')
+    return render(request, 'transaction/payment/../templates/transaction/delivery_option.html')
