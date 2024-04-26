@@ -2,6 +2,8 @@
 
 body {
     font-family: sans-serif;
+
+
 }
 
 .header {
@@ -53,9 +55,6 @@ body {
     margin: 20px;
 }
 
-.search-bar {
-    margin-bottom: 20px;
-}
 
 .product-grid {
     display: grid;
@@ -86,32 +85,42 @@ body {
     font-weight: bold;
 }
 
-
-
 .search-box {
     position: relative;
-    margin: auto;
-    width: 35%;
-}
-.search-input {
-    padding: 10px;
-    border: 1px solid #ccc;
-    font-size: 16px;
-    border-radius: 4px;
     width: 100%;
-    height: 40px;
+    background-color: #4CAF50;
+    margin: auto;
+    /*width: 20%; /* Increase the width */
+    padding: 10px; /* Add some padding */
+    display: flex;
+    justify-content: space-between;
 }
+
+.search-input {
+
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 4px;
+  height: 40px;
+    width: calc(100% - 100px); /* Set width to fit remaining space */
+}
+
 .search-button {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
     padding: 8px;
+    font-size: 16px;
     border: none;
+    height: 40px;
     border-radius: 4px;
     cursor: pointer;
     background-color: #4CAF50;
     color: white;
+    width: 100px; /* Set button width to a fixed value */
+}
+/* Media Queries */
+@media (max-width: 768px) {
+  .search-box {
+    width: 50%; /* Adjust width as needed for smaller screens */
+  }
 }
 .header h1 {
   margin: 0; /* Remove default margin from heading */
@@ -121,15 +130,18 @@ body {
   padding: 20px; /* Add padding to content section */
 }
 
-.search-bar {
-  margin-bottom: 20px; /* Add space below search bar */
-}
+
 
 .product-listings {
   /* Add styles for product listings section */
 }
 
 .icon {
+  width: 50px; /* Adjust the width as needed */
+  height: 50px; /* Adjust the height as needed */
+
+}
+.basket_icon {
   width: 50px; /* Adjust the width as needed */
   height: 50px; /* Adjust the height as needed */
 
@@ -207,4 +219,64 @@ body {
 }
  .header h2 {
   color: white;
+}
+
+.form-container {
+    display: flex;
+    justify-content: space-between;
+    width: 60%; /* Adjust as needed */
+    margin: 50px auto;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 5px;
+    font-size: 16px; /* Adjust as needed */
+}
+
+.form-left, .form-right {
+    flex: 1;
+    width: 45%;
+}
+
+
+
+.form-left input, .form-right input {
+    width: 90%; /* Adjust as needed */
+    padding: 10px 15px; /* Adjust as needed */
+    margin: 8px 0 16px 0;
+    box-sizing: border-box;
+    border: 2px solid #ccc; /* Adjust as needed */
+    border-radius: 5px; /* Adjust as needed */
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    outline: none;
+}
+
+.form-left input:focus, .form-right input:focus {
+    border: 3px solid #555;
+}
+
+
+button {
+    width: 90%;
+    margin: 8px 0 16px 0;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #3e8e41;
+}
+
+.form-group label {
+    display: inline-block;
+    font-family: auto, serif;
+    font-size: 10px;
+}
+.error {
+    color: red;
+    font-size: 0.8em;
 }
