@@ -11,7 +11,10 @@
 <body>
 
 <header class="header">
-    <h1><img src="{% static 'img/basket.png' %}" alt="BasketLogo" class="icon">Rocket Basket: Shop Fast, Ship Faster <img src="{% static 'img/Rockettt.png' %}" alt="RocketLogo" class="icon">
+    <h1>
+        <img src="{% static 'img/basket.png' %}" alt="BasketLogo" class="icon">
+        Rocket Basket: Shop Fast, Ship Faster
+        <img src="{% static 'img/Rockettt.png' %}" alt="RocketLogo" class="icon">
         <img id="myImage" src="{% static 'img/account_icon.png' %}" alt="Image" style="width:50px">
         {% if request.user.is_authenticated %}
             {% if request.user.is_seller %}
@@ -82,7 +85,7 @@ window.onclick = function(event) {
   <main class="content">
     <form method="get" action="{% url 'accounts:main_menu' %}">
         <div class="search-box">
-            <input type="text" class="search-input" placeholder="Search" name="query">
+            <input type="text" class="search-input" placeholder="Search" name="query"><br>
             <button type="submit" class="search-button">Search</button>
         </div>
         {% if messages %}
@@ -92,7 +95,7 @@ window.onclick = function(event) {
                 </div>
             {% endfor %}
         {% endif %}
-    <br>
+        <br>
 
         {% if request.user.is_authenticated %}
                 {% if request.user.is_seller %}
@@ -107,9 +110,10 @@ window.onclick = function(event) {
                                 {% if product.Quantity > 0 %}
                                     <form method="POST" action="{% url 'cart:add_to_cart' product_id=product.ProductID %}">
                                         {% csrf_token %}
+                                        {% comment %} --ngano naay add to cart button ang seller?
                                         <input type="hidden" name="product_id" value="{{ product.ProductID }}">
                                         <input type="number" name="quantity" value="1" min="1" max="5">
-                                        <input type="submit" value="Add to Cart">
+                                        <input type="submit" value="Add to Cart">{% endcomment %}
                                     </form>
                                 {% else %}
                                     <p>Out of stock</p>
@@ -118,7 +122,8 @@ window.onclick = function(event) {
                         {% endfor %}
                     </div>
                     <div class="card-container">
-                    <a href="{% url 'products:add_product' %}"><img src="{% static 'img/AddMoreProduct.png' %}" alt="BasketLogo" class="icon">
+                        <a href="{% url 'products:add_product' %}"><img src="{% static 'img/AddMoreProduct.png' %}" alt="BasketLogo" class="icon">
+                        </a>
                     </div>
 
                 {% else %}
@@ -168,25 +173,23 @@ window.onclick = function(event) {
                 {% endfor %}
             </div>
         {% endif %}
-</form>
+    </form>
 
-<script>
-    function increaseQuantity(productId) {
-        var quantityInput = document.getElementById('quantity-' + productId);
-        if (quantityInput.value < 5) {
-            quantityInput.value = parseInt(quantityInput.value) + 1;
+    <script>
+        function increaseQuantity(productId) {
+            var quantityInput = document.getElementById('quantity-' + productId);
+            if (quantityInput.value < 5) {
+                quantityInput.value = parseInt(quantityInput.value) + 1;
+            }
         }
-    }
 
-    function decreaseQuantity(productId) {
-        var quantityInput = document.getElementById('quantity-' + productId);
-        if (quantityInput.value > 1) {
-            quantityInput.value = parseInt(quantityInput.value) - 1;
+        function decreaseQuantity(productId) {
+            var quantityInput = document.getElementById('quantity-' + productId);
+            if (quantityInput.value > 1) {
+                quantityInput.value = parseInt(quantityInput.value) - 1;
+            }
         }
-    }
-</script>
-
-
-</main>
+    </script>
+  </main>
 </body>
 </html>

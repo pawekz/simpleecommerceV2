@@ -1,42 +1,95 @@
 {% load static %}
+{% comment %}okay na ang design, kulang nalang ug edit functionality{% endcomment %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Inventory|Rocket Basket</title>
+    <title>Inventory | Rocket Basket</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/inventory.css' %}">
 
 </head>
 <body>
-    <h1><a href="{% url 'accounts:main_menu' %}"><img src="{% static 'img/back.png' %}" alt="back Icon" style="height: 30px; width: 30px;"></a>Inventory</h1>
+<header class="header">
+    <h1><a href="{% url 'accounts:main_menu' %}"><img src="{% static 'img/back.png' %}" alt="back-icon" style="height: 30px; width: 30px;"></a>   Rocket Basket: Shop Fast, Ship Faster - Seller Inventory   <img src="{% static 'img/Rockettt.png' %}" alt="RocketLogo" class="i_icon">
+        <img src="{% static 'img/basket.png' %}" alt="BasketLogo" class="i_icon">
+        <img id="myImage" src="{% static 'img/account_icon.png' %}" alt="Image" style="width:50px"></h1>
+
+    <div id="myPopup" class="popup">
+        <div class="popup-content">
+            <span class="close">&times;</span>
+            <div class="popup-links">
+                <a class="popup-link" href="{% url 'accounts:seller_profile' %}">See profile</a>
+                <a class="popup-link" href="{% url 'accounts:login' %}">Logout</a>
+            </div>
+        </div>
+    </div>
+    <script>
+// Get the modal
+    var modal = document.getElementById("myPopup");
+
+// Get the image and insert it inside the modal
+    var img = document.getElementById("myImage");
+    img.onclick = function(){
+    modal.style.display = "block";
+    }
+
+// Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+    modal.style.display = "none";
+    }
+
+// When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+    </script>
+</header>
+<div class="inventory_container">
+<h1>Your Products:</h1>
     <table>
         <thead>
-            <tr>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Price Per Unit</th>
-                <th>In Stock</th>
-                <th>Date Added</th>
-                <th>Mark as</th>
-            </tr>
+        <tr>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price Per Unit</th>
+            <th>In Stock</th>
+            <th>Date Added</th>
+            <th>Status</th>
+            <th>Edit</th>
+        </tr>
         </thead>
         <tbody>
-            {% for product in products %}
-                <tr>
-                    <td>
-                        <img src="{{ product.image.url }}" alt="{{ product.ProductName }}" width="50" height="50">
-                    </td>
-                    <td>{{ product.ProductName }}</td>
-                    <td>{{ product.Description }}</td>
-                    <td>{{ product.PricePerUnit }}</td>
-                    <td>{{ product.Quantity }}</td>
-                    <td>{{ product.date_added }}</td>
-                    <td>
-                        <button id="mark-as-sold-{{ product.id }}">Mark as Sold</button>
-                        </td>
-                </tr>
-                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        {% for product in products %}
+            <tr>
+                <td>
+                    <img src="{{ product.image.url }}" alt="{{ product.ProductName }}" width="50" height="50">
+                </td>
+                <td>{{ product.ProductName }}</td>
+                <td>{{ product.Description }}</td>
+                <td>{{ product.PricePerUnit }}</td>
+                <td>{{ product.Quantity }}</td>
+                <td>{{ product.date_added }}</td>
+                <td>
+                    {% if product.Quantity == 0 %}
+                        <h4 class="status-sold-out">Sold Out</h4>
+                    {% elif product.Quantity <= 5 %}
+                        <h4 class="status-dwindling">Dwindling</h4>
+                    {% else %}
+                        <h4 class="status-on-stock">On Stock</h4>
+                    {% endif %}
+                    {% comment %}<button id="mark-as-sold-{{ product.id }}">Mark as Sold</button>{% endcomment %}
+                </td>
+                <td>
+                    <img src="{% static 'img/editicon.png' %}" alt="editicon.png" width="50" height="50">
+                </td>
+            </tr>
+               {% comment %} <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
 $(document).ready(function() {
     $("button[id^='mark-as-sold-']").click(function() {
@@ -57,9 +110,10 @@ $(document).ready(function() {
         });
     });
 });
-</script>
-            {% endfor %}
+</script>{% endcomment %}
+        {% endfor %}
         </tbody>
     </table>
+</div>
 </body>
 </html>

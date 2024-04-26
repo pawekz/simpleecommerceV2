@@ -17,12 +17,12 @@ th {
     color: white;
 }
 tr:hover {background-color: #f5f5f5;}
-img {
+.img {
     border-radius: 50%;
 }
 
 
-/*
+
 .header {
     text-align: center;
     padding: 20px;
@@ -41,7 +41,7 @@ img {
     right: 320px;
     top: 60px;
 }
-
+/*
 .icon.basket {
     width: 55px;
     height: 55px;
@@ -59,7 +59,7 @@ img {
     height: 40px;
     margin-left: 10px;
 }
-
+*/
 
 .shop-text {
     text-align: center;
@@ -133,35 +133,33 @@ img {
     color: white;
 }
 .header h1 {
-  margin: 0; /* Remove default margin from heading
+  margin: 0; /* Remove default margin from heading*/
 }
 
 .content {
-  padding: 20px; /* Add padding to content section
+  padding: 20px; /* Add padding to content section*/
 }
 
 .search-bar {
-  margin-bottom: 20px; /* Add space below search bar
+  margin-bottom: 20px; /* Add space below search bar*/
 }
 
 .product-listings {
-  /* Add styles for product listings section
+  /* Add styles for product listings section*/
 }
 
-.icon {
-  width: 50px; /* Adjust the width as needed
-  height: 50px; /* Adjust the height as needed
-  /*position: absolute;
-  /*top: 10px; /* Adjust the top position as needed
-  /*left: 10px; /* Adjust the left position as needed
+.i_icon {
+  width: 50px; /* Adjust the width as needed*/
+  height: 50px; /* Adjust the height as needed*/
+
 }
 .profile-icon {
-  width: 50px; /* Adjust the width as needed
+  width: 50px; /* Adjust the width as needed*/
   height: 50px;
-  margin-right: 20px; /* Add margin for spacing
+  margin-right: 20px; /* Add margin for spacing*/
 }
 
- /* Pop-up container
+ /* Pop-up container*/
 .popup {
     display: none;
     position: fixed;
@@ -174,7 +172,7 @@ img {
     background-color: rgba(0,0,0,0.4);
 }
 
-        /* Pop-up content
+        /* Pop-up content*/
 .popup-content {
     background-color: #fefefe;
     margin: 15% auto;
@@ -184,7 +182,7 @@ img {
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
 }
 
-        /* Close button
+        /* Close button*/
 .close {
     color: #aaa;
     float: right;
@@ -199,13 +197,13 @@ img {
     cursor: pointer;
 }
 
-        /* Pop-up links
+        /* Pop-up links*/
 .popup-links {
     display: flex;
-    flex-direction: column; /* for a vertical list
-    gap: 10px; /* space between items
-    align-items: center; /* center items horizontally
-    align-content: center; /* center items vertically
+    flex-direction: column; /* for a vertical list*/
+    gap: 10px; /* space between items*/
+    align-items: center; /* center items horizontally*/
+    align-content: center; /* center items vertically*/
 }
 
 
@@ -217,8 +215,8 @@ img {
     text-decoration: none;
     border-radius: 5px;
     transition: background-color 0.3s ease;
-    width: 50%; /* make each link take full width of the container
-    text-align: center; /* center the text
+    width: 50%; /* make each link take full width of the container*/
+    text-align: center; /* center the text*/
 }
 
 .popup-link:hover {
@@ -227,4 +225,32 @@ img {
  .header h2 {
   color: white;
 }
-*/
+
+ .inventory_container {
+    display: flex;
+     flex-direction: column;
+    justify-content: space-between;
+    width: 60%; /* Adjust as needed */
+    margin: 50px auto;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 5px;
+    font-size: 16px; /* Adjust as needed */
+}
+
+
+.status-sold-out {
+    background-color: red;
+    color: white;
+}
+
+.status-dwindling {
+    background-color: orange;
+    color: white;
+}
+
+.status-on-stock {
+    background-color: #4CAF50;
+    color: white;
+}
+

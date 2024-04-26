@@ -104,8 +104,7 @@ button:hover {
 .product-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 50px; /* Use the gap property instead of grid-gap */
-    align-items: start;
+    gap: 20px;
 }
 
 .icon {
