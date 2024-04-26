@@ -4,19 +4,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" type="text/css" href="{% static 'css/delivery_option.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/delivery_opt.css' %}">
     <title>Rocket Basket Delivery Options</title>
 </head>
 <body>
 <header class="header">
-
  <div class="header-content">
 
     <p>
-        <a class="back-text" href="{% url 'cart:cart' %}">
-            <img src="{% static 'img/back.png' %}" alt="rocket basket Icon" class="icon-back" >
-        </a>
-        Rocket Basket: Shop Fast, Ship Faster - Customer Cart <img src="{% static 'img/Rockettt.png' %}" alt="RocketLogo" class="rocket_icon">
+        <a href="{% url 'cart:cart' %}"><img src="{% static 'img/back.png' %}" alt="rocket basket Icon" class="icon-back" ></a>
+        <b>Rocket Basket: Shop Fast, Ship Faster - Delivery Option</b> <img src="{% static 'img/Rockettt.png' %}" alt="RocketLogo" class="rocket_icon">
         <img src="{% static 'img/basket.png' %}" alt="BasketLogo" class="basket_icon">
         <img id="myImage" src="{% static 'img/account_icon.png' %}" alt="Image"  class="profile-icon">
 
@@ -72,36 +69,62 @@ window.onclick = function(event) {
 
 
 
- <div class="container">
-    <p class="delivery-option-title">CHOOSE DELIVERY</p>
+ <div class="content" style="text-align: center">
+     <h1>DELIVERY OPTION</h1>
      <p class="delivery-option-subtitle">CHOOSE DELIVERY OPTION BELOW</p>
+     <br>
+     <br>
+     <br>
     <div class="delivery-options-container">
         <div class="delivery-option">
-          <input type="radio" id="standard-delivery" name="delivery-option">
-          <label for="standard-delivery">
-            <p>STANDARD DELIVERY</p>
-            <p class="price">PHP 40.00</p>
-          </label>
+            <input type="checkbox" id="standard-delivery" name="delivery-option" class="delivery-checkbox">
+            <label for="standard-delivery" class="delivery-label">
+                <p>STANDARD DELIVERY</p>
+                <p class="price">PHP 40.00</p>
+            </label>
         </div>
         <div class="delivery-option">
-          <input type="radio" id="next-day-delivery" name="delivery-option">
-          <label for="next-day-delivery">
-            <p>NEXT DAY DELIVERY</p>
-            <p class="price">PHP 120.00</p>
-          </label>
+            <input type="checkbox" id="next-day-delivery" name="delivery-option" class="delivery-checkbox">
+            <label for="next-day-delivery" class="delivery-label">
+                <p>NEXT DAY DELIVERY</p>
+                <p class="price">PHP 120.00</p>
+            </label>
         </div>
         <div class="delivery-option">
-          <input type="radio" id="express-delivery" name="delivery-option">
-          <label for="express-delivery">
-            <p>EXPRESS DELIVERY</p>
-            <p class="price">PHP 80.00</p>
-          </label>
+            <input type="checkbox" id="express-delivery" name="delivery-option" class="delivery-checkbox">
+            <label for="express-delivery" class="delivery-label">
+                <p>EXPRESS DELIVERY</p>
+                <p class="price">PHP 80.00</p>
+            </label>
         </div>
     </div>
-</div>
-  <div class="button-container">
-    <a href="{% url 'cart:cart' %}" class="button back-to-cart">BACK TO CART</a>
-    <button class="button choose-payment">CHOOSE PAYMENT OPTION</button>
-  </div>
+     <div class="payment-option">
+        <a href="{% url 'cart:cart' %}"><button class="back-button">BACK</button></a>
+        <a href="{% url 'transaction:home' %}"><button class="choose-delivery-option">CHOOSE PAYMENT <br> OPTION</button></a>
+    </div>
+ <script>
+// Get all the checkboxes and the containers
+var checkboxes = document.querySelectorAll(".delivery-checkbox");
+var containers = document.querySelectorAll(".delivery-option");
+
+// Listen for the change event on each checkbox
+checkboxes.forEach((checkbox, index) => {
+    checkbox.addEventListener('change', function() {
+        // First, remove the class from all containers and uncheck all checkboxes
+        checkboxes.forEach((otherCheckbox, otherIndex) => {
+            if (otherIndex !== index) {
+                otherCheckbox.checked = false;
+            }
+            containers[otherIndex].classList.remove("delivery-option-checked");
+        });
+
+        // If the checkbox is checked, add the class to the container
+        if (checkbox.checked) {
+            containers[index].classList.add("delivery-option-checked");
+        }
+    });
+});
+</script>
+ </div>
 </body>
 </html>
