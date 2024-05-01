@@ -1,0 +1,28 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Rocket Basket: Shop Fast, Ship Faster - Track Delivery</title>
+     <link rel="stylesheet" type="text/css" href="{% static 'css/uos.css' %}">
+</head>
+<body class="center-content">
+    <h1>Rocket Basket: Shop Fast, Ship Faster - Track Delivery</h1>
+    <form action="/update_status" method="post">
+        <input type="checkbox" id="delivered" name="status" value="delivered">
+        <label for="delivered">Delivered</label><br>
+        <input type="checkbox" id="aboutToDeliver" name="status" value="aboutToDeliver">
+        <label for="aboutToDeliver">About to Deliver</label><br>
+        <input type="checkbox" id="departed" name="status" value="departed">
+        <label for="departed">Departed from Sort Center</label><br>
+        <input type="checkbox" id="arrived" name="status" value="arrived">
+        <label for="arrived">Arrived at Sort Center</label><br>
+        <input type="checkbox" id="pickedUp" name="status" value="pickedUp">
+        <label for="pickedUp">Package Picked Up</label><br>
+        <input type="checkbox" id="packed" name="status" value="packed" checked>
+        <label for="packed">Packed and Ready to Ship</label><br>
+        <input type="submit" value="Update Status">
+    </form>
+</body>
+</html>

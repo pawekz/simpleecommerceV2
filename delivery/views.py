@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from cart.models import Cart, CartItem
 from django.shortcuts import get_object_or_404
 from accounts.models import Customer
+from delivery.models import Delivery
 
 # Create your views here.
 def home(request):
@@ -54,3 +55,7 @@ def delivery_option(request):
     }
 
     return render(request, 'delivery/delivery_option.html', context)
+
+
+def seller_updateorderstatus(request):
+    return render(request, 'delivery/seller_updateorderstatus.html')

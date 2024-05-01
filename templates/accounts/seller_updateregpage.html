@@ -37,7 +37,9 @@
 <body>
   <div class="container">
     <div class="header">
-      <p>Rocket Basket: Shop Fast, Ship Faster - Seller Information Update </p>
+      <p><a href="{% url 'accounts:seller_profile' %}">
+            <img src="{% static 'img/back.png' %}" alt="back icon" class="back-icon" style="width: 30px; height: 35px;">
+        </a>Rocket Basket: Shop Fast, Ship Faster - Seller Information Update </p>
     </div>
     <form method="POST" onsubmit="return validateForm();">
         {% csrf_token %}

@@ -1,6 +1,26 @@
         body {
             font-family: Arial, sans-serif;
         }
+
+         .header-text {
+            text-align: left;
+            margin-left: 230px;
+            padding-right: 1px;
+            font-size: 35px;
+        }
+
+        .icon-back, .icon-rocket {
+            height: 50px;
+            width: 50px;
+            margin-left: 40px;
+        }
+
+        .icon-basket {
+            height: 75px;
+            width: 75px;
+        }
+
+
         .container{
             justify-content: center;
             margin-left: 100px;
@@ -24,7 +44,7 @@
         }
         .profile-icon {
             width: 80px;
-            height: 80px;
+            height: 120px;
             border-radius: 50%;
             background-color: #f0f0f0;
             display: flex;
@@ -44,11 +64,11 @@
         .form-group label {
             display: block;
             padding-bottom: 10px;
-            font-size: 18px;
+            font-size: 20px;
         }
         .form-group input {
-            width: 350px;
-            padding: 15px;
+            width: 400px;
+            padding: 20px;
             font-size:16px;
             box-sizing: border-box;
             margin-bottom: 35px;
@@ -132,14 +152,22 @@
         }
 
         .recent-activity {
-            border: 3px solid #f0f0f0;
+            border: 3px solid #63666A;
             margin-bottom: 2px;
-            padding: 20px 20px 70px;
+            padding: 20px 20px 20px;
         }
-        .recent-activity h2 {
+        .recent{
+            font-size: 45px;
+            font-weight: bold;
             margin-bottom: -15px;
             margin-top: -15px;
         }
+
+        .activity-title {
+            font-size: 30px;
+            margin-bottom: 20px;
+        }
+
         .recent-activity-container {
             display: flex;
             justify-content: space-between;
@@ -152,6 +180,7 @@
         }
         .item-details p {
             margin: 5px 0;
+            padding-left: 10px;
         }
         .additional-icons img.basket {
             width: 40px;
@@ -162,6 +191,7 @@
             width: 30px;
             height: 30px;
             margin-left: 10px;
+
         }
         .gallery-container {
             display: flex;
@@ -172,13 +202,62 @@
             height: auto;
             border-radius: 5px;
             border: 1px solid #f0f0f0; /* Add border to each image */
+            margin: 10px;
         }
-        .gallery-item img {
+        .item-image {
             width: 100%;
             height: auto;
             border-radius: 5px;
         }
-         .back img {
+         .icon-back {
             width: 50px;
             height: 50px;
         }
+
+         .action-link1, .action-link2 {
+            display: block;
+            margin-top: 20px;
+            color: #007bff;
+            text-decoration: underline;
+            font-size: 20px;
+            font-weight: bold;
+            padding-left: 10px;
+        }
+
+        .action-link1:hover, .action-link2:hover {
+            text-decoration: underline;
+        }
+
+        .more-link {
+            display: block;
+            margin-top: 20px;
+            color: #007bff;
+            text-decoration: underline;
+            font-size: 20px;
+            font-weight: bold;
+            padding-left: 10px;
+        }
+
+        .more-link:hover {
+            text-decoration: underline;
+        }
+
+
+/* Default styles for mobile view */
+.header, .container, .container-profile, .left-side, .right-side, .recent-activity, .buttons-container {
+    /* Styles for mobile view */
+}
+
+/* Styles for tablet view */
+@media screen and (min-width: 768px) {
+    .header, .container, .container-profile, .left-side, .right-side, .recent-activity, .buttons-container {
+        /* Override styles for tablet view */
+    }
+}
+
+/* Styles for desktop view */
+@media screen and (min-width: 1024px) {
+    .header, .container, .container-profile, .left-side, .right-side, .recent-activity, .buttons-container {
+        /* Override styles for desktop view */
+    }
+}

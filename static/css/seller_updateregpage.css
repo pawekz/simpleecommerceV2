@@ -13,12 +13,21 @@ body {
     .header {
       text-align: left;
       margin-bottom: 50px;
+      font-size: 30px;
     }
+
+    .back-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+
     .header p {
       text-align: left;
       padding-right: 150px; /* Adjusted padding to move the text to the right */
-      font-size: 20px;
+      font-size: 25px;
     }
+
     .form-container {
       display: flex;
       justify-content: space-between;
