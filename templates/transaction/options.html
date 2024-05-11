@@ -2,7 +2,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" type="text/css" href="../../static/css/payment_option.css"/>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'css/payment_option.css' %}">
@@ -13,28 +12,28 @@
         <span class="additional-icons"><img src="{% static 'img/Rockettt.png' %}" alt="Rocket Icon" class="rocket">
             <img src="{% static 'img/basket.png' %}" alt="rocket basket Icon" class="basket"></span>
     </p>
+    
+    <div class="payment-header">
+        
     <h2>Payment Options - Rocket Basket</h2>
     <div class="payment-options">
         <div class="payment-option-">
             <h3>Pay with Credit Card</h3>
-            <p>Pay with your credit card</p>
             <a href="{% url 'transaction:credit_payment' %}">Pay with Credit Card</a>
         </div>
         <div class="payment-option-gcash">
-            <h3>Pay with PayPal</h3>
-            <p>Pay with your GCash account</p>
+            <h3>Pay with GCash</h3>
             <a href="{% url 'transaction:gcash_payment' %}">Pay with GCash</a>
         </div>
         <div class="payment-option-maya">
-            <h3>Pay with PayMaya</h3>
-            <p>Pay with your Maya account</p>
+            <h3>Pay with Maya</h3>
             <a href="{% url 'transaction:maya_payment' %}">Pay with Maya</a>
         </div>
         <div class="payment-option-cod">
             <h3>Cash on Delivery</h3>
-            <p>Pay with cash upon delivery</p>
             <a href="{% url 'transaction:cod_payment' %}">Pay with Cash on Delivery</a>
         </div>
+    </div>
     </div>
 </body>
 </html>

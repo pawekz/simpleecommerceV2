@@ -9,3 +9,44 @@ img {
     height: 30px;
     width: 30px;
 }
+
+.payment-options {
+    display: flex;
+    justify-content: space-between;
+}
+.payment-option- a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #ffea00;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.payment-option-gcash a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #0004ff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.payment-option-maya a {
+    background-color: #07ff39;
+    display: inline-block;
+    padding: 10px 20px;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.payment-option-cod a {
+    background-color: #DC3545;
+    display: inline-block;
+    padding: 10px 20px;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+

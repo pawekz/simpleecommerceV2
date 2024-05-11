@@ -1,0 +1,51 @@
+/*.form-container {
+    display: flex;
+    justify-content: space-between;
+    width: 90%; !* Adjust as needed *!
+    margin: 50px auto;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 5px;
+    font-size: 16px; !* Adjust as needed *!
+}*/
+
+.input-group-custom {
+    display: flex;
+    align-items: center;
+}
+
+
+
+/*.input-group-custom .input-group-text {
+    height: calc(1.5em + .75rem + 2px); !* Adjust the height to match the input field *!
+    padding: .375rem .75rem; !* Adjust the padding to match the input field *!
+    font-size: 1rem; !* Adjust the font size to match the input field *!
+
+}*/
+
+.form-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.form-right {
+    border: 1px solid #000; /* Adjust as needed */
+    padding: 20px;
+    border-radius: 5px;
+    width: 30%
+}
+
+.form-check {
+    width: 30%;
+}
+
+.form-control{
+    width: 60%; !important;
+    height: 40px; !important;
+    margin: 0 auto; !important;
+}
+
+.checkbox-container .form-check-input{
+    width: 5px; /* Adjust this value as needed */
+    /* Add any other styles as needed */
+}
