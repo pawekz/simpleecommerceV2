@@ -194,3 +194,8 @@ body {
 .delivery-option-checked {
     background-color: #4CAF50;
 }
+
+.card.delivery-option.selected {
+    background-color: #007bff !important; /* Change this to the color you want */
+    color: white !important; /* Change this to the color you want for the text */
+}

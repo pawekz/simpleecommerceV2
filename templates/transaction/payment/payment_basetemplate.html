@@ -70,6 +70,7 @@
     <main style="min-height: 45vh; margin-top: 20px">
     
     {% block content %}
+        {% csrf_token %}
         <div class="payment-header">
             <div class="payment-options row justify-content-center">
                 <div class="col-sm-4 col-md-2 mx-2">
@@ -112,8 +113,9 @@
         </div>
     {% endblock %}
 </main>
+
     <div id="footer-button">
-        <a href="{% url 'delivery:delivery_option' %}" class="btn btn-warning btn-lg col-3" type="button">Return to Delivery Selection</a>
+        <a href="{% url 'transaction:review_cart' %}" class="btn btn-warning btn-lg col-3" type="button">Return to Cart Review</a>
         {% comment %}<button class="btn btn-success btn-lg col-3" type="button">Next</button>{% endcomment %}
     </div>
 </body>

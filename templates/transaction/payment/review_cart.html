@@ -4,17 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/cod_payment.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/gcash_payment.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/basetemplate_payment.css' %}">
     <script src="{% static 'css/jquery.min.js' %}"></script>
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
     <script src="{% static 'css/bootstrap.bundle.min.js' %}"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'css/product_display.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/cart.css' %}">
     <title>Payment Details - GCash | Simple E-Commerce</title>
 </head>
 <body>
-    <header class="header mt-3 d-flex flex-column align-items-center">
-    <h2 class="d-flex align-items-center">
+    {% comment %}copy this code below sa body para consistent, ebutang lang asa ang applicable{% endcomment %}
+<header class="header mt-3 d-flex flex-column align-items-center">
+    <h2 class="text-dark-emphasis d-flex align-items-center">
         <img src="{% static 'img/basket.png' %}" alt="BasketLogo" class="icon me-4">
         Rocket Basket: Shop Fast, Ship Faster
         <img src="{% static 'img/Rockettt.png' %}" alt="RocketLogo" class="icon me-4">
@@ -65,54 +67,48 @@
 {% else %}
     <h6>Shop for 100's of items</h6>
 {% endif %}
-        <h3 class="display-5"><b>CASH ON DELIVERY</b></h3>
+<h3 class="display-5"><b>REVIEW CART</b></h3>
 </header>
-    
+{% comment %}cart content display and also delivery read only{% endcomment %}
+    <div class="cart-border">
+    {% csrf_token %}
+    <table>
+        <thead>
+            <tr>
+            <h2>REVIEW YOUR CART</h2>
+                <tr>
+                    <th class="common-class">PRODUCT</th>
+                    <th class="common-class">NAME</th>
+                    <th class="common-class">PRICE PER UNIT</th>
+                    <th class="common-class">QUANTITY</th>
+                    <th class="common-class">AMOUNT</th>
+                </tr>
+        </thead>
+        <tbody>    
+        {% csrf_token %}
+           {% for item in cart_items %}
+            <tr>
+                <td class="common-class"><img src="{{ item.product.image.url }}" alt="Product Image" class="product-image"></td>
+                <td class="common-class">{{ item.product.ProductName }}</td>
+                <td class="common-class">₱ {{ item.product.PricePerUnit }}</td>
+                <td class="common-class">{{ item.quantity }}</td>
+                <td class="common-class">₱ {{ item.total_amount }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div><br>
+<div class="delivery-payment-border p-3 mb-2 bg-light text-dark rounded text-end">
+    <h3 class="mb-2"><strong>Subtotal (Cart):</strong> <span class="text-bg-info">₱ {{ subtotal }} </span> </h3>
+    <h5 class="mb-2"><strong>Selected delivery type:</strong> <span class="text-primary">{{ delivery_type.DeliveryTypeName }}</span></h5>
+    <h5 class="mb-2"><strong>Delivery fee:</strong> <span class="text-success">₱ {{ delivery_type.DeliveryPrice }}</span></h5><br>
+    <h2 class="mb-1"><strong>Total amount:</strong> <span class="text-success-emphasis"><strong>₱ {{ total_amount }}</strong></span></h2>
+</div>
+<div class="footer-button">
+    {% comment %}<button class="btn btn-primary" onclick="location.href='{% url 'transaction:payment_option' %}'">Proceed to Payment</button>{% endcomment %}
+    <a href="{% url 'delivery:delivery_option' %}" class="btn btn-warning btn-lg col-3" type="button">Return to Delivery Selection</a>
+    <a href="{% url 'transaction:payment_option' %}" class="btn btn-success btn-lg col-3" type="button">Proceed to Payment</a>
+</div>
 
-        <form method="post" class="form-container">
-        <div class="form-left input" style="width: 40%;">
-            <h3 class="mb-3">Billing Details</h3>
-            <div class="col-md-12">
-                <label for="full_name" class="form-label">Full Name</label>
-                <input type="text" id="full_name" name="full_name" class="form-control" value="{{ request.user.customer.customer_name }}">
-                <div class="form-text">Enter your full name</div>
-            </div>
-            <div class="col-md-12">
-                <label for="contact_number" class="form-label">Contact Number</label>
-                <input type="text" id="contact_number" name="contact_number" class="form-control" value="{{ request.user.customer.contact_no }}">
-                <div class="form-text">Enter your contact number</div>
-            </div>
-            <div class="col-md-12">
-                <label for="address" class="form-label">Address</label>
-                <input type="text" id="address" name="address" class="form-control" value="{{ request.user.customer.address }}">
-                <div class="form-text">Enter your complete address</div>
-            </div>
-            <br>
-{% comment %}            <div class="checkbox-container">
-                <input type="checkbox" id="same_as_billing" name="same_as_billing" class="form-check-input">
-                <label for="same_as_billing" class="form-check-inline">Delivery Address is the same as my Billing Address</label>
-            </div>{% endcomment %}
-        </div>
-            
-            
-            <div class="form-right input col-md-8 border-box">
-        <h3 class="mb-3">Summary</h3>
-            <div class="mb-2">
-                <strong>Subtotal:</strong> {{ subtotal }}
-            </div>
-        <div class="mb-2">
-            <strong>Delivery fee:</strong> {{ delivery_type.DeliveryPrice }}
-        </div>
-            <hr>
-        <div class="mb-2">
-            <strong>Total Amount (including VAT):</strong> {{ total_amount }}
-        </div>
-            </div>
-        </form>
-
-        <div id="footer-button">
-            <a href="{% url 'transaction:payment_option' %}" class="btn btn-warning btn-lg col-3" role="button">Back to Payment Options</a>
-            <a href="{% url 'transaction:confirm_payment' %}" class="btn btn-success btn-lg col-3" role="button">Confirm Payment</a>
-        </div>
 </body>
 </html>

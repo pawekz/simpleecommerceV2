@@ -75,23 +75,23 @@
             <h3 class="mb-3">Billing Details</h3>
             <div class="col-md-10">
                 <label for="full_name" class="form-label">Full Name</label>
-                <input type="text" id="full_name" name="full_name" class="form-control" value="{{ full_name }}">
+                <input type="text" id="full_name" name="full_name" class="form-control" value="{{ request.user.customer.customer_name}}">
                 <div class="form-text">Enter your full name</div>
             </div>
             <div class="col-md-10">
                 <label for="contact_number" class="form-label">Contact Number</label>
-                <input type="text" id="contact_number" name="contact_number" class="form-control" value="{{ contact_number }}">
+                <input type="text" id="contact_number" name="contact_number" class="form-control" value="{{ request.user.customer.contact_no }}">
                 <div class="form-text">Enter your contact number</div>
             </div>
             <div class="col-md-10">
                 <label for="address" class="form-label">Address</label>
-                <input type="text" id="address" name="address" class="form-control" value="{{ address }}">
+                <input type="text" id="address" name="address" class="form-control" value="{{ request.user.customer.address }}">
                 <div class="form-text">Enter your complete address</div>
             </div>
-            <div>
+  {% comment %}          <div>
                 <input type="checkbox" id="same_as_billing" name="same_as_billing" class="form-check-input">
-                <label for="same_as_billing" class="form-check-inline">Shipping Address is the same as my Billing Address</label>
-            </div>
+                <label for="same_as_billing" class="form-check-inline">Delivery Address is the same as my Billing Address</label>
+            </div>{% endcomment %}
         </div>
 
         <div class="form-middle input" style="width: 40%;">
@@ -124,19 +124,19 @@
                 <strong>Subtotal:</strong> {{ subtotal }}
             </div>
             <div class="mb-2">
-                <strong>Shipping fee:</strong> {{ shipping_fee }}
+                <strong>Delivery fee:</strong> {{ delivery_type.DeliveryPrice }}
             </div>
             <hr>
             <div class="mb-2">
-                <strong>Total Amount (including VAT):</strong> {{ subtotal }}
+                <strong>Total Amount (including VAT):</strong> {{ total_amount }}
                 {% comment %}change subtotal{% endcomment %}
             </div>
         </div>
     </form></div><br>
         
         <div id="footer-button">
-            <a href="{% url 'transaction:home' %}" class="btn btn-warning btn-lg col-3" role="button">Back to Payment Options</a>
-            <a href="{% url 'transaction:success' %}" class="btn btn-success btn-lg col-3" role="button">Confirm Payment</a>
+            <a href="{% url 'transaction:payment_option' %}" class="btn btn-warning btn-lg col-3" role="button">Back to Payment Options</a>
+            <a href="{% url 'transaction:confirm_payment' %}" class="btn btn-success btn-lg col-3" role="button">Confirm Payment</a>
         </div>
         
 </body>
