@@ -180,3 +180,5 @@ venv
 env
 .idea
 *.sqlite3
+
+*.patch
