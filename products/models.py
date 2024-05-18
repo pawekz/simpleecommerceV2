@@ -13,6 +13,7 @@ def rename_image(instance, filename):
     new_filename = f"{uuid.uuid4().hex}_{datetime.now().strftime('%Y%m%d%H%M%S')}"
     return f'static/product/images/{new_filename}.{ext}'
 
+
 class Product(models.Model):
     ProductID = models.AutoField(primary_key=True)
     ProductName = models.CharField(max_length=255)
