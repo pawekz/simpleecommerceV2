@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_extensions',  # added this line to install django-extensions
+    #'django_extensions',  # added this line to install django-extensions
     "accounts.apps.AccountsConfig",
     "transaction.apps.PaymentConfig",
     "cart.apps.CartConfig",
