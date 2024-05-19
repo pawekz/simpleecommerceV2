@@ -175,7 +175,7 @@ accounts/migrations/*
 cart/migrations/*
 delivery/migrations/*
 products/migrations/*
-transactions/migrations/*
+transaction/migrations/*
 venv
 env
 .idea
