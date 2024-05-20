@@ -14,4 +14,5 @@ urlpatterns = [
     path('review_cart/', views.review_cart, name='review_cart'),
     path('confirm_payment/', views.confirm_payment, name='confirm_payment'),
     path('success/', views.success, name='success'),
+    path('error/', views.error, name='error')
 ]

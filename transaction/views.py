@@ -5,6 +5,7 @@ from django.utils import timezone
 from accounts.models import Customer
 from cart.models import CartItem, Cart
 from delivery.models import DeliveryType, Delivery
+from products.models import Product
 from transaction.models import OrderHistory, Transaction
 from django.db import transaction
 
@@ -111,29 +112,52 @@ def success(request):
 
 
 def confirm_payment(request):
+    print("Starting confirm_payment")
     # Get the current user's cart
     cart = Cart.objects.get(customer=request.user.customer)
+    print(f"Got cart: {cart}")
+
+    # Check if a transaction has already been created for this cart
+    if Transaction.objects.filter(Cart=cart).exists():
+        print("Transaction already processed for this cart")
+        return redirect('transaction:success')  # Redirect to the success page
+
+    # Check if the cart is already empty
+    if not cart.cartitem_set.exists():
+        print("Cart is already empty, transaction has been processed")
+        return redirect('transaction:success')  # Redirect to the success page
 
     try:
         with transaction.atomic():
+            print("Starting transaction")
+            # Lock the cart items until the transaction is complete
+            cart_items = CartItem.objects.select_for_update().filter(cart=cart)
+
             # Create a new Transaction instance
             new_transaction = Transaction(
                 PurchaseDate=timezone.now(),
                 TotalPrice=cart.total,
-                TotalQuantity=cart.cartitem_set.count(),  # Assumes each CartItem represents one product
-                CustomerID=request.user.customer  # Assign the Customer instance directly
+                TotalQuantity=cart_items.count(),  # Assumes each CartItem represents one product
+                CustomerID=request.user.customer,  # Assign the Customer instance directly
+                Cart=cart  # Assign the Cart instance
             )
             new_transaction.save()
+            print(f"Saved new transaction: {new_transaction}")
 
             # Get the first Delivery object, or create a new one if none exist
             delivery = Delivery.objects.first()
             if delivery is None:
                 delivery_type = DeliveryType.objects.first()  # Assumes a DeliveryType exists
-                delivery = Delivery(DeliveryStatus='To Pack', DeliveryType=delivery_type)
+                print(f"Got delivery type: {delivery_type}")
+                delivery = Delivery(DeliveryStatus='1', DeliveryType=delivery_type)
                 delivery.save()  # Save the Delivery instance to the database
+                print(f"Created and saved new delivery: {delivery}")
+            else:
+                print(f"Using existing delivery: {delivery}")
 
             # Create a new OrderHistory instance for each item in the cart
-            for item in cart.cartitem_set.all():
+            for item in cart_items:
+                print(f"Processing cart item: {item}")
                 if item.product is None:
                     print(f"CartItem with id {item.id} does not have an associated product.")
                     continue
@@ -146,9 +170,32 @@ def confirm_payment(request):
                     DeliveryID=delivery  # Use the Delivery object
                 )
                 order_history.save()
+                print(f"Saved order history: {order_history}")
 
-                item.product.Quantity -= item.quantity
+                # Check if the product quantity is less than the quantity in the cart
+                if item.product.Quantity < item.quantity:
+                    print(
+                        f"Product quantity is less than the quantity in the cart for product: {item.product.ProductName}")
+                    return redirect('transaction:error')  # Redirect to an error page
+
+                # Print the actual quantity from the Product model before deduction
+                actual_product_before = Product.objects.get(ProductID=item.product.ProductID)
+                print(f"Actual product quantity in the database before deduction: {actual_product_before.Quantity}")
+
+                # The suspected line of code that causes the "double deduction error"
+                # print(f"Product quantity before deduction: {item.product.Quantity}")
+                # item.product.Quantity -= item.quantity
+
                 item.product.save()
+                print(f"Updated product quantity: {item.product.Quantity}")
+
+                # Print the actual quantity from the Product model after deduction
+                actual_product_after = Product.objects.get(ProductID=item.product.ProductID)
+                print(f"Actual product quantity in the database after deduction: {actual_product_after.Quantity}")
+
+                # Delete the CartItem instance after updating product quantity
+                item.delete()
+                print(f"Deleted cart item: {item}")
 
     except Exception as e:
         # Handle the exception
@@ -156,6 +203,7 @@ def confirm_payment(request):
         return redirect('transaction:error')  # Redirect to an error page
 
     # Redirect to the success page
+    print("Transaction successful, redirecting to success page")
     return redirect('transaction:success')
 
 
@@ -185,3 +233,7 @@ def calculate_cart_subtotal(request):
 
 def payment_option(request):
     return render(request, 'transaction/payment/payment_basetemplate.html')
+
+
+def error(request):
+    return render(request, 'transaction/error.html')
