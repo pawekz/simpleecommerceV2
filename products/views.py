@@ -78,6 +78,14 @@ def mark_as_sold(request, product_id):
     return JsonResponse({'success': False})
 
 
+
+
+
+
+
+
+
+
 def checkout(request, product_id):
     quantity = int(request.GET.get('quantity', 1))  # Convert quantity to int
     product = get_object_or_404(Product, ProductID=product_id)

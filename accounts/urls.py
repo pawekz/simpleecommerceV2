@@ -19,6 +19,8 @@ urlpatterns = [
     path('terms_and_conditions/', views.terms_and_conditions, name='terms_and_conditions'),
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
+    path('deactivate_account/', views.deactivate_account, name='deactivate_account'),
+    path('reactivate_account/', views.reactivate_account, name='reactivate_account'),
     path('', views.main_menu, name='main_menu'),
     #path('', views.home, name='home'),
 ]

@@ -15,3 +15,10 @@ class CartItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField()
     total_amount = models.DecimalField(decimal_places=2, max_digits=12, null=True)
+
+
+    def delete(self, *args, **kwargs):
+        print(f"Deleting CartItem {self.id} for product {self.product.ProductID}")
+        self.product.Quantity += self.quantity
+        self.product.save()
+        super().delete(*args, **kwargs)
