@@ -13,6 +13,7 @@ class Transaction(models.Model):
     TotalPrice = models.DecimalField(max_digits=12, decimal_places=2)
     TotalQuantity = models.IntegerField()
     CustomerID = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    Cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
 
 
 class OrderHistory(models.Model):

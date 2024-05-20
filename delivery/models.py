@@ -12,7 +12,7 @@ class DeliveryType(models.Model):
 
 
 class Delivery(models.Model):
-    DeliveryID = models.IntegerField(primary_key=True)
+    DeliveryID = models.AutoField(primary_key=True)
     DeliveryStatus = models.CharField(max_length=20)
     DeliveryDate = models.DateTimeField(auto_now_add=True, auto_now=False)
     DeliveryType = models.ForeignKey(DeliveryType, on_delete=models.CASCADE)
