@@ -176,6 +176,11 @@ cart/migrations/*
 delivery/migrations/*
 products/migrations/*
 transaction/migrations/*
+!accounts/migrations/__init__.py
+!cart/migrations/__init__.py
+!delivery/migrations/__init__.py
+!products/migrations/__init__.py
+!transaction/migrations/__init__.py
 venv
 env
 .idea
