@@ -1,21 +1,62 @@
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, get_user_model
 from .forms import CustomerRegistrationForm, SellerRegistrationForm
-from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
 from .forms import CustomerProfileUpdateForm, SellerProfileUpdateForm
 from django.shortcuts import render, redirect
 from .models import Customer, Seller
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth import update_session_auth_hash
-from django.shortcuts import render
 from products.models import Product
 from accounts.forms import SearchForm
-from django.contrib.auth import login
+from django.contrib.auth import login,  get_user_model
 from .forms import UserRegistrationForm
 from cart.models import Cart, CartItem
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+from django import forms
+from django.contrib.auth.backends import ModelBackend
 
 
+
+
+class AllowInactiveUserModelBackend(ModelBackend):
+    def authenticate(self, request, username=None, password=None, **kwargs):
+        User = get_user_model()
+        try:
+            user = User.objects.get(username=username)
+            if user.check_password(password):
+                return user
+        except User.DoesNotExist:
+            return None
+
+    def get_user(self, user_id):
+        User = get_user_model()
+        try:
+            return User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return None
+
+def login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    return redirect('accounts:main_menu')
+                else:
+                    form.add_error(None, 'This account has been deactivated.')
+                    return render(request, 'accounts/login.html', {'form': form})
+            else:
+                form.add_error(None, 'Invalid username or password')
+    else:
+        form = AuthenticationForm()
+    return render(request, 'accounts/login.html', {'form': form})
 
 def register(request):
     if request.method == 'POST':
@@ -29,8 +70,6 @@ def register(request):
         form = UserRegistrationForm()
     return render(request, 'accounts/register.html', {'form': form})
 
-
-
 def customer_register(request):
     if request.method == 'POST':
         form = CustomerRegistrationForm(request.POST)
@@ -40,7 +79,6 @@ def customer_register(request):
     else:
         form = CustomerRegistrationForm()
     return render(request, 'accounts/customer_registration.html', {'form': form})
-
 
 def seller_register(request):
     if request.method == 'POST':
@@ -53,24 +91,33 @@ def seller_register(request):
     return render(request, 'accounts/seller_registration.html', {'form': form})
 
 
-def terms_and_conditions(request):
-    return render(request, 'accounts/terms_and_conditions.html')
+
+@login_required
+def deactivate_account(request):
+    user = request.user
+    user.is_active = False
+    user.save()
+    messages.add_message(request, messages.INFO, 'Your account has been deactivated.')
+
+    # Check if the user is a customer before trying to access their cart
+    if hasattr(user, 'customer'):
+        # Clear the user's cart and update product quantities
+        try:
+            cart = Cart.objects.get(customer=user.customer)
+            print(f"Found cart {cart.id} for customer {user.customer.id}")
+            for item in cart.cartitem_set.all():
+                print(f"Updating quantity for product {item.product.ProductID}")
+                item.product.Quantity += item.quantity
+                item.product.save()
+            cart.cartitem_set.all().delete()
+        except Cart.DoesNotExist:
+            print(f"No cart found for customer {user.customer.id}")
+
+    logout(request)
+    return redirect('accounts:login')
 
 
-#def home(request):
-#    form = SearchForm(request.GET)
-#    products = Product.objects.all()  # Fetch all products
-#    if form.is_valid():
-#        query = form.cleaned_data['query']
-#        products = products.filter(ProductName__icontains=query)
-#        if not products.exists():
-#            messages.warning(request, 'No products found for your query.')
-#    return render(request, 'accounts/main_menu.html', {'form': form, 'products': products})
-
-
-
-
-def login_view(request):
+def reactivate_account(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
@@ -78,17 +125,21 @@ def login_view(request):
             password = form.cleaned_data.get('password')
             user = authenticate(username=username, password=password)
             if user is not None:
-                login(request, user)
-                if user.is_seller:  # Check if the user is a seller
-                    return redirect('accounts:main_menu')  # Redirect to the seller profile page
+                if not user.is_active:
+                    user.is_active = True
+                    user.save()
+                    messages.success(request, "Your account has been reactivated.")
+                    return redirect('accounts:login')
                 else:
-                    return redirect('accounts:main_menu')  # Redirect to the customer profile page
+                    form.add_error(None, 'Invalid username or password')
             else:
                 form.add_error(None, 'Invalid username or password')
-    else:
-        form = AuthenticationForm()
-    return render(request, 'accounts/login.html', {'form': form})
+        else:
+            form = AuthenticationForm()
+        return render(request, 'accounts/reactivate_account.html', {'form': form})
 
+def terms_and_conditions(request):
+    return render(request, 'accounts/terms_and_conditions.html')
 
 def logout_view(request):
     logout(request)
@@ -99,11 +150,19 @@ def customer_profile(request):
     # Get the Customer object for the current user
     customer = Customer.objects.get(customuser_ptr=request.user)
 
-    # Fetch the cart for the current customer
-    cart = Cart.objects.get(customer=customer)
+    # Initialize the cart and recent_cart_items variables
+    cart = None
+    recent_cart_items = None
 
-    # Fetch the recent 2 items added to the cart
-    recent_cart_items = CartItem.objects.filter(cart=cart).order_by('-id')[:2]
+    try:
+        # Try to fetch the cart for the current customer
+        cart = Cart.objects.get(customer=customer)
+
+        # Fetch the recent 2 items added to the cart
+        recent_cart_items = CartItem.objects.filter(cart=cart).order_by('-id')[:2]
+    except Cart.DoesNotExist:
+        # If the Cart does not exist, pass and continue to render the page
+        pass
 
     context = {
         'customer': customer,
@@ -111,7 +170,6 @@ def customer_profile(request):
     }
 
     return render(request, 'accounts/customer_profile.html', context)
-
 
 def customer_updateregpage(request):
     if not request.user.is_authenticated:
@@ -155,8 +213,6 @@ def customer_updateregpage(request):
     }
 
     return render(request, 'accounts/customer_updateregpage.html', context)
-
-
 
 def seller_profile(request):
     if not request.user.is_authenticated:
@@ -217,10 +273,6 @@ def seller_updateregpage(request):
 
     return render(request, 'accounts/seller_updateregpage.html', context)
 
-
-
-
-
 def main_menu(request):
     form = SearchForm(request.GET)
     if request.user.is_authenticated:
@@ -243,36 +295,4 @@ def main_menu(request):
         if not products:
             messages.info(request, f"No products found for '{query}'.")
 
-    return render(request, 'accounts/main_menu.html', {'products': products, 'user_type': user_type})#def customer_homepage(request):
-#    if request.user.is_authenticated:  # Check authentication first
-#        form = SearchForm(request.GET)
-#        products = Product.objects.all()  # Fetch all products
-#
-#        if form.is_valid():
-#            query = form.cleaned_data['query']
-#            products = products.filter(ProductName__icontains=query)
-#            if not products:
-#                messages.info(request, f"No products found for '{query}'.")
-#                return render(request, 'accounts/customer_homepage.html', {'form': form, 'products': products})
-#        # No need to check authentication again as it's done at the beginning
-#
-#        return render(request, 'accounts/customer_homepage.html', {'form': form, 'products': products})
-#    return render(request, 'accounts/customer_homepage.html')
-
-#def seller_homepage(request):
-#    if request.user.is_authenticated:  # Check authentication first
-#        form = SearchForm(request.GET)
-#       # Fetch all products that belong to the current seller
-#        products = Product.objects.filter(SellerID=request.user.seller)
-#
-#        if form.is_valid():
-#            query = form.cleaned_data['query']
-#            products = products.filter(ProductName__icontains=query)
-#            if not products:
-#                messages.info(request, f"No products found for '{query}'.")
-#                return render(request, 'accounts/seller_homepage.html', {'form': form, 'products': products})
-#        # No need to check authentication again as it's done at the beginning
-#
-#        return render(request, 'accounts/seller_homepage.html', {'form': form, 'products': products})
-#    return render(request, 'accounts/seller_homepage.html')
-
+    return render(request, 'accounts/main_menu.html', {'products': products, 'user_type': user_type})

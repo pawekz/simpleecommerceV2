@@ -9,30 +9,34 @@
 <body>
 <section class="image-section">
     <h1>Rocket Basket: Shop Fast, Ship Faster</h1>
-    <a href="{% url 'accounts:main_menu' %}"><img src="{% static 'img/rb.png' %}" alt="RocketBasketLogo">
+    <a href="{% url 'accounts:main_menu' %}"><img src="{% static 'img/rb.png' %}" alt="RocketBasketLogo"></a>
 </section>
 
 <section class="text-section">
     <br><br>
     {% comment %} prints Login User{% endcomment %}
 
-
     {% comment %}<a href="{% url 'accounts:logout' %}">Logout</a>{% endcomment %}
     <a class="button" href="{% url 'accounts:login' %}">Login</a>
     <a class="button" href="{% url 'accounts:customer_register' %}">Register</a>
+    
+
     <div class="card">
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Login">
-    </form>
-    {% if form.non_field_errors %}
-        <ul>
-            {% for error in form.non_field_errors %}
-                <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Login">
+        </form>
+        {% if form.non_field_errors %}
+            <ul>
+                {% for error in form.non_field_errors %}
+                    <li>{{ error }}</li>
+                    {% if 'deactivated' in error %}
+                        <li><a href="{% url 'accounts:reactivate_account' %}">Click here</a> to reactivate your account.</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        {% endif %}
     </div>
 </section>
 </body>

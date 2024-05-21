@@ -88,7 +88,10 @@
         </div>
         <div class="delete-btn" style="text-align: center;">
             <p> I don’t wanna use the platform anymore, I would like to
-                <a class="delete" href="{% url 'accounts:customer_profile' %}"> DELETE </a> my info️ </p>
+                <a class="delete" href="{% url 'accounts:deactivate_account' %}"
+   onclick="return confirm('Are you sure you want to deactivate your account? ' +
+    'To reactivate it, you can click the link or visit the reactivation page.');"> DEACTIVATE </a> my account.
+            </p>
         </div>
     </form>
   </div>

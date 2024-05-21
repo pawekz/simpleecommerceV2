@@ -44,6 +44,7 @@ def add_to_cart(request, product_id):
 
     # Get the quantity from the form data
     quantity = int(request.POST.get('quantity', 1))
+    print(f"Quantity from form data: {quantity}")
 
     # Check if the product quantity is less than the requested quantity
     if product.Quantity < quantity:
@@ -63,7 +64,9 @@ def add_to_cart(request, product_id):
     )
 
     if not item_created:
+        print(f"Quantity before update: {cart_item.quantity}")
         cart_item.quantity += quantity
+        print(f"Quantity after update: {cart_item.quantity}")
         cart_item.total_amount += total_amount
         cart_item.save()
 
