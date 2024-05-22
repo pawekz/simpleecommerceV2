@@ -45,7 +45,10 @@ def edit_product(request, product_id):
         form = ProductForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
             form.save()
-            return redirect('products:add_product')
+            messages.success(request, "Product details have been successfully updated.")
+            return redirect('products:redirection')
+        else:
+            messages.error(request, "Failed updating product details.")
     else:
         form = ProductForm(instance=product)
     return render(request, 'products/edit_product.html', {'form': form})
@@ -100,3 +103,7 @@ def checkout(request, product_id):
 def proceed_to_payment(request):
     # Implement your payment logic here
     return render(request, 'transaction/payment/../templates/transaction/delivery_option.html')
+
+
+def redirection(request):
+    return render(request, "products/redirection.html")

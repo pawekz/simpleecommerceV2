@@ -1,0 +1,32 @@
+ .container {
+    display: flex;
+     flex-direction: column;
+    justify-content: space-between;
+    width: fit-content; /* Adjust as needed */
+    margin: 50px auto;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 5px;
+     align-items: center;
+    font-size: 16px; /* Adjust as needed */
+}
+
+ .r_button {
+            background-color: #4CAF50; /* Green color */
+            color: white;
+            padding: 10px 10px;
+            width: fit-content;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer; /* Make it look like a button */
+            font-size: 50px;
+        }
+
+        .r_button:hover {
+            background-color: #3e8e41; /* Darker green on hover */
+        }
+
+ p {
+     font-size: 50px;
+     font: bolder;
+ }

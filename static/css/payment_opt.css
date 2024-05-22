@@ -4,6 +4,7 @@ body {
     display: flex;
     flex-direction: column;
     max-width: 90%; /* Adjust as needed */
+    text-align: center;
 }
 
 .header {
@@ -57,17 +58,16 @@ body {
   height: 50px;
   margin-left: 100px; /* Add margin for spacing */
 }
-
-.delivery-option-subtitle {
+.payment-option-subtitle {
   font-size: 16px;
   margin: 10px 0;
   text-align: center;
 }
-.delivery-options-container {
+.payment-options-container {
     display: flex;
     justify-content: space-between;
 }
-.delivery-option {
+.payment-option {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -88,12 +88,12 @@ body {
   font-size: 18px;
   margin: 0;
 }
-.payment-option {
+
+.back-div{
     display: flex;
-    margin-left: 395px;
-    margin-top: 20px;
 }
-.back-button {
+
+.back-btn {
     padding: 30px 100px;
     background-color: indianred;
     color: white;
@@ -106,32 +106,6 @@ body {
     font-weight: bold;
 }
 
-.back-button:hover {
+.back-btn:hover {
     background-color: darkred;
-}
-.choose-delivery-option {
-    /* Add your styles here */
-    padding:  20px 50px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-left: 100px;
-    font-size: 25px;
-    font-weight: bold;
-}
-
-.choose-delivery-option:hover {
-    background-color: darkseagreen;
-}
-
-.delivery-option-checked {
-    background-color: #4CAF50;
-}
-
-.card.delivery-option.selected {
-    background-color: #007bff !important; /* Change this to the color you want */
-    color: white !important; /* Change this to the color you want for the text */
 }

@@ -1,0 +1,19 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="../../static/css/redirection.css"/>
+    <meta charset="UTF-8">
+    <title>Redirect</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/redirection.css' %}">
+    
+</head>
+<body>
+    <div class="container">
+        <p>What would you like to do next?</p>
+        <a class="r_button" href="{% url 'products:add_product' %}">Add More Products</a>
+        <br>
+        <a class="r_button" href="{% url 'products:inventory' %}">Back to Inventory</a>
+    </div>
+</body>
+</html>

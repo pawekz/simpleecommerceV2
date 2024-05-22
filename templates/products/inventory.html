@@ -86,7 +86,9 @@
                     {% comment %}<button id="mark-as-sold-{{ product.id }}">Mark as Sold</button>{% endcomment %}
                 </td>
                 <td>
-                    <img src="{% static 'img/editicon.png' %}" alt="editicon.png" width="50" height="50">
+                    <a href="{% url 'products:edit_product' product.ProductID %}">
+                        <img src="{% static 'img/editicon.png' %}" alt="editicon.png" width="50" height="50">
+                    </a>
                 </td>
             </tr>
                {% comment %} <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
