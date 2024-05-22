@@ -12,6 +12,7 @@
 <body>
 {% csrf_token %}
 {% comment %}copy this code below sa body para consistent, ebutang lang asa ang applicable{% endcomment %}
+{% comment %}this can be improved po. i'll try to make an inheritable for this to reduce redundancy.{% endcomment %}
 <header class="header mt-3 d-flex flex-column align-items-center">
     <h2 class="d-flex align-items-center">
         <img src="{% static 'img/basket.png' %}" alt="BasketLogo" class="icon me-4">

@@ -121,11 +121,11 @@ def confirm_payment(request):
 
             # Check if a transaction has already been created for this cart
             if Transaction.objects.filter(Cart=cart).exists():
-                return redirect('transaction:success')  # Redirect to the success page
+                return redirect('transaction:payment_successful')  # Redirect to the success page
 
             # Check if the cart is already empty
             if not cart.cartitem_set.exists():
-                return redirect('transaction:success')  # Redirect to the success page
+                return redirect('transaction:payment_successful')  # Redirect to the success page
 
             # Lock the cart items until the transaction is complete
             cart_items = CartItem.objects.select_for_update().filter(cart=cart)
@@ -210,3 +210,13 @@ def payment_option(request):
 
 def error(request):
     return render(request, 'transaction/error.html')
+
+
+def order_history(request):
+    # Get the Customer object for the current
+    customer = Customer.objects.get(customuser_ptr=request.user)
+    return render(request, 'transaction/order_history.html')
+
+
+def payment_successful(request):
+    return render(request, 'transaction/payment/payment_successful.html')

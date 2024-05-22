@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Successful</title>
+    <link rel="stylesheet" href="{% static 'css/order_history.css' %}">
+    <script src="{% static 'css/jquery.min.js' %}"></script>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <script src="{% static 'css/bootstrap.bundle.min.js' %}"></script>
+</head>
+<body>
+    <header class="header">
+    <div class="header-content">
+
+        <h1>
+            <b>Rocket Basket: Shop Fast, Ship Faster</b> <img src="{% static 'img/Rockettt.png' %}" alt="RocketLogo" class="oh_icon">
+            <img src="{% static 'img/basket.png' %}" alt="BasketLogo" class="oh_icon">
+            <img id="myImage" src="{% static 'img/account_icon.png' %}" alt="Image"  class="profile-icon">
+        </h1>
+
+    {% comment %}made the pop up inheritable to reduce redundancy {% endcomment %}
+    {% include 'inheritables/popup.html' %}
+    </div>
+    </header>
+    
+<div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-success" role="alert">
+                    <h4 class="alert-heading">Thank you for your purchase!</h4>
+                    <p>Your order has been successfully placed.</p>
+                    <hr>
+                    <p class="mb-0">You can view your order details in your <a href="{% url 'accounts:customer_profile' %}">profile</a>.</p>
+                </div>
+            </div>
+        </div>
+    <br>
+    <a class="oh_button" href="{% url 'delivery:customer_trackdelivery' %}">Track Delivery</a>
+    </div>
+    
+</body>
+</html>

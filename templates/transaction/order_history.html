@@ -1,10 +1,54 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>RB OrderHistory</title>
+    <title>Rocket Basket | OrderHistory</title>
+    <link rel="stylesheet" href="{% static 'css/order_history.css' %}">
+
 </head>
 <body>
+<header class="header">
+    <div class="header-content">
 
+        <h1>
+            <b>Rocket Basket: Shop Fast, Ship Faster - Order History</b> <img src="{% static 'img/Rockettt.png' %}" alt="RocketLogo" class="oh_icon">
+            <img src="{% static 'img/basket.png' %}" alt="BasketLogo" class="oh_icon">
+            <img id="myImage" src="{% static 'img/account_icon.png' %}" alt="Image"  class="profile-icon">
+        </h1>
+
+    {% comment %}made the pop up inheritable to reduce redundancy {% endcomment %}
+    {% include 'inheritables/popup.html' %}
+    </div>
+</header>
+<div class="container">
+    <h2>Order History</h2>
+    <table>
+        <tr>
+            <th>ORDER #</th>
+            <th>DESCRIPTION</th>
+            <th>AMOUNT</th>
+            <th>STATUS</th>
+            <th>OPINION?</th>
+            <th>CHAT SELLER</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>Test Product</td>
+            <td>P 120.00</td>
+            <td><span class="shipped">SHIPPED</span></td>
+            <td class="icon"><img src="{% static 'img/heart.png' %}" alt="heart.png" width="50" height="50"></td>
+            <td class="icon"><img src="{% static 'img/chat.png' %}" alt="chat.png" width="50" height="50"></td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Test Product 2</td>
+            <td>P 240.00</td>
+            <td><span class="in-transit">IN TRANSIT</span></td>
+            <td class="icon"><img src="{% static 'img/leave_a_heart.png' %}" alt="leave_a_heart.png" width="50" height="50"></td>
+            <td class="icon"><img src="{% static 'img/chat.png' %}" alt="chat.png" width="50" height="50"></td>
+        </tr>
+    </table>
+</div>
 </body>
 </html>

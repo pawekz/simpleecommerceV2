@@ -22,6 +22,8 @@
             {% else %}
                 <a href="{% url 'cart:cart' %}"><img src="{% static 'img/AddMoreProduct.png' %}" alt="RocketLogo" class="icon"></a>
             {% endif %}
+        {% else %}
+            <a href="{% url 'cart:cart' %}"><img src="{% static 'img/AddMoreProduct.png' %}" alt="RocketLogo" class="icon"></a>
         {% endif %}
     </h1>
 
@@ -86,6 +88,13 @@ window.onclick = function(event) {
             <input type="text" class="search-input" placeholder="Search" name="query"><br>
             <button type="submit" class="search-button">Search</button>
         </div>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
         <br>
 
         {% if request.user.is_authenticated %}
@@ -101,9 +110,10 @@ window.onclick = function(event) {
                                 {% if product.Quantity > 0 %}
                                     <form method="POST" action="{% url 'cart:add_to_cart' product_id=product.ProductID %}">
                                         {% csrf_token %}
+                                        {% comment %} --ngano naay add to cart button ang seller?
                                         <input type="hidden" name="product_id" value="{{ product.ProductID }}">
                                         <input type="number" name="quantity" value="1" min="1" max="5">
-                                        <input type="submit" value="Add to Cart">
+                                        <input type="submit" value="Add to Cart">{% endcomment %}
                                     </form>
                                 {% else %}
                                     <p>Out of stock</p>
@@ -126,7 +136,7 @@ window.onclick = function(event) {
                                 <p>Quantity: {{ product.Quantity }}</p>
                                 <p class="price">Price: ₱{{ product.PricePerUnit }}</p>
                                {% if product.Quantity > 0 %}
-                                <form method="post" action="{% url 'cart:add_to_cart' product_id=product.ProductID %}">
+                                <form method="POST" action="{% url 'cart:add_to_cart' product_id=product.ProductID %}">
                                     {% csrf_token %}
                                     <input type="hidden" name="product_id" value="{{ product.ProductID }}">
                                     <input type="number" name="quantity" value="1" min="1" max="{{ product.Quantity }}">
@@ -135,6 +145,13 @@ window.onclick = function(event) {
                             {% else %}
                                 <p>Out of stock</p>
                             {% endif %}
+
+{#                                <form method="get" action="{% url 'products:checkout' product.ProductID %}">#}
+{#                                    <input type="number" id="quantity-{{ product.ProductID }}" name="quantity" value="1" min="1" max="5">#}
+{#                                    <button type="button" onclick="increaseQuantity({{ product.ProductID }})">+</button>#}
+{#                                    <button type="button" onclick="decreaseQuantity({{ product.ProductID }})">-</button>#}
+{#                                    <input type="submit" value="Buy">#}
+{#                                </form>#}
                             </div>
                         {% endfor %}
                     </div>

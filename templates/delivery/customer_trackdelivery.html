@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Track Delivery</title>
+    <link rel="stylesheet" href="{% static 'css/order_history.css' %}">
+</head>
+<body>
+<header class="header">
+    <div class="header-content">
+
+        <h1>
+            <b>Rocket Basket: Shop Fast, Ship Faster</b> <img src="{% static 'img/Rockettt.png' %}" alt="RocketLogo" class="oh_icon">
+            <img src="{% static 'img/basket.png' %}" alt="BasketLogo" class="oh_icon">
+            <img id="myImage" src="{% static 'img/account_icon.png' %}" alt="Image"  class="profile-icon">
+        </h1>
+
+    {% comment %}made the pop up inheritable to reduce redundancy {% endcomment %}
+    {% include 'inheritables/popup.html' %}
+    </div>
+    </header>
+{% comment %}e modify lang palihuggggg, pwede ra kaayo tangtangon ang container{% endcomment %}
+<div class="container">
+    <h2>ModifyModifyModifyModifyModify</h2>
+</div>
+     
+</body>
+</html>

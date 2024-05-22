@@ -78,3 +78,6 @@ def delivery_option(request):
 
 def seller_updateorderstatus(request):
     return render(request, 'delivery/seller_updateorderstatus.html')
+
+def customer_trackdelivery(request):
+    return render(request, 'delivery/customer_trackdelivery.html')
