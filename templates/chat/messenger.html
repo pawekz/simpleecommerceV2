@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat</title>
+    <style>
+        #chatbox {
+            width: 300px;
+            height: 400px;
+            border: 1px solid black;
+            overflow: auto;
+        }
+        #usermsg {
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div id="chatbox"></div>
+    <input name="usermsg" type="text" id="usermsg" />
+    <button id="submitmsg">Send</button>
+
+    <script>
+        document.getElementById('submitmsg').addEventListener('click', function() {
+            var newMessage = document.createElement('p');
+            newMessage.textContent = document.getElementById('usermsg').value;
+            document.getElementById('chatbox').appendChild(newMessage);
+            document.getElementById('usermsg').value = '';
+        });
+    </script>
+</body>
+</html>
