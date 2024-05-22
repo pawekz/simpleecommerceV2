@@ -68,20 +68,15 @@
                     <div>
                         <p style="font-size:20px">Recently Bought:</p>
                         <div class="gallery-container">
-                            <div class="gallery-item">
-                                <img src="https://mydiamond.com.ph/cdn/shop/products/MD02228_MD02926_600x.jpg?v=1589514281" alt="item-image" style="height: 200px;">
-                                <div class="item-details">
-                                    <p>Diamond Bracelet</p>
-                                    <p>Price: $299</p>
+                            {% for item in recent_orders_items %}
+                                <div class="gallery-item">
+                                    <img src="{{ item.product.image.url }}" alt="{{ item.product.ProductName }}" style="height: 200px;">
+                                    <div class="item-details">
+                                        <p>{{ item.product.ProductName }}</p>
+                                        <p>Price: ${{ item.product.PricePerUnit }}</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="gallery-item">
-                                <img src="https://www.thewatchcompany.com/media/tm_blog/p/o/7/1322/post_7_1322.jpg" alt="item-image" style="height: 200px;">
-                                <div class="item-details">
-                                    <p>Chronograph Watch</p>
-                                    <p>Price: $199</p>
-                                </div>
-                            </div>
+                            {% endfor %}
                         </div>
                         <a href="{% url 'transaction:order_history' %}" style="display: block; margin-top: 10px;">Let's See What We Snagged (Order History)</a>
                     </div>
