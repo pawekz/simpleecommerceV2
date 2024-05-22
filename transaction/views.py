@@ -114,119 +114,70 @@ def success(request):
 
 @login_required
 def confirm_payment(request):
-    print("confirm_payment called")
     try:
         with transaction.atomic():
-            cart = get_cart(request)
-            print("Cart retrieved: ", cart)
-            if transaction_exists(cart) or cart_is_empty(cart):
-                print("transaction already exists or cart is empty")
-                return redirect('transaction:success')
+            # Get the current user's cart
+            cart = Cart.objects.get(customer=request.user.customer)
 
-            cart_items = lock_cart_items(cart)
-            print("Cart items locked:", cart_items)
+            # Check if a transaction has already been created for this cart
+            if Transaction.objects.filter(Cart=cart).exists():
+                return redirect('transaction:success')  # Redirect to the success page
 
-            new_transaction = save_new_transaction(request, cart, cart_items)
-            print("New transaction saved:", new_transaction)
+            # Check if the cart is already empty
+            if not cart.cartitem_set.exists():
+                return redirect('transaction:success')  # Redirect to the success page
 
-            delivery = save_new_delivery(request)
-            print("Delivery saved:", delivery)
+            # Lock the cart items until the transaction is complete
+            cart_items = CartItem.objects.select_for_update().filter(cart=cart)
 
-            process_cart_items(cart_items, new_transaction, cart, delivery)
-            print("Cart items processed")
+            # Create a new Transaction instance
+            new_transaction = Transaction(
+                PurchaseDate=timezone.now(),
+                TotalPrice=cart.total,
+                TotalQuantity=cart_items.count(),  # Assumes each CartItem represents one product
+                CustomerID=request.user.customer,  # Assign the Customer instance directly
+                Cart=cart  # Assign the Cart instance
+            )
+            new_transaction.save()
+
+            # Get the first Delivery object, or create a new one if none exist
+            delivery = Delivery.objects.first()
+            if delivery is None:
+                delivery_type = DeliveryType.objects.first()  # Assumes a DeliveryType exists
+                delivery = Delivery(DeliveryStatus='1', DeliveryType=delivery_type)
+                delivery.save()  # Save the Delivery instance to the database
+
+            # Create a new OrderHistory instance for each item in the cart
+            for item in cart_items:
+                if item.product is None:
+                    continue
+                order_history = OrderHistory(
+                    ProductID=item.product,  # Assign the Product instance directly
+                    TransactionID=new_transaction,
+                    CartID=cart,
+                    QuantityPerProduct=item.quantity,  # Use QuantityPerProduct instead of Quantity
+                    DatePurchased=timezone.now(),
+                    DeliveryID=delivery  # Use the Delivery object
+                )
+                order_history.save()
+
+                # Check if the product quantity is less than the quantity in the cart
+                if item.product.Quantity < item.quantity:
+                    return redirect('transaction:error')  # Redirect to an error page
+
+                # Update product quantity
+                # item.product.Quantity -= item.quantity
+                item.product.save()
+
+                # Delete the CartItem instance after updating product quantity
+                item.delete()
 
     except Exception as e:
-        print("Exception ocured: ", e)
-        return redirect('transaction:error')
+        # Handle the exception
+        return redirect('transaction:error')  # Redirect to an error page
 
-    print("Payment confirmed successfully")
+    # Redirect to the success page
     return redirect('transaction:success')
-
-
-def get_cart(request):
-    print("Fetching cart for the user called get_cart")
-    return Cart.objects.get(customer=request.user.customer)
-
-
-def transaction_exists(cart):
-    print("Checking if transaction already exists called transaction_exist")
-    return Transaction.objects.filter(Cart=cart).exists()
-
-
-def cart_is_empty(cart):
-    print("Checking if cart is empty called cart_is_empty")
-    return not cart.cartitem_set.exists()
-
-
-def lock_cart_items(cart):
-    print("Locking cart items called lock_cart_items")
-    return CartItem.objects.select_for_update().filter(cart=cart)
-
-
-def save_new_transaction(request, cart, cart_items):
-    print("Creating a new transaction called save_new_transaction")
-    new_transaction = Transaction(
-        PurchaseDate=timezone.now(),
-        TotalPrice=cart.total,
-        TotalQuantity=cart_items.count(),
-        CustomerID=request.user.customer,
-        Cart=cart
-    )
-    new_transaction.save()
-    return new_transaction
-
-
-def save_new_delivery(request):
-    print("Saving a new delivery called save_new_delivery")
-    selected_delivery_type_id = request.session.get('selected_delivery_type_id')
-    delivery_type = DeliveryType.objects.get(id=selected_delivery_type_id)
-    # dnhi na ka mag modify pre sa `DeliveryStatus`
-    delivery = Delivery(DeliveryStatus='1', DeliveryType=delivery_type)
-    delivery.save()
-    return delivery
-
-
-def process_cart_items(cart_items, new_transaction, cart, delivery):
-    print("Processing cart items called process_cart_items")
-    for item in cart_items:
-        if item.product is None:
-            continue
-        print("Saving order history for item:", item)
-        order_history = save_order_history(item, new_transaction, cart, delivery)
-        if product_quantity_insufficient(item):
-            return redirect('transaction:error')
-        update_product_quantity(item)
-        delete_cart_item(item)
-
-
-def save_order_history(item, new_transaction, cart, delivery):
-    print("Creating order history called save_order_history: ", item)
-    order_history = OrderHistory(
-        ProductID=item.product,
-        TransactionID=new_transaction,
-        CartID=cart,
-        QuantityPerProduct=item.quantity,
-        DatePurchased=timezone.now(),
-        DeliveryID=delivery
-    )
-    order_history.save()
-    return order_history
-
-
-def product_quantity_insufficient(item):
-    print("Check product quantity for item called product_quantity_insufficient:", item)
-    return item.product.Quantity < item.quantity
-
-
-def update_product_quantity(item):
-    print("Updating product quantity for item called update_product_quantity:", item)
-    item.product.Quantity -= item.quantity
-    item.product.save()
-
-
-def delete_cart_item(item):
-    print("Deleting cart item:", item)
-    item.delete()
 
 
 def calculate_cart_subtotal(request):
