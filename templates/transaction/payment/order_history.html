@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rocket Basket: Shop Fast, Ship Faster - Order History</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background-color: #f4f4f4;
+    }
+    .container {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin: 20px auto;
+        width: 80%;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        text-align: left;
+        padding: 8px;
+        border-bottom: 1px solid #ddd;
+    }
+    th {
+        background-color: #f8f8f8;
+    }
+    .shipped {
+        color: green;
+        font-weight: bold;
+    }
+    .in-transit {
+        color: orange;
+        font-weight: bold;
+    }
+    .icon {
+        text-align: center;
+    }
+    .icon img {
+        width: 20px;
+        height: 20px;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h2>Rocket Basket: Shop Fast, Ship Faster - Order History</h2>
+    <table>
+        <tr>
+            <th>ORDER #</th>
+            <th>DESCRIPTION</th>
+            <th>AMOUNT</th>
+            <th>STATUS</th>
+            <th>OPINION?</th>
+            <th>CHAT SELLER</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>Test Product</td>
+            <td>P 120.00</td>
+            <td><span class="shipped">SHIPPED</span></td>
+            <td class="icon"><img src="heart_icon.png" alt="Heart"/></td>
+            <td class="icon"><img src="chat_icon.png" alt="Chat"/></td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Test Product 2</td>
+            <td>P 240.00</td>
+            <td><span class="in-transit">IN TRANSIT</span></td>
+            <td class="icon"><img src="heart_icon.png" alt="Heart"/></td>
+            <td class="icon"><img src="chat_icon.png" alt="Chat"/></td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
