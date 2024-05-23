@@ -4,7 +4,6 @@ from cart.models import Cart
 from delivery.models import Delivery
 from products.models import Product
 
-
 # change the default models if necessary
 # Create your models here.
 
@@ -23,8 +22,3 @@ class OrderHistory(models.Model):
     QuantityPerProduct = models.IntegerField()
     DatePurchased = models.DateTimeField(auto_now_add=True, auto_now=False)
     DeliveryID = models.ForeignKey(Delivery, on_delete=models.CASCADE)
-
-
-
-
-

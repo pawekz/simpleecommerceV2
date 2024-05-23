@@ -2,7 +2,6 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
-
 from accounts.models import Customer
 from cart.models import CartItem, Cart
 from delivery.models import DeliveryType, Delivery

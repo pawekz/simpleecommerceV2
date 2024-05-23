@@ -129,6 +129,7 @@ def decrease_quantity(request, product_id):
 
     return redirect('cart:cart')
 
+
 def remove_from_cart(request, product_id):
     product = get_object_or_404(Product, ProductID=product_id)
     customer = Customer.objects.get(customuser_ptr_id=request.user.id)
@@ -136,16 +137,19 @@ def remove_from_cart(request, product_id):
 
     cart_item = get_object_or_404(CartItem, cart=cart, product=product)
 
+    # Store the quantity before deleting the cart item
+    quantity = cart_item.quantity
+
+    # Delete the CartItem before modifying the product quantity
+    cart_item.delete()
+
     # Subtract the total_amount of the CartItem from the Cart total
-    cart.total -= cart_item.total_amount
+    cart.total -= product.PricePerUnit * quantity
     cart.save()
 
     # Increase the product quantity
-    product.Quantity += cart_item.quantity
+    product.Quantity += quantity
     product.save()
-
-    # Delete the CartItem
-    cart_item.delete()
 
     messages.success(request, 'Product removed from cart.')
     return redirect('cart:cart')
