@@ -177,7 +177,7 @@ def confirm_payment(request):
         return redirect('transaction:error')  # Redirect to an error page
 
     # Redirect to the success page
-    return redirect('transaction:success')
+    return redirect('transaction:payment_successful')
 
 
 def calculate_cart_subtotal(request):
