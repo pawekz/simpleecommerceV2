@@ -8,7 +8,6 @@ from .models import Customer, Seller
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth import update_session_auth_hash
 from products.models import Product
-from transaction.models import Order, OrderItem
 from accounts.forms import SearchForm
 from django.contrib.auth import login,  get_user_model
 from .forms import UserRegistrationForm
@@ -154,7 +153,6 @@ def customer_profile(request):
     # Initialize the cart and recent_cart_items variables
     cart = None
     recent_cart_items = None
-    recent_orders_items = None
 
     try:
         # Try to fetch the cart for the current customer
@@ -162,15 +160,6 @@ def customer_profile(request):
 
         # Fetch the recent 2 items added to the cart
         recent_cart_items = CartItem.objects.filter(cart=cart).order_by('-id')[:2]
-
-        # Fetch the recent 2 orders of the customer
-        recent_orders = Order.objects.filter(customer=customer).order_by('-purchase_date')[:2]
-
-        # Fetch the items in the recent orders
-        recent_orders_items = []
-        for order in recent_orders:
-            order_items = OrderItem.objects.filter(order=order)
-            recent_orders_items.extend(order_items)
     except Cart.DoesNotExist:
         # If the Cart does not exist, pass and continue to render the page
         pass
@@ -178,11 +167,9 @@ def customer_profile(request):
     context = {
         'customer': customer,
         'recent_cart_items': recent_cart_items,
-        'recent_orders_items': recent_orders_items,
     }
 
     return render(request, 'accounts/customer_profile.html', context)
-
 
 def customer_updateregpage(request):
     if not request.user.is_authenticated:

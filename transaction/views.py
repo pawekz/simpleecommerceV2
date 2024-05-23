@@ -2,7 +2,6 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
-
 from accounts.models import Customer
 from cart.models import CartItem, Cart
 from delivery.models import DeliveryType, Delivery
@@ -177,7 +176,7 @@ def confirm_payment(request):
         return redirect('transaction:error')  # Redirect to an error page
 
     # Redirect to the success page
-    return redirect('transaction:success')
+    return redirect('transaction:payment_successful')
 
 
 def calculate_cart_subtotal(request):
