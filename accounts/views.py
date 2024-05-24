@@ -150,19 +150,13 @@ def customer_profile(request):
     # Get the Customer object for the current user
     customer = Customer.objects.get(customuser_ptr=request.user)
 
-    # Initialize the cart and recent_cart_items variables
-    cart = None
-    recent_cart_items = None
+    # Fetch the latest cart for the current customer or create a new one if it doesn't exist
+    cart = Cart.objects.filter(customer=customer).order_by('-id').first()
+    if cart is None:
+        cart = Cart.objects.create(customer=customer, total=0.00)
 
-    try:
-        # Try to fetch the cart for the current customer
-        cart = Cart.objects.get(customer=customer)
-
-        # Fetch the recent 2 items added to the cart
-        recent_cart_items = CartItem.objects.filter(cart=cart).order_by('-id')[:2]
-    except Cart.DoesNotExist:
-        # If the Cart does not exist, pass and continue to render the page
-        pass
+    # Fetch the recent 2 items added to the cart
+    recent_cart_items = CartItem.objects.filter(cart=cart).order_by('-id')[:2]
 
     context = {
         'customer': customer,

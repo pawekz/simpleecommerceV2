@@ -60,7 +60,9 @@ def delivery_option(request):
     customer = Customer.objects.get(customuser_ptr=request.user)
 
     # Fetch the cart for the current customer
-    cart = get_object_or_404(Cart, customer=customer)
+    cart = Cart.objects.filter(customer=customer).order_by('-id').first()
+    if cart is None:
+        cart = Cart.objects.create(customer=customer, total=0.00)
 
     # Fetch all items in the customer's cart
     cart_items = CartItem.objects.filter(cart=cart)

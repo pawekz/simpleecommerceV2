@@ -9,6 +9,11 @@ from products.models import Product
 from transaction.models import OrderHistory, Transaction
 from django.db import transaction
 
+import logging
+
+
+logger = logging.getLogger(__name__)
+
 
 # Create your views here.
 def home(request):
@@ -31,7 +36,9 @@ def review_cart(request):
     customer = Customer.objects.get(customuser_ptr=request.user)
 
     # Fetch the cart for the current customer
-    cart = get_object_or_404(Cart, customer=customer)
+    cart = Cart.objects.filter(customer=customer).order_by('-id').first()
+    if cart is None:
+        cart = Cart.objects.create(customer=customer, total=0.00)
 
     # Fetch all items in the customer's cart
     cart_items = CartItem.objects.filter(cart=cart)
@@ -61,7 +68,9 @@ def get_payment_context(request):
     customer = Customer.objects.get(customuser_ptr=request.user)
 
     # Fetch the cart for the current customer
-    cart = get_object_or_404(Cart, customer=customer)
+    cart = Cart.objects.filter(customer=customer).order_by('-id').first()
+    if cart is None:
+        cart = Cart.objects.create(customer=customer, total=0.00)
 
     # Fetch all items in the customer's cart
     cart_items = CartItem.objects.filter(cart=cart)
@@ -113,21 +122,47 @@ def success(request):
 
 @login_required
 def confirm_payment(request):
+    print("starting confirm_payment")
+
+    customer = Customer.objects.get(customuser_ptr=request.user)
+    print(f"call customer ID: {customer}")
+
     try:
         with transaction.atomic():
             # Get the current user's cart
-            cart = Cart.objects.get(customer=request.user.customer)
+            cart = Cart.objects.filter(customer=customer).order_by('-id').first()
+            if cart is None:
+                cart = Cart.objects.create(customer=customer, total=0.00)
+            print(f"Cart: {cart}")
 
             # Check if a transaction has already been created for this cart
             if Transaction.objects.filter(Cart=cart).exists():
+                logger.info(f"Transaction already exists for cart {cart.id}")
+                print(f"Transaction already exists for cart {cart.id}")
                 return redirect('transaction:payment_successful')  # Redirect to the success page
 
             # Check if the cart is already empty
             if not cart.cartitem_set.exists():
+                logger.info('Cart is empty')
+                print("Cart is empty")
                 return redirect('transaction:payment_successful')  # Redirect to the success page
 
             # Lock the cart items until the transaction is complete
             cart_items = CartItem.objects.select_for_update().filter(cart=cart)
+            print(f"Cart items: {cart_items}")
+
+            # Get the preferred DeliveryType from the session
+            delivery_type_id = request.session.get('selected_delivery_type_id')
+            delivery_type = DeliveryType.objects.get(id=delivery_type_id)
+
+            # Get the first Delivery object for the preferred DeliveryType, or create a new one if none exist
+            delivery = Delivery.objects.filter(DeliveryType=delivery_type).first()
+            if delivery is None:
+                delivery = Delivery(DeliveryStatus='1', DeliveryType=delivery_type)
+                delivery.save()  # Save the Delivery instance to the database
+            print(f"Delivery : {delivery}")
+            print("Delivery Save")
+
 
             # Create a new Transaction instance
             new_transaction = Transaction(
@@ -135,21 +170,20 @@ def confirm_payment(request):
                 TotalPrice=cart.total,
                 TotalQuantity=cart_items.count(),  # Assumes each CartItem represents one product
                 CustomerID=request.user.customer,  # Assign the Customer instance directly
-                Cart=cart  # Assign the Cart instance
+                Cart=cart,  # Assign the Cart instance
+                Delivery=delivery #Assign the Delivery instance
             )
+            print("Transaction about to save")
             new_transaction.save()
 
-            # Get the first Delivery object, or create a new one if none exist
-            delivery = Delivery.objects.first()
-            if delivery is None:
-                delivery_type = DeliveryType.objects.first()  # Assumes a DeliveryType exists
-                delivery = Delivery(DeliveryStatus='1', DeliveryType=delivery_type)
-                delivery.save()  # Save the Delivery instance to the database
+            cart.delivery = delivery
+            cart.save()
 
             # Create a new OrderHistory instance for each item in the cart
             for item in cart_items:
                 if item.product is None:
                     continue
+
                 order_history = OrderHistory(
                     ProductID=item.product,  # Assign the Product instance directly
                     TransactionID=new_transaction,
@@ -158,21 +192,33 @@ def confirm_payment(request):
                     DatePurchased=timezone.now(),
                     DeliveryID=delivery  # Use the Delivery object
                 )
+                print("Order History about to save")
                 order_history.save()
 
                 # Check if the product quantity is less than the quantity in the cart
                 if item.product.Quantity < item.quantity:
+                    logger.warning(f"Product {item.product.ProductID} is out of stock")
                     return redirect('transaction:error')  # Redirect to an error page
 
                 # Update product quantity
                 # item.product.Quantity -= item.quantity
                 item.product.save()
+                logger.info(f"Product {item.product.ProductID} quantity updated")
+                print(f"Product {item.product.ProductID} quantity updated")
 
                 # Delete the CartItem instance after updating product quantity
-                item.delete()
+                item.delete(update_product_quantity=False)
+                logger.info(f"CartItem {item.id} deleted")
+                print(f"CartItem {item.id} deleted")
+
+            # Create a new Cart instance for the customer
+            print("About to create new instance of the cart")
+            new_cart = Cart(customer=request.user.customer, total=0.00)
+            new_cart.save()
 
     except Exception as e:
         # Handle the exception
+        logger.error(f"An error occurred: {e}")
         return redirect('transaction:error')  # Redirect to an error page
 
     # Redirect to the success page
