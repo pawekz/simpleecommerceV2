@@ -13,6 +13,7 @@ class Transaction(models.Model):
     TotalQuantity = models.IntegerField()
     CustomerID = models.ForeignKey(Customer, on_delete=models.CASCADE)
     Cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    Delivery = models.ForeignKey(Delivery, on_delete=models.SET_NULL, null=True,blank=True)
 
 
 class OrderHistory(models.Model):
