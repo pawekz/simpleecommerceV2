@@ -37,6 +37,7 @@
                     <a class="popup-link" href="{% url 'accounts:logout' %}">Logout</a>
                 {% else %}
                     <a class="popup-link" href="{% url 'accounts:customer_profile' %}">See Profile</a>
+                    <a class="popup-link" href="{% url 'transaction:order_history' %}">View Order History</a>
                     <a class="popup-link" href="{% url 'accounts:logout' %}">Logout</a>
                 {% endif %}
             {% else %}
