@@ -1,9 +1,25 @@
+ section {
+            flex: 1; /* Make sections equal width */
+            padding: 20px;
+        }
 
-body {
-    font-family: Arial, sans-serif;
-    padding: 20px;
-    background-color: #f4f4f4;
-}
+        .image-section {
+            /* Styling for the section with the image */
+        }
+
+        .text-section {
+            /* Styling for the section with the text and buttons */
+        }
+
+.rpcard {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            max-width: 300px;
+            margin: 0 auto;
+            text-align: left;
+            transition: background-color 0.2s ease-in-out;
+        }
 .container {
     background-color: white;
     border-radius: 8px;
@@ -14,6 +30,11 @@ body {
     align-items: center;
     align-content: center;
     text-align: center;
+}
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: #f4f4f4;
 }
 table {
     width: 100%;
@@ -161,3 +182,26 @@ th {
             cursor: pointer; /* Make it look like a button */
         }
 
+.dcard {
+     display: flex;
+    flex-direction: row;
+    width: 100%;
+    /*justify-content: center; /* Aligns items horizontally in the center */
+    align-items: center; /* Aligns items vertically in the center */
+}
+
+ .image-dcard{
+     justify-content: right;
+    flex: 1; /* Each child takes up half of the container's width */
+    padding: 50px; /* Optional: Adds some spacing around the content */
+  }
+.description-dcard {
+    justify-content: left;
+    flex: 1; /* Each child takes up half of the container's width */
+    padding: 50px; /* Optional: Adds some spacing around the content */
+  }
+  img {
+
+    width: 100%; /* Makes the image responsive */
+    height: auto; /* Maintains aspect ratio */
+  }

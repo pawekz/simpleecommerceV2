@@ -6,6 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'css/main_menu.css' %}">
+    <script src="https://cdn.lordicon.com/lordicon.js"></script>
 <title>Rocket Basket</title>
 </head>
 <body>
@@ -136,6 +137,7 @@ window.onclick = function(event) {
                                 <p>{{ product.Description }}</p>
                                 <p>Quantity: {{ product.Quantity }}</p>
                                 <p class="price">Price: ₱{{ product.PricePerUnit }}</p>
+                            
                                {% if product.Quantity > 0 %}
                                 <form method="POST" action="{% url 'cart:add_to_cart' product_id=product.ProductID %}">
                                     {% csrf_token %}
@@ -143,7 +145,18 @@ window.onclick = function(event) {
                                     <input type="number" name="quantity" value="1" min="1" max="{{ product.Quantity }}">
                                     <input type="submit" value="Add to Cart">
                                 </form>
-                            {% else %}
+                                   {% comment %}
+                                   	--conditional staement for hart img
+                                   	 if empty ang reviews, as is empty heart
+                                   	 else, filled heart. 
+                                   	 and ayaw kalimot sa pag adjust sa
+                                   	 description sa product para neat ug
+                                   	 consistent sha tan awn
+                                   {% endcomment %}
+                                   <br>
+
+                                   <lord-icon src="https://cdn.lordicon.com/xyboiuok.json" trigger="hover" style="width:50px;height:50px"></lord-icon>
+                               {% else %}
                                 <p>Out of stock</p>
                             {% endif %}
 
@@ -164,7 +177,7 @@ window.onclick = function(event) {
                         <img class="product-image" src="{{ product.image.url }}" alt="{{ product.ProductName }}">
                         <h3>{{ product.ProductName }}</h3>
                         <p>{{ product.Description }}</p>
-                        <p class="price">Price: ${{ product.PricePerUnit }}</p>
+                        <p class="price">Price: ₱{{ product.PricePerUnit }}</p>
                         <p>Quantity: {{ product.Quantity }}</p>
                         <form method="post" action="{% url 'accounts:login' %}">
                             {% csrf_token %}

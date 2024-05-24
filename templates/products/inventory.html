@@ -9,46 +9,19 @@
 
 </head>
 <body>
-<header class="header">
-    <h1><a href="{% url 'accounts:main_menu' %}"><img src="{% static 'img/back.png' %}" alt="back-icon" style="height: 30px; width: 30px;"></a>   Rocket Basket: Shop Fast, Ship Faster - Seller Inventory   <img src="{% static 'img/Rockettt.png' %}" alt="RocketLogo" class="i_icon">
-        <img src="{% static 'img/basket.png' %}" alt="BasketLogo" class="i_icon">
-        <img id="myImage" src="{% static 'img/account_icon.png' %}" alt="Image" style="width:50px"></h1>
+    <header class="header">
+    <div class="header-content">
 
-    <div id="myPopup" class="popup">
-        <div class="popup-content">
-            <span class="close">&times;</span>
-            <div class="popup-links">
-                <a class="popup-link" href="{% url 'accounts:seller_profile' %}">See profile</a>
-                <a class="popup-link" href="{% url 'accounts:login' %}">Logout</a>
-            </div>
-        </div>
+        <h1>
+            <b>Rocket Basket: Shop Fast, Ship Faster</b> <img src="{% static 'img/Rockettt.png' %}" alt="RocketLogo" class="i_icon">
+            <a href="{% url 'cart:cart' %}"><img src="{% static 'img/basket.png' %}" alt="BasketLogo" class="i_icon"></a>
+            <img id="myImage" src="{% static 'img/account_icon.png' %}" alt="Image" class="profile-icon">
+        </h1>
+
+    {% comment %}made the pop up inheritable to reduce redundancy {% endcomment %}
+    {% include 'inheritables/popup.html' %}
     </div>
-    <script>
-// Get the modal
-    var modal = document.getElementById("myPopup");
-
-// Get the image and insert it inside the modal
-    var img = document.getElementById("myImage");
-    img.onclick = function(){
-    modal.style.display = "block";
-    }
-
-// Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
-
-// When the user clicks on <span> (x), close the modal
-    span.onclick = function() {
-    modal.style.display = "none";
-    }
-
-// When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-    </script>
-</header>
+    </header>
 <div class="inventory_container">
 <h1>Your Products:</h1>
     <table>

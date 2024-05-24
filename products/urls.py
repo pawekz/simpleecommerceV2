@@ -14,5 +14,6 @@ urlpatterns = [
     path('mark-as-sold/<int:product_id>/', views.mark_as_sold, name='mark_as_sold'),
     path('checkout/<int:product_id>/', views.checkout, name='checkout'),
     path('proceed_to_payment/', views.proceed_to_payment, name='proceed_to_payment'),
-    path('redirection/',views.redirection,name='redirection')
+    path('redirection/',views.redirection,name='redirection'),
+    path('review_product/', views.review_product, name='review_product')
 ]

@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rocket Basket | Review Product</title>
+    <link rel="stylesheet" href="{% static 'css/review_product.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <header class="header">
+    <div class="header-content">
+
+        <h1>
+            <b>Rocket Basket: Shop Fast, Ship Faster</b> <img src="{% static 'img/Rockettt.png' %}" alt="RocketLogo" class="oh_icon">
+            <a href="{% url 'cart:cart' %}"><img src="{% static 'img/basket.png' %}" alt="BasketLogo" class="oh_icon"></a>
+            <img id="myImage" src="{% static 'img/account_icon.png' %}" alt="Image" class="profile-icon">
+        </h1>
+
+    {% comment %}made the pop up inheritable to reduce redundancy {% endcomment %}
+    {% include 'inheritables/popup.html' %}
+    </div>
+    </header>
+    {% comment %}
+    <section class="image-section">
+        <div class="container">
+            {% comment %}
+                Product name.. 
+                image of the product
+            {
+            <img src="{% static 'img/trash_icon.png' %}" class="oh_icon">
+        </div>
+    </section>
+    
+    <section class="text-section">{% endcomment %}
+        <div class="container">
+    {% comment %}
+    	ang product here is the actual product na gi-purchase sa user, i fetch ang name.. 
+    {% endcomment %}
+            <h2>How do you feel about the product that you purchased?</h2>
+            <div class="dcard">
+                <div class="image-dcard">
+                     <img src="{% static 'img/credit_card_logo.png' %}" alt="Credit Card Logo">
+                </div>
+                <div class="description-dcard">
+                    <h3>Product Name</h3>
+                    <p>Quantity bought</p>
+                </div>
+            </div>
+            <p style="font-size: smaller"><i>Kindly tap the heart if you like your purchase. Thankyou :)</i></p>
+            <!-- Add an ID to the heart image -->
+            <img id="myHeart" src="{% static 'img/empty_heart.png' %}" class="oh_icon">
+    
+        </div>
+
+<script>
+// Listen for a click event on the heart image
+$('#myHeart').click(function() {
+    // Check if the current image is the empty heart
+    if ($(this).attr('src') === "{% static 'img/empty_heart.png' %}") {
+        // Change the image source to the filled heart
+        $(this).attr('src', "{% static 'img/heart.png' %}");
+    } else {
+        // Optionally, revert back to the empty heart if clicked again
+        $(this).attr('src', "{% static 'img/empty_heart.png' %}");
+    }
+});
+</script>
+
+</body>
+</html>
