@@ -124,6 +124,10 @@ def success(request):
 def confirm_payment(request):
     print("starting confirm_payment")
 
+    if 'payment_confirmed' in request.session:
+        print("payment already confirmed going back to main menu")
+        return redirect('accounts:main_menu')
+
     customer = Customer.objects.get(customuser_ptr=request.user)
     print(f"call customer ID: {customer}")
 
@@ -220,7 +224,9 @@ def confirm_payment(request):
         # Handle the exception
         logger.error(f"An error occurred: {e}")
         return redirect('transaction:error')  # Redirect to an error page
+    #potential fix for clicking back button
 
+    request.session['payment_confirmed'] = True
     # Redirect to the success page
     return redirect('transaction:payment_successful')
 

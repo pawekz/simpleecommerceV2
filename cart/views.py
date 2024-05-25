@@ -80,7 +80,7 @@ def add_to_cart(request, product_id):
     product.save()
 
     # Update the cart total
-    cart.total += Decimal(total_amount).quantize(
+    cart.total = Decimal(cart.total) + Decimal(total_amount).quantize(
         Decimal('0.00'))  # Add the price of the added product to the cart total
     cart.save()
 
