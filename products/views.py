@@ -108,6 +108,7 @@ def proceed_to_payment(request):
 def redirection(request):
     return render(request, "products/redirection.html")
 
-def review_product(request):
+def review_product(request, product_id):
+    product = get_object_or_404(Product, ProductID=product_id)
 
     return render(request, 'products/review_product.html')

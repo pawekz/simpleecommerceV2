@@ -40,6 +40,7 @@
             <h2>How do you feel about the product that you purchased?</h2>
             <div class="dcard">
                 <div class="image-dcard">
+                    {% for product in products %}
                      <img src="{% static 'img/credit_card_logo.png' %}" alt="Credit Card Logo">
                 </div>
                 <div class="description-dcard">

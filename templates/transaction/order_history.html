@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <title>Rocket Basket | OrderHistory</title>
     <link rel="stylesheet" href="{% static 'css/order_history.css' %}">
-    <script src="https://cdn.lordicon.com/lordicon.js"></script>
 
 </head>
 <body>
@@ -27,35 +26,22 @@
     <table>
         <tr>
             <th>ORDER #</th>
-            <th>DESCRIPTION</th>
+            <th>PRODUCT NAME</th>
             <th>AMOUNT</th>
             <th>STATUS</th>
             <th>OPINION?</th>
             <th>CHAT SELLER</th>
         </tr>
-        <tr>
-            <td>1</td>
-            <td>Test Product</td>
-            <td>P 120.00</td>
-            <td><span class="shipped">SHIPPED</span></td>
-            <td class="icon">
-                <a href="{% url 'products:review_product' %}">
-                    <img src="{% static 'img/leave_a_heart.png' %}" alt="leave_a_heart.png" width="50" height="50">
-                    {% comment %}
-                    	<lord-icon src="https://cdn.lordicon.com/ulnswmkk.json" trigger="hover" style="width:50px;height:50px"></lord-icon>
-                    {% endcomment %}
-                </a>
-            </td>
-            <td class="icon"><img src="{% static 'img/chat.png' %}" alt="chat.png" width="50" height="50"></td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>Test Product 2</td>
-            <td>P 240.00</td>
-            <td><span class="in-transit">IN TRANSIT</span></td>
-            <td class="icon"><img src="{% static 'img/leave_a_heart.png' %}" alt="leave_a_heart.png" width="50" height="50"></td>
-            <td class="icon"><img src="{% static 'img/chat.png' %}" alt="chat.png" width="50" height="50"></td>
-        </tr>
+       {% for order in order_history %}
+    <tr>
+        <td>{{ order.id }}</td>
+        <td>{{ order.ProductID.ProductName }}</td>
+        <td>{{ order.QuantityPerProduct }}</td>
+        <td>{{ order.DeliveryID.status }}</td>
+        <td>♥</td>
+        <td><button>Chat</button></td>
+    </tr>
+{% endfor %}
     </table>
 </div>
 </body>
