@@ -264,10 +264,23 @@ def error(request):
 
 
 def order_history(request):
-    # Get the Customer object for the current
+    # Get the Customer object for the current user
     customer = Customer.objects.get(customuser_ptr=request.user)
-    return render(request, 'transaction/order_history.html')
+
+    # Fetch the Cart instances for the current customer
+    carts = Cart.objects.filter(customer=customer)
+
+    # Fetch the OrderHistory instances for the current customer
+    order_history = OrderHistory.objects.filter(CartID__in=carts)
+
+    context = {
+        'order_history': order_history,
+    }
+
+    return render(request, 'transaction/order_history.html', context)
 
 
 def payment_successful(request):
     return render(request, 'transaction/payment/payment_successful.html')
+
+
