@@ -40,13 +40,13 @@
             <h2>How do you feel about the product that you purchased?</h2>
             <div class="dcard">
                 <div class="image-dcard">
-                    {% for product in products %}
+                    
                      <img src="{% static 'img/credit_card_logo.png' %}" alt="Credit Card Logo">
                 </div>
-                <div class="description-dcard">
-                    <h3>Product Name</h3>
-                    <p>Quantity bought</p>
-                </div>
+                <h3>Product Name: {{ product.ProductName }}</h3>
+                <p>Product Description: {{ product.Description }}</p>
+                <p>Product Price: {{ product.PricePerUnit }}</p>
+                <p>Seller: {{ product.SellerID.username }}</p>
             </div>
             <p style="font-size: smaller"><i>Kindly tap the heart if you like your purchase. Thankyou :)</i></p>
             <!-- Add an ID to the heart image -->

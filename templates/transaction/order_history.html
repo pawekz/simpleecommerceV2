@@ -38,7 +38,7 @@
         <td>{{ order.ProductID.ProductName }}</td>
         <td>{{ order.QuantityPerProduct }}</td>
         <td>{{ order.DeliveryID.status }}</td>
-        <td>♥</td>
+        <td><a href="{% url 'products:review_product' order.ProductID.ProductID %}"><img src="{% static 'img/leave_a_heart.png' %}" alt="RocketBasketLogo" class="oh_icon"></a></td>
         <td><button>Chat</button></td>
     </tr>
 {% endfor %}

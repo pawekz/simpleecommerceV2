@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from accounts.models import Seller
+from transaction.models import OrderHistory
 from .forms import ProductForm
 from .models import Product
 from django.urls import reverse
@@ -81,14 +82,6 @@ def mark_as_sold(request, product_id):
     return JsonResponse({'success': False})
 
 
-
-
-
-
-
-
-
-
 def checkout(request, product_id):
     quantity = int(request.GET.get('quantity', 1))  # Convert quantity to int
     product = get_object_or_404(Product, ProductID=product_id)
@@ -108,7 +101,8 @@ def proceed_to_payment(request):
 def redirection(request):
     return render(request, "products/redirection.html")
 
-def review_product(request, product_id):
-    product = get_object_or_404(Product, ProductID=product_id)
 
-    return render(request, 'products/review_product.html')
+def review_product(request, product_id):
+    order_history = get_object_or_404(OrderHistory, ProductID=product_id)
+    product = order_history.ProductID
+    return render(request, 'products/review_product.html', {'product': product})
