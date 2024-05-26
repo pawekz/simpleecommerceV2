@@ -61,19 +61,27 @@ def add_to_cart(request, product_id):
         messages.error(request, 'Not enough stock for this product.')
         return redirect('accounts:main_menu')
 
-    # Calculate total_amount before creating the CartItem instance
+    # Check if the product is already in the cart
+    cart_item, created = CartItem.objects.get_or_create(
+        cart=cart,
+        product=product,
+        defaults={'quantity': 0, 'total_amount': 0.00}
+    )
+
+    # If the product is already in the cart, increment the quantity
+    if not created:
+        cart_item.quantity += quantity
+    else:
+        cart_item.quantity = quantity
+
+    # Calculate total_amount for the CartItem instance
     if product.PricePerUnit is not None:
-        total_amount = round(product.PricePerUnit * quantity, 2)
+        total_amount = round(product.PricePerUnit * cart_item.quantity, 2)
     else:
         total_amount = 0.00
 
-    # Create a new CartItem instance
-    cart_item = CartItem.objects.create(
-        cart=cart,
-        product=product,
-        quantity=quantity,
-        total_amount=total_amount
-    )
+    cart_item.total_amount = total_amount
+    cart_item.save()
 
     # Decrease the product quantity
     product.Quantity -= quantity
