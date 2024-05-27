@@ -187,3 +187,5 @@ env
 *.sqlite3
 
 *.patch
+/qodana.yaml
+/identifier.sqlite
