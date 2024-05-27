@@ -8,7 +8,6 @@ from django.shortcuts import get_object_or_404
 from accounts.models import Customer
 from delivery.models import Delivery, DeliveryType
 
-
 # Create your views here.
 def home(request):
     # add a functionality that chooses the preferred delivery method
@@ -79,7 +78,14 @@ def delivery_option(request):
 
 
 def seller_updateorderstatus(request):
-    return render(request, 'delivery/seller_updateorderstatus.html')
+    return render(request, 'delivery/../templates/transaction/seller_update_order_status.html')
 
-def customer_trackdelivery(request):
-    return render(request, 'delivery/customer_trackdelivery.html')
+
+
+def customer_trackdelivery(request, order_id):
+    # your delivery tracking logic here
+    return render(request, 'delivery/../templates/transaction/customer_trackdelivery.html')
+
+
+
+

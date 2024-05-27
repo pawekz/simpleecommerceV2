@@ -137,18 +137,18 @@ window.onclick = function(event) {
                                 <p>{{ product.Description }}</p>
                                 <p>Quantity: {{ product.Quantity }}</p>
                                 <p class="price">Price: ₱{{ product.PricePerUnit }}</p>
-                            
+
                                {% if product.Quantity > 0 %}
-                                <form method="POST" action="{% url 'cart:add_to_cart' product_id=product.ProductID %}">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="product_id" value="{{ product.ProductID }}">
-                                    <input type="number" name="quantity" value="1" min="1" max="{{ product.Quantity }}">
-                                    <input type="submit" value="Add to Cart">
-                                </form>
+                                    <form method="POST" action="{% url 'cart:add_to_cart' product_id=product.ProductID %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="product_id" value="{{ product.ProductID }}">
+                                        <input type="number" name="quantity" value="1" min="1" max="{{ product.Quantity }}">
+                                        <input type="submit" value="Add to Cart">
+                                    </form>
                                    {% comment %}
                                    	--conditional staement for hart img
                                    	 if empty ang reviews, as is empty heart
-                                   	 else, filled heart. 
+                                   	 else, filled heart.
                                    	 and ayaw kalimot sa pag adjust sa
                                    	 description sa product para neat ug
                                    	 consistent sha tan awn

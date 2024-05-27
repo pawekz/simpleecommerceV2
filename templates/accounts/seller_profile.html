@@ -65,7 +65,7 @@
 
                      <a href="{% url 'products:add_product' %}" class="action-link1">Add another product to Sell</a> 
                         <br> 
-                   <a href="{% url 'delivery:seller_updateorderstatus' %}" class="action-link2">Update Order Status (Delivery)</a>
+                   <a href="{% url 'transaction:seller_order_history' %}" class="action-link2">Update Order Status (Delivery)</a>
                     </div>
 
 
@@ -87,7 +87,7 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="#" class="more-link">From Cart to Checkout (More)</a>
+                        <a href="{% url 'products:inventory' %}" class="more-link">From Cart to Checkout (Inventory)</a>
                     </div>
                 </div>
             </div>

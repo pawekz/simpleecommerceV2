@@ -1,0 +1,42 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    padding: 20px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.timeline {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.timeline li {
+    margin: 10px 0;
+    position: relative;
+}
+
+.timeline li:before {
+    content: '•';
+    position: absolute;
+    left: -15px;
+    color: grey;
+}
+
+.timeline li.active:before {
+    color: green;
+}
+
+#rocket, #moon {
+    width: 50px;
+    height: 50px;
+}

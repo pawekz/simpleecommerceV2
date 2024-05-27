@@ -1,0 +1,23 @@
+.packed-and-ready-to-ship {
+    background-color: blue;
+}
+
+.package-picked-up {
+    background-color: orange;
+}
+
+.arrived-at-sort-center {
+    background-color: orange;
+}
+
+.departed-from-sort-center {
+    background-color: orange;
+}
+
+.about-to-deliver {
+    background-color: yellow;
+}
+
+.delivered {
+    background-color: green;
+}

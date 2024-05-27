@@ -1,0 +1,82 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rocket Basket | Seller Order History</title>
+    <link rel="stylesheet" href="{% static 'css/order_history.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function updateOrderStatus(orderId, newStatus) {
+            $.post("{% url 'transaction:ajax_update_order_status' %}", {
+                order_id: orderId,
+                status: newStatus,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            }, function(data) {
+                if (data.success) {
+                    alert('Order status updated successfully');
+                    var statusElement = document.getElementById('status-' + orderId);
+                    statusElement.innerText = newStatus;
+                    statusElement.className = newStatus.replace(/ /g, '-').toLowerCase();
+                } else {
+                    alert('Failed to update order status');
+                }
+            });
+        }
+    </script>
+</head>
+
+
+<body>
+<header class="header">
+    <div class="header-content">
+        <h1>
+            <b>Rocket Basket: Shop Fast, Ship Faster - Seller Order History</b> <img src="{% static 'img/Rockettt.png' %}" alt="RocketLogo" class="oh_icon">
+            <img src="{% static 'img/basket.png' %}" alt="BasketLogo" class="oh_icon">
+            <img id="myImage" src="{% static 'img/account_icon.png' %}" alt="Image"  class="profile-icon">
+        </h1>
+    {% comment %}made the pop up inheritable to reduce redundancy {% endcomment %}
+    {% include 'inheritables/popup.html' %}
+    </div>
+</header>
+<div class="container">
+    <h2>Seller Order History</h2>
+    <table>
+        <tr>
+            <th>ORDER #</th>
+            <th>PRODUCT NAME</th>
+            <th>QUANTITY</th>
+            <th>TOTAL AMOUNT</th>
+            <th>DATE PURCHASED</th>
+            <th>BUYER</th>
+            <th>STATUS</th>
+            <th>ACTION</th>
+        </tr>
+       {% for order in order_history %}
+    <tr>
+        <td>{{ order.id }}</td>
+        <td>{{ order.ProductID.ProductName }}</td>
+        <td>{{ order.QuantityPerProduct }}</td>
+        <td>{{ order.TransactionID.TotalPrice }}</td>
+        <td>{{ order.DatePurchased }}</td>
+        <td>{{ order.TransactionID.CustomerID.customer_name }}</td>
+        
+        
+        <td id="status-{{ order.id }}" class="{{ order.TransactionID.get_status_display|slugify }}">{{ order.TransactionID.get_status_display }}</td>
+        <td>
+            <select name="status" onchange="updateOrderStatus({{ order.id }}, this.value)">
+                <option selected disabled>Update Delivery Status</option>
+                <option value="Packed and Ready to Ship">Packed and Ready to Ship</option>
+                <option value="Package Picked Up">Package Picked Up</option>
+                <option value="Arrived at Sort Center">Arrived at Sort Center</option>
+                <option value="Departed from Sort Center">Departed from Sort Center</option>
+                <option value="About to Deliver">About to Deliver</option>
+                <option value="Delivered">Delivered</option>
+            </select>
+        </td>
+    </tr>
+{% endfor %}
+    </table>
+</div>
+</body>
+</html>

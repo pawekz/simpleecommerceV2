@@ -8,6 +8,16 @@ from products.models import Product
 # Create your models here.
 
 class Transaction(models.Model):
+    STATUS_CHOICES = [
+        ('Delivered', 'Delivered'),
+        ('About to Deliver', 'About to Deliver'),
+        ('Departed from Sort Center', 'Departed from Sort Center'),
+        ('Arrived at Sort Center', 'Arrived at Sort Center'),
+        ('Package Picked Up', 'Package Picked Up'),
+        ('Packed and Ready to Ship', 'Packed and Ready to Ship'),
+    ]
+
+    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='Packed and Ready to Ship')
     PurchaseDate = models.DateTimeField(auto_now_add=True, auto_now=False)
     TotalPrice = models.DecimalField(max_digits=12, decimal_places=2)
     TotalQuantity = models.IntegerField()
@@ -23,3 +33,5 @@ class OrderHistory(models.Model):
     QuantityPerProduct = models.IntegerField()
     DatePurchased = models.DateTimeField(auto_now_add=True, auto_now=False)
     DeliveryID = models.ForeignKey(Delivery, on_delete=models.CASCADE)
+
+

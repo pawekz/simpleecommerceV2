@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Track Delivery</title>
+    <link rel="stylesheet" href="{% static 'css/order_history.css' %}">
+</head>
+<body>
+<header class="header">
+    <div class="header-content">
+
+        <h1>
+            <b>Rocket Basket: Shop Fast, Ship Faster</b> <img src="{% static 'img/Rockettt.png' %}" alt="RocketLogo" class="oh_icon">
+            <img src="{% static 'img/basket.png' %}" alt="BasketLogo" class="oh_icon">
+            <img id="myImage" src="{% static 'img/account_icon.png' %}" alt="Image" class="profile-icon">
+        </h1>
+
+    {% comment %}made the pop up inheritable to reduce redundancy {% endcomment %}
+    {% include 'inheritables/popup.html' %}
+    </div>
+    </header>
+
+
+
+    <div class="container">
+       
+        <ul class="timeline" id="deliveryTimeline">
+            <li id="packed">Packed and Ready to Ship</li>
+            <li id="pickedUp">Package Picked Up</li>
+            <li id="arrived">Arrived at Sort Center</li>
+            <li id="departed">Departed from Sort Center</li>
+            <li id="aboutToDeliver">About to Deliver</li>
+            <li id="delivered">Delivered</li>
+        </ul>
+        <img id="rocket" src="{% static 'img/rocket.png' %}" alt="Rocket Icon">
+        <img id="moon" src="{% static 'img/moon.png' %}" alt="Moon Icon">
+    </div>
+    
+    <script>
+        // JavaScript to move the rocket and change the color of the bullet points
+        // This is just a placeholder. You'll need to replace this with your actual delivery tracking logic.
+        const stages = ['packed', 'pickedUp', 'arrived', 'departed', 'aboutToDeliver', 'delivered'];
+        let currentStage = 0;
+    
+        function updateTimeline() {
+            const currentElement = document.getElementById(stages[currentStage]);
+            currentElement.classList.add('active');
+            // Move the rocket icon here
+            // Change the color of the bullet point here
+            currentStage++;
+        }
+    
+        setInterval(updateTimeline, 1000);  // Update the timeline every second for demo purposes
+    </script>
+
+</body>
+</html>

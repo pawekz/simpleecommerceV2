@@ -201,3 +201,60 @@
             width: 50px;
             height: 50px;
         }
+
+
+         /* Styles for tablet */
+@media screen and (max-width: 768px) {
+    .header-text {
+        font-size: 28px;
+        margin-left: 160px;
+    }
+    .profile-icon {
+        width: 60px;
+        height: 60px;
+    }
+    .profile-icon img {
+        width: 90px;
+        height: 90px;
+    }
+    .form-group input {
+        width: 250px;
+    }
+    .edit-profile-btn, .logout-btn {
+        font-size: 20px;
+        padding: 15px;
+        width: 100%;
+    }
+    .right-side {
+        margin-left: 10px;
+        margin-bottom: 10px;
+    }
+}
+
+/* Styles for mobile */
+@media screen and (max-width: 480px) {
+    .header-text {
+        font-size: 20px;
+        margin-left: 80px;
+    }
+    .profile-icon {
+        width: 40px;
+        height: 40px;
+    }
+    .profile-icon img {
+        width: 60px;
+        height: 60px;
+    }
+    .form-group input {
+        width: 200px;
+    }
+    .edit-profile-btn, .logout-btn {
+        font-size: 16px;
+        padding: 10px;
+        width: 100%;
+    }
+    .right-side {
+        margin-left: 5px;
+        margin-bottom: 5px;
+    }
+}

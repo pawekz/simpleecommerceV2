@@ -241,6 +241,7 @@ form {
     margin-right: 20px;
     font-size: 25px;
     font-weight: bold;
+    text-decoration: none;
 }
 
 .back-button:hover {
@@ -258,8 +259,92 @@ form {
     margin-left: 100px;
     font-size: 25px;
     font-weight: bold;
+    text-decoration: none;
 }
 
 .choose-delivery-option:hover {
     background-color: darkseagreen;
 }
+
+.button-container {
+    display: flex;
+    justify-content: space-between; /* This will add space between your buttons */
+    flex-wrap: wrap; /* This will allow the buttons to wrap to the next line on smaller screens */
+}
+
+
+/* Styles for tablet */
+@media screen and (max-width: 768px) {
+
+    .header {
+        font-size: 24px; /* Reduce font size for tablets */
+    }
+
+    .header-content,
+    .header-text,
+    .back-text {
+        margin-left: 50px;
+    }
+
+    .cart-border h2 {
+        margin-left: 40px;
+        font-size: 30px;
+    }
+
+    .subtotal {
+        margin-right: 150px;
+        font-size: 40px;
+    }
+
+    .delivery-option {
+        margin-left: 225px;
+    }
+
+    .back-button,
+    .choose-delivery-option {
+        width: 100%; /* Make the buttons take the full width of the container on smaller screens */
+        margin-bottom: 10px; /* Add some space below the buttons */
+    }
+}
+
+
+
+/* Styles for mobile */
+@media screen and (max-width: 480px) {
+
+    .header {
+        font-size: 18px; /* Reduce font size for mobile devices */
+    }
+
+    .header-content,
+    .header-text,
+    .back-text {
+        margin-left: 20px;
+    }
+
+    .cart-border h2 {
+        margin-left: 20px;
+        font-size: 20px;
+    }
+
+    .subtotal {
+        margin-right: 75px;
+        font-size: 30px;
+    }
+
+    .delivery-option {
+        margin-left: 100px;
+    }
+
+     .back-button {
+            padding: 10px 25px;
+            font-size: 18px;
+            margin-right: 5px;
+        }
+
+        .choose-delivery-option {
+            padding: 8px 20px;
+            font-size: 18px;
+            margin-left: 25px;
+        }
+    }

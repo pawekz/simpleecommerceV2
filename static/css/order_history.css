@@ -161,3 +161,26 @@ th {
             cursor: pointer; /* Make it look like a button */
         }
 
+.packed-and-ready-to-ship {
+    color: blue;
+}
+
+.package-picked-up {
+    color: orange;
+}
+
+.arrived-at-sort-center {
+    color: orange;
+}
+
+.departed-from-sort-center {
+    color: orange;
+}
+
+.about-to-deliver {
+    color: yellow;
+}
+
+.delivered {
+    color: green;
+}

@@ -1,16 +1,24 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Exists, OuterRef
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
-from accounts.models import Customer
+from accounts.models import Customer, CustomUser
 from cart.models import CartItem, Cart
 from delivery.models import DeliveryType, Delivery
-from products.models import Product, ProductReview
-from transaction.models import OrderHistory, Transaction
+from products.models import Product
+from .models import OrderHistory, Transaction
 from django.db import transaction
-
+from .models import OrderHistory, Transaction
+from .forms import UpdateOrderStatusForm
+from django.shortcuts import render
+from django.contrib.auth.models import User
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 import logging
+
+
+
+
 
 
 logger = logging.getLogger(__name__)
@@ -274,17 +282,57 @@ def order_history(request):
     # Fetch the OrderHistory instances for the current customer
     order_history = OrderHistory.objects.filter(CartID__in=carts)
 
-    # Check if a rating by the current customer exists for each product
-    ratings = ProductReview.objects.filter(CustomerID=customer.id, ProductID=OuterRef('ProductID'))
-    order_history = order_history.annotate(has_rated=Exists(ratings))
-
     context = {
         'order_history': order_history,
     }
 
-    return render(request, 'transaction/order_history.html', context)
+    return render(request, 'transaction/customer_order_history.html', context)
+
+
 
 def payment_successful(request):
     return render(request, 'transaction/payment/payment_successful.html')
 
 
+
+
+def customer_trackdelivery(request, transaction_id):  # Use transaction_id instead of order_id
+    transaction = get_object_or_404(Transaction, pk=transaction_id)  # Fetch Transaction instead of Order
+    return render(request, 'transaction/customer_trackdelivery.html', {'status': transaction.status})  # Use transaction.status instead of order.status
+
+
+
+
+
+
+
+def customer_order_history(request, customer_id):
+    order_histories = OrderHistory.objects.filter(CustomerID=customer_id)
+    order_statuses = [get_object_or_404(Transaction, pk=order_history.TransactionID.pk).status for order_history in order_histories]
+    total_prices = [get_object_or_404(Transaction, pk=order_history.TransactionID.pk).TotalPrice for order_history in order_histories]
+    return render(request, 'transaction/customer_order_history.html', {'order_histories': order_histories, 'order_statuses': order_statuses, 'total_prices': total_prices})
+
+
+def seller_order_history(request):
+    # Get all OrderHistory instances
+    order_history = OrderHistory.objects.all()
+
+    context = {
+        'order_history': order_history,
+    }
+
+    return render(request, 'transaction/seller_order_history.html', context)
+
+
+
+@csrf_exempt
+def ajax_update_order_status(request):
+    if request.method == 'POST':
+        order_id = request.POST.get('order_id')
+        new_status = request.POST.get('status')
+        transaction = get_object_or_404(Transaction, pk=order_id)
+        transaction.status = new_status
+        transaction.save()
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False})
