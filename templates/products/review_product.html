@@ -21,37 +21,44 @@
     {% include 'inheritables/popup.html' %}
     </div>
     </header>
-    {% comment %}
-    <section class="image-section">
         <div class="container">
-            {% comment %}
-                Product name.. 
-                image of the product
-            {
-            <img src="{% static 'img/trash_icon.png' %}" class="oh_icon">
-        </div>
-    </section>
-    
-    <section class="text-section">{% endcomment %}
-        <div class="container">
-    {% comment %}
-    	ang product here is the actual product na gi-purchase sa user, i fetch ang name.. 
-    {% endcomment %}
             <h2>How do you feel about the product that you purchased?</h2>
             <div class="dcard">
                 <div class="image-dcard">
-                    
-                     <img src="{% static 'img/credit_card_logo.png' %}" alt="Credit Card Logo">
+                     <img src="{{ product.image.url }}" alt="Product Image">
                 </div>
-                <h3>Product Name: {{ product.ProductName }}</h3>
-                <p>Product Description: {{ product.Description }}</p>
-                <p>Product Price: {{ product.PricePerUnit }}</p>
-                <p>Seller: {{ product.SellerID.username }}</p>
+                <div class="text-dcard">
+                <H1>{{ product.ProductName }}</H1>
+                <br>
+                {% if product %}
+                <table>
+                    <tr>
+                        <th></th>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>Product Description</th>
+                        <td>{{ product.Description }}</td>
+                    </tr>
+                    <tr>
+                        <th>Product Price</th>
+                        <td>{{ product.PricePerUnit }}</td>
+                    </tr>
+                    <tr>
+                        <th>Seller</th>
+                        <td>{{ product.SellerID.username }}</td>
+                    </tr>
+                </table>
+                    
+                {% else %}
+                    <p>No product found for this ID.</p>
+                {% endif %}
+                </div>
             </div>
             <p style="font-size: smaller"><i>Kindly tap the heart if you like your purchase. Thankyou :)</i></p>
             <!-- Add an ID to the heart image -->
             <img id="myHeart" src="{% static 'img/empty_heart.png' %}" class="oh_icon">
-    
+            
         </div>
 
 <script>

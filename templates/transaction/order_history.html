@@ -39,7 +39,10 @@
         <td>{{ order.QuantityPerProduct }}</td>
         <td>{{ order.DeliveryID.status }}</td>
         <td><a href="{% url 'products:review_product' order.ProductID.ProductID %}"><img src="{% static 'img/leave_a_heart.png' %}" alt="RocketBasketLogo" class="oh_icon"></a></td>
-        <td><button>Chat</button></td>
+        {% comment %}
+        	please change the login link to chat seller link here
+        {% endcomment %}
+        <td><a href="{% url 'accounts:login' %}"><img src="{% static 'img/chat.png' %}" alt="RocketBasketLogo" class="oh_icon"></a></td>
     </tr>
 {% endfor %}
     </table>

@@ -102,7 +102,8 @@ def redirection(request):
     return render(request, "products/redirection.html")
 
 
+
 def review_product(request, product_id):
-    order_history = get_object_or_404(OrderHistory, ProductID=product_id)
-    product = order_history.ProductID
+    order_histories = OrderHistory.objects.filter(ProductID=product_id)
+    product = order_histories.first().ProductID if order_histories else None
     return render(request, 'products/review_product.html', {'product': product})
