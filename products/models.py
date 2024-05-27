@@ -3,7 +3,7 @@ import os
 
 from django.db import models
 from PIL import Image
-from accounts.models import Seller
+from accounts.models import Seller, Customer
 from datetime import datetime
 from django.utils import timezone
 
@@ -34,16 +34,9 @@ class Product(models.Model):
         img.save(self.image.path)
 
 
-class Review(models.Model):
-    ReviewID = models.IntegerField(primary_key=True)
-    ProductID = models.IntegerField()
-    CustomerID = models.IntegerField()
-    Rating = models.IntegerField()
-    ReviewDate = models.DateTimeField(auto_now_add=True, auto_now=False)
-
 class ProductReview(models.Model):
     ReviewID = models.IntegerField(primary_key=True)
     ProductID = models.ForeignKey(Product, on_delete=models.CASCADE)
-    CustomerID = models.IntegerField()
+    CustomerID = models.ForeignKey(Customer, on_delete=models.CASCADE)
     Rating = models.IntegerField()
     ReviewDate = models.DateTimeField(auto_now_add=True, auto_now=False)
