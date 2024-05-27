@@ -1,11 +1,12 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Exists, OuterRef
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from accounts.models import Customer
 from cart.models import CartItem, Cart
 from delivery.models import DeliveryType, Delivery
-from products.models import Product
+from products.models import Product, ProductReview
 from transaction.models import OrderHistory, Transaction
 from django.db import transaction
 
@@ -273,12 +274,15 @@ def order_history(request):
     # Fetch the OrderHistory instances for the current customer
     order_history = OrderHistory.objects.filter(CartID__in=carts)
 
+    # Check if a rating by the current customer exists for each product
+    ratings = ProductReview.objects.filter(CustomerID=customer.id, ProductID=OuterRef('ProductID'))
+    order_history = order_history.annotate(has_rated=Exists(ratings))
+
     context = {
         'order_history': order_history,
     }
 
     return render(request, 'transaction/order_history.html', context)
-
 
 def payment_successful(request):
     return render(request, 'transaction/payment/payment_successful.html')

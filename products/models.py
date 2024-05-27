@@ -40,3 +40,10 @@ class Review(models.Model):
     CustomerID = models.IntegerField()
     Rating = models.IntegerField()
     ReviewDate = models.DateTimeField(auto_now_add=True, auto_now=False)
+
+class ProductReview(models.Model):
+    ReviewID = models.IntegerField(primary_key=True)
+    ProductID = models.ForeignKey(Product, on_delete=models.CASCADE)
+    CustomerID = models.IntegerField()
+    Rating = models.IntegerField()
+    ReviewDate = models.DateTimeField(auto_now_add=True, auto_now=False)

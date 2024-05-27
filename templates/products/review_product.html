@@ -25,17 +25,14 @@
             <h2>How do you feel about the product that you purchased?</h2>
             <div class="dcard">
                 <div class="image-dcard">
+                    <br>
+                    <br>
                      <img src="{{ product.image.url }}" alt="Product Image">
                 </div>
                 <div class="text-dcard">
                 <H1>{{ product.ProductName }}</H1>
-                <br>
                 {% if product %}
                 <table>
-                    <tr>
-                        <th></th>
-                        <td></td>
-                    </tr>
                     <tr>
                         <th>Product Description</th>
                         <td>{{ product.Description }}</td>
@@ -49,7 +46,7 @@
                         <td>{{ product.SellerID.username }}</td>
                     </tr>
                 </table>
-                    
+
                 {% else %}
                     <p>No product found for this ID.</p>
                 {% endif %}
@@ -57,19 +54,33 @@
             </div>
             <p style="font-size: smaller"><i>Kindly tap the heart if you like your purchase. Thankyou :)</i></p>
             <!-- Add an ID to the heart image -->
-            <img id="myHeart" src="{% static 'img/empty_heart.png' %}" class="oh_icon">
+            <img id="myHeart" src="{% static 'img/empty_heart.png' %}" class="oh_icon"><br><br>
+            <a href="{% url 'accounts:main_menu' %}" class="button">Back</a>
             
         </div>
 
 <script>
-// Listen for a click event on the heart image
 $('#myHeart').click(function() {
-    // Check if the current image is the empty heart
     if ($(this).attr('src') === "{% static 'img/empty_heart.png' %}") {
-        // Change the image source to the filled heart
         $(this).attr('src', "{% static 'img/heart.png' %}");
+
+        $.ajax({
+            url: "{% url 'products:add_review' %}",
+            method: 'POST',
+            data: {
+                ProductID: '{{ product.ProductID }}',
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function(data) {
+                if (data.success) {
+                    console.log('Review added successfully');
+                } else {
+                    // If a review already exists, display the notification message
+                    alert(data.message);
+                }
+            }
+        });
     } else {
-        // Optionally, revert back to the empty heart if clicked again
         $(this).attr('src', "{% static 'img/empty_heart.png' %}");
     }
 });

@@ -1,9 +1,14 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+
 from accounts.models import Seller
 from transaction.models import OrderHistory
 from .forms import ProductForm
-from .models import Product
+from .models import Product, Review, ProductReview
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
@@ -101,7 +106,21 @@ def proceed_to_payment(request):
 def redirection(request):
     return render(request, "products/redirection.html")
 
+@require_POST
+def add_review(request):
+    product_id = request.POST.get('ProductID')
+    product = get_object_or_404(Product, ProductID=product_id)
+    customer_id = request.user.id
 
+    # Check if a review already exists for this product by this customer
+    existing_review = ProductReview.objects.filter(ProductID=product, CustomerID=customer_id).first()
+    if existing_review:
+        # If a review already exists, return a message to notify the customer
+        return JsonResponse({'success': False, 'message': 'You have already reviewed this product.'})
+
+    # If no review exists, create a new one
+    ProductReview.objects.create(ProductID=product, CustomerID=customer_id, Rating=1)
+    return JsonResponse({'success': True})
 
 def review_product(request, product_id):
     order_histories = OrderHistory.objects.filter(ProductID=product_id)
