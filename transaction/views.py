@@ -17,10 +17,6 @@ from django.views.decorators.csrf import csrf_exempt
 import logging
 
 
-
-
-
-
 logger = logging.getLogger(__name__)
 
 
@@ -171,7 +167,7 @@ def confirm_payment(request):
             # Get the first Delivery object for the preferred DeliveryType, or create a new one if none exist
             delivery = Delivery.objects.filter(DeliveryType=delivery_type).first()
             if delivery is None:
-                delivery = Delivery(DeliveryStatus='1', DeliveryType=delivery_type)
+                delivery = Delivery(DeliveryType=delivery_type)
                 delivery.save()  # Save the Delivery instance to the database
             print(f"Delivery : {delivery}")
             print("Delivery Save")
