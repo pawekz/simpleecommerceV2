@@ -280,3 +280,7 @@ button:hover {
     color: red;
     font-size: 0.8em;
 }
+.product-description {
+    height: 100px; /* Adjust this value as needed */
+    overflow: auto;
+}

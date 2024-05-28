@@ -5,7 +5,7 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
-from accounts.models import Seller
+from accounts.models import Seller, Customer
 from transaction.models import OrderHistory
 from .forms import ProductForm
 from .models import Product, ProductReview
@@ -112,14 +112,17 @@ def add_review(request):
     product = get_object_or_404(Product, ProductID=product_id)
     customer_id = request.user.id
 
+    # Retrieve the Customer instance
+    customer = get_object_or_404(Customer, id=customer_id)
+
     # Check if a review already exists for this product by this customer
-    existing_review = ProductReview.objects.filter(ProductID=product, CustomerID=customer_id).first()
+    existing_review = ProductReview.objects.filter(ProductID=product, CustomerID=customer).first()
     if existing_review:
         # If a review already exists, return a message to notify the customer
         return JsonResponse({'success': False, 'message': 'You have already reviewed this product.'})
 
     # If no review exists, create a new one
-    ProductReview.objects.create(ProductID=product, CustomerID=customer_id, Rating=1)
+    ProductReview.objects.create(ProductID=product, CustomerID=customer, Rating=1)
     return JsonResponse({'success': True})
 
 def review_product(request, product_id):
