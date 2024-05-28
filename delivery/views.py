@@ -7,6 +7,8 @@ from cart.models import Cart, CartItem
 from django.shortcuts import get_object_or_404
 from accounts.models import Customer
 from delivery.models import Delivery, DeliveryType
+from transaction.models import Transaction
+
 
 # Create your views here.
 def home(request):
@@ -15,30 +17,6 @@ def home(request):
     # code below
 
     return render(request, 'delivery/delivery_option.html')
-
-
-# def standard_delivery(request):
-#     # add a functionality that adds the total price of the products in the
-#     # cart + the standard delivery fee of 50.00
-#     # code below
-#
-#     return render(request, 'delivery/standard_delivery.html')
-#
-#
-# def express_delivery(request):
-#     # add a functionality that adds the total price of the products in the
-#     # cart + the express delivery fee of 150.00
-#     #code below
-#
-#     return render(request, 'delivery/express_delivery.html')
-#
-#
-# def next_day_delivery(request):
-#     # add a functionality that adds the total price of the products in the
-#     # cart + the express delivery fee of 150.00
-#     # code below
-#
-#     return render(request, 'delivery/next_day_delivery.html')
 
 
 def delivery_option(request):
@@ -78,14 +56,18 @@ def delivery_option(request):
 
 
 def seller_updateorderstatus(request):
-    return render(request, 'delivery/../templates/transaction/seller_update_order_status.html')
+    return render(request, 'transaction/seller_update_order_status.html')
 
 
+def cust_trackdelivery(request, transaction_id=None):
+    if transaction_id is not None:
+        transaction = get_object_or_404(Transaction, pk=transaction_id)
+        return render(request, 'transaction/customer_trackdelivery.html',
+                      {'status': transaction.status})
+    transaction = get_object_or_404(Transaction, pk=transaction_id)  # Fetch Transaction instead of Order
+    return render(request, 'transaction/customer_trackdelivery.html',
+                  {'status': transaction.status})  # Use transaction.status instead of order.status
 
-def customer_trackdelivery(request, order_id):
-    # your delivery tracking logic here
-    return render(request, 'delivery/../templates/transaction/customer_trackdelivery.html')
 
-
-
-
+def customer_trackdelivery(request):
+    return render(request, 'transaction/customer_trackdelivery.html')

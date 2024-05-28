@@ -16,7 +16,6 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import logging
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -172,7 +171,6 @@ def confirm_payment(request):
             print(f"Delivery : {delivery}")
             print("Delivery Save")
 
-
             # Create a new Transaction instance
             new_transaction = Transaction(
                 PurchaseDate=timezone.now(),
@@ -180,7 +178,7 @@ def confirm_payment(request):
                 TotalQuantity=cart_items.count(),  # Assumes each CartItem represents one product
                 CustomerID=request.user.customer,  # Assign the Customer instance directly
                 Cart=cart,  # Assign the Cart instance
-                Delivery=delivery #Assign the Delivery instance
+                Delivery=delivery  #Assign the Delivery instance
             )
             print("Transaction about to save")
             new_transaction.save()
@@ -233,7 +231,7 @@ def confirm_payment(request):
 
     request.session['payment_confirmed'] = True
     # Redirect to the success page
-    return redirect('transaction:payment_successful')
+    return redirect('transaction:payment_successful', transaction_id=new_transaction.id)
 
 
 def calculate_cart_subtotal(request):
@@ -285,28 +283,27 @@ def order_history(request):
     return render(request, 'transaction/customer_order_history.html', context)
 
 
-
-def payment_successful(request):
-    return render(request, 'transaction/payment/payment_successful.html')
-
-
+# def payment_successful(request):
+#     return render(request, 'transaction/payment/payment_successful.html')
+# In transaction/views.py
+def payment_successful(request, transaction_id):
+    return render(request, 'transaction/payment/payment_successful.html', {'transaction_id': transaction_id})
 
 
 def customer_trackdelivery(request, transaction_id):  # Use transaction_id instead of order_id
-    transaction = get_object_or_404(Transaction, pk=transaction_id)  # Fetch Transaction instead of Order
-    return render(request, 'transaction/customer_trackdelivery.html', {'status': transaction.status})  # Use transaction.status instead of order.status
-
-
-
-
-
+    transactions = get_object_or_404(Transaction, pk=transaction_id)  # Fetch Transaction instead of Order
+    return render(request, 'transaction/customer_trackdelivery.html',
+                  {'status': transactions.status})  # Use transaction.status instead of order.status
 
 
 def customer_order_history(request, customer_id):
     order_histories = OrderHistory.objects.filter(CustomerID=customer_id)
-    order_statuses = [get_object_or_404(Transaction, pk=order_history.TransactionID.pk).status for order_history in order_histories]
-    total_prices = [get_object_or_404(Transaction, pk=order_history.TransactionID.pk).TotalPrice for order_history in order_histories]
-    return render(request, 'transaction/customer_order_history.html', {'order_histories': order_histories, 'order_statuses': order_statuses, 'total_prices': total_prices})
+    order_statuses = [get_object_or_404(Transaction, pk=order_history.TransactionID.pk).status for order_history in
+                      order_histories]
+    total_prices = [get_object_or_404(Transaction, pk=order_history.TransactionID.pk).TotalPrice for order_history in
+                    order_histories]
+    return render(request, 'transaction/customer_order_history.html',
+                  {'order_histories': order_histories, 'order_statuses': order_statuses, 'total_prices': total_prices})
 
 
 def seller_order_history(request):
@@ -318,7 +315,6 @@ def seller_order_history(request):
     }
 
     return render(request, 'transaction/seller_order_history.html', context)
-
 
 
 @csrf_exempt
