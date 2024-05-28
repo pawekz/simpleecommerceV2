@@ -8,7 +8,7 @@ from django.views.decorators.http import require_POST
 from accounts.models import Seller
 from transaction.models import OrderHistory
 from .forms import ProductForm
-from .models import Product, Review, ProductReview
+from .models import Product, ProductReview
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
