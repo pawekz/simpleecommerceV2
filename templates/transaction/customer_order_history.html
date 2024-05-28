@@ -42,8 +42,18 @@
         <td>{{ order.TransactionID.TotalPrice }}</td>
         <td>{{ order.DatePurchased }}</td>
         <td id="status-{{ order.id }}" class="{{ order.TransactionID.get_status_display|slugify }}">{{ order.TransactionID.get_status_display }}</td>
-        <td>♥</td>
-        <td><button>Chat</button></td>
+        <td>
+            <a href="{% url 'products:review_product' order.ProductID.ProductID %}">
+                {% if order.has_rated %}
+                    <img src="{% static 'img/heart.png' %}" alt="Heart" class="heart-icon">
+                {% else %}
+                    <img src="{% static 'img/leave_a_heart.png' %}" alt="Heart" class="heart-icon">
+                {% endif %}
+                <button>Review</button>
+            </a>
+        </td>
+        <td><a href="{% url 'accounts:login' %}"><img src="{% static 'img/chat.png' %}" alt="login" class="oh_icon"></a>
+        </td>
     </tr>
 {% endfor %}
     </table>
