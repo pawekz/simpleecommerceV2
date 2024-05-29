@@ -14,10 +14,10 @@ urlpatterns = [
     path('confirm_payment/', views.confirm_payment, name='confirm_payment'),
     path('success/', views.success, name='success'),
     path('error/', views.error, name='error'),
-    path('order_history/<int:customer_id>/', views.order_history, name='customer_order_history'),
-    path('order_history/', views.order_history, name='order_history'),
-    path('payment_successful/<int:transaction_id>/', views.payment_successful, name='payment_successful'),
+    path('order_history/', views.order_history,name='order_history'),
+    path('payment_successful/<int:transaction_id>/', views.payment_successful,name='payment_successful'),
     path('seller_order_history/', views.seller_order_history, name='seller_order_history'),
     path('ajax_update_order_status/', views.ajax_update_order_status, name='ajax_update_order_status'),
     path('customer_trackdelivery/<int:transaction_id>/', views.customer_trackdelivery, name='customer_trackdelivery'),
+
 ]

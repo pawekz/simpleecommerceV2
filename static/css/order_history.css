@@ -161,32 +161,26 @@ th {
             cursor: pointer; /* Make it look like a button */
         }
 
-.packed-and-ready-to-ship {
-    background-color: blue;
-    color: white; /* You might want to change the text color to ensure it's readable on the new background */
+.status-packed-and-ready-to-ship {
+    color: blue;
 }
 
-.package-picked-up {
-    background-color: orange;
-    color: white;
+.status-package-picked-up {
+    color: green;
 }
 
-.arrived-at-sort-center {
-    background-color: orange;
-    color: white;
+.status-arrived-at-sort-center {
+    color: yellow;
 }
 
-.departed-from-sort-center {
-    background-color: orange;
-    color: white;
+.status-departed-from-sort-center {
+    color: orange;
 }
 
-.about-to-deliver {
-    background-color: yellow;
-    color: black; /* Black text might be more readable on a yellow background */
+.status-about-to-deliver {
+    color: purple;
 }
 
-.delivered {
-    background-color: green;
-    color: white;
+.status-delivered {
+    color: red;
 }

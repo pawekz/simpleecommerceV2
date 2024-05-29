@@ -15,6 +15,10 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
 import logging
 
 logger = logging.getLogger(__name__)
@@ -280,37 +284,49 @@ def customer_trackdelivery(request, transaction_id):  # Use transaction_id inste
 
 
 
-@customer_required
-def order_history(request, customer_id=None):
-    # If a customer_id is provided, get the Customer object for that customer
-    # Otherwise, get the Customer object for the current user
-    if customer_id is not None:
-        customer = get_object_or_404(Customer, pk=customer_id)
-    else:
-        customer = Customer.objects.get(customuser_ptr=request.user)
+def order_history(request):
+    # Get the Customer object for the current user
+    customer = Customer.objects.get(customuser_ptr=request.user)
 
     # Fetch the Cart instances for the current customer
     carts = Cart.objects.filter(customer=customer)
 
     # Fetch the OrderHistory instances for the current customer
-    order_histories = OrderHistory.objects.filter(CartID__in=carts)
-
-    # Fetch the status and total price for each order
-    order_statuses = [get_object_or_404(Transaction, pk=order_history.TransactionID.pk).status for order_history in order_histories]
-    total_prices = [get_object_or_404(Transaction, pk=order_history.TransactionID.pk).TotalPrice for order_history in order_histories]
+    order_history = OrderHistory.objects.filter(CartID__in=carts)
 
     context = {
-        'order_histories': order_histories,
-        'order_statuses': order_statuses,
-        'total_prices': total_prices,
+        'order_history': order_history,
     }
 
-    return render(request, 'transaction/customer_order_history.html', context)
+    return render(request, 'transaction/order_history.html', context)
 
-@seller_required
+
+def customer_order_history(request, customer_id):
+    order_histories = OrderHistory.objects.filter(CustomerID=customer_id)
+    order_statuses = [get_object_or_404(Transaction, pk=order_history.TransactionID.pk).status for order_history in
+                      order_histories]
+    total_prices = [get_object_or_404(Transaction, pk=order_history.TransactionID.pk).TotalPrice for order_history in
+                    order_histories]
+    return render(request, 'transaction/order_history.html',
+                  {'order_histories': order_histories, 'order_statuses': order_statuses, 'total_prices': total_prices})
+
+
+
+
+
+
+from django.shortcuts import render
+from .models import OrderHistory
+from products.models import Product
+
 def seller_order_history(request):
-    # Get all OrderHistory instances
-    order_history = OrderHistory.objects.all()
+    # Check if the user is a seller
+    if hasattr(request.user, 'seller'):
+        # Get all OrderHistory instances that belong to the logged in seller
+        order_history = OrderHistory.objects.filter(ProductID__SellerID=request.user.seller)
+    else:
+        # If the user is not a seller, return an empty QuerySet
+        order_history = OrderHistory.objects.none()
 
     context = {
         'order_history': order_history,
@@ -324,9 +340,9 @@ def ajax_update_order_status(request):
     if request.method == 'POST':
         order_id = request.POST.get('order_id')
         new_status = request.POST.get('status')
-        transaction = get_object_or_404(Transaction, pk=order_id)
+        order = OrderHistory.objects.get(id=order_id)
+        transaction = order.TransactionID
         transaction.status = new_status
         transaction.save()
         return JsonResponse({'success': True})
-    else:
-        return JsonResponse({'success': False})
+    return JsonResponse({'success': False})

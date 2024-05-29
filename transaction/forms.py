@@ -1,6 +1,7 @@
 from django import forms
-from .models import Transaction, OrderHistory
+from .models import Transaction
 
-class UpdateOrderStatusForm(forms.Form):
-    order = forms.ModelChoiceField(queryset=OrderHistory.objects.all())
-    status = forms.ChoiceField(choices=Transaction.STATUS_CHOICES)
+class UpdateOrderStatusForm(forms.ModelForm):
+    class Meta:
+        model = Transaction
+        fields = ['status']
