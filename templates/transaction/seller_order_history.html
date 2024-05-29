@@ -7,26 +7,27 @@
     <link rel="stylesheet" href="{% static 'css/order_history.css' %}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
-        function updateOrderStatus(orderId, newStatus) {
-            $.post("{% url 'transaction:ajax_update_order_status' %}", {
-                order_id: orderId,
-                status: newStatus,
-                csrfmiddlewaretoken: '{{ csrf_token }}'
-            }, function(data) {
-                if (data.success) {
-                    alert('Order status updated successfully');
-                    var statusElement = document.getElementById('status-' + orderId);
-                    statusElement.innerText = newStatus;
-                    statusElement.className = newStatus.replace(/ /g, '-').toLowerCase();
-                } else {
-                    alert('Failed to update order status');
-                }
-            });
-        }
+       function updateOrderStatus(orderId, newStatus) {
+        $.post("{% url 'transaction:ajax_update_order_status' %}", {
+            order_id: orderId,
+            status: newStatus,
+            csrfmiddlewaretoken: '{{ csrf_token }}'
+        }, function(data) {
+            if (data.success) {
+                alert('Order status updated successfully');
+                var statusElement = document.getElementById('status-' + orderId);
+                // Find the h4 element that displays the status
+                var statusTextElement = statusElement.querySelector('h4');
+                // Update the status text and class on the h4 element
+                statusTextElement.innerText = newStatus;
+                statusTextElement.className = 'status-' + newStatus.replace(/ /g, '-').toLowerCase();
+            } else {
+                alert('Failed to update order status');
+            }
+        });
+    }
     </script>
 </head>
-
-
 <body>
 <header class="header">
     <div class="header-content">
@@ -60,9 +61,21 @@
         <td>{{ order.TransactionID.TotalPrice }}</td>
         <td>{{ order.DatePurchased }}</td>
         <td>{{ order.TransactionID.CustomerID.customer_name }}</td>
-        
-        
-        <td id="status-{{ order.id }}" class="{{ order.TransactionID.get_status_display|slugify }}">{{ order.TransactionID.get_status_display }}</td>
+        <td id="status-{{ order.id }}" class="{{ order.TransactionID.get_status_display|slugify }}">
+            {% if order.TransactionID.get_status_display == "Delivered" %}
+                <h4 class="status-delivered delivered">Delivered</h4>
+            {% elif order.TransactionID.get_status_display == "About to Deliver" %}
+                <h4 class="status-about-to-deliver about-to-deliver">About to Deliver</h4>
+            {% elif order.TransactionID.get_status_display == "Departed from Sort Center" %}
+                <h4 class="status-departed departed-from-sort-center">Departed from Sort Center</h4>
+            {% elif order.TransactionID.get_status_display == "Arrived at Sort Center" %}
+                <h4 class="status-arrived arrived-at-sort-center">Arrived at Sort Center</h4>
+            {% elif order.TransactionID.get_status_display == "Package Picked Up" %}
+                <h4 class="status-picked-up package-picked-up">Package Picked Up</h4>
+            {% else %}
+                <h4 class="status-packed packed-and-ready-to-ship">Packed and Ready to Ship</h4>
+            {% endif %}
+        </td>
         <td>
             <select name="status" onchange="updateOrderStatus({{ order.id }}, this.value)">
                 <option selected disabled>Update Delivery Status</option>

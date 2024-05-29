@@ -1,4 +1,5 @@
 from django.contrib import messages
+from .decorators import customer_required, seller_required
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
@@ -260,21 +261,7 @@ def error(request):
     return render(request, 'transaction/error.html')
 
 
-def order_history(request):
-    # Get the Customer object for the current user
-    customer = Customer.objects.get(customuser_ptr=request.user)
 
-    # Fetch the Cart instances for the current customer
-    carts = Cart.objects.filter(customer=customer)
-
-    # Fetch the OrderHistory instances for the current customer
-    order_history = OrderHistory.objects.filter(CartID__in=carts)
-
-    context = {
-        'order_history': order_history,
-    }
-
-    return render(request, 'transaction/customer_order_history.html', context)
 
 
 # def payment_successful(request):
@@ -292,16 +279,35 @@ def customer_trackdelivery(request, transaction_id):  # Use transaction_id inste
                   {'status': transactions.status})  # Use transaction.status instead of order.status
 
 
-def customer_order_history(request, customer_id):
-    order_histories = OrderHistory.objects.filter(CustomerID=customer_id)
-    order_statuses = [get_object_or_404(Transaction, pk=order_history.TransactionID.pk).status for order_history in
-                      order_histories]
-    total_prices = [get_object_or_404(Transaction, pk=order_history.TransactionID.pk).TotalPrice for order_history in
-                    order_histories]
-    return render(request, 'transaction/customer_order_history.html',
-                  {'order_histories': order_histories, 'order_statuses': order_statuses, 'total_prices': total_prices})
 
+@customer_required
+def order_history(request, customer_id=None):
+    # If a customer_id is provided, get the Customer object for that customer
+    # Otherwise, get the Customer object for the current user
+    if customer_id is not None:
+        customer = get_object_or_404(Customer, pk=customer_id)
+    else:
+        customer = Customer.objects.get(customuser_ptr=request.user)
 
+    # Fetch the Cart instances for the current customer
+    carts = Cart.objects.filter(customer=customer)
+
+    # Fetch the OrderHistory instances for the current customer
+    order_histories = OrderHistory.objects.filter(CartID__in=carts)
+
+    # Fetch the status and total price for each order
+    order_statuses = [get_object_or_404(Transaction, pk=order_history.TransactionID.pk).status for order_history in order_histories]
+    total_prices = [get_object_or_404(Transaction, pk=order_history.TransactionID.pk).TotalPrice for order_history in order_histories]
+
+    context = {
+        'order_histories': order_histories,
+        'order_statuses': order_statuses,
+        'total_prices': total_prices,
+    }
+
+    return render(request, 'transaction/customer_order_history.html', context)
+
+@seller_required
 def seller_order_history(request):
     # Get all OrderHistory instances
     order_history = OrderHistory.objects.all()

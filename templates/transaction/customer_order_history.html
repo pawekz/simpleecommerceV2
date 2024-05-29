@@ -35,27 +35,41 @@
             <th>CHAT SELLER</th>
         </tr>
        {% for order in order_history %}
-        <tr>
-            <td>{{ order.id }}</td>
-            <td>{{ order.ProductID.ProductName }}</td>
-            <td>{{ order.QuantityPerProduct }}</td>
-            <td>{{ order.TransactionID.TotalPrice }}</td>
-            <td>{{ order.DatePurchased }}</td>
-            <td id="status-{{ order.id }}" class="{{ order.TransactionID.get_status_display|slugify }}">{{ order.TransactionID.get_status_display }}</td>
-            <td>
-                <a href="{% url 'products:review_product' order.ProductID.ProductID %}">
-                    {% if order.has_rated %}
-                        <img src="{% static 'img/heart.png' %}" alt="Heart" class="oh_icon">
-                    {% else %}
-                        <img src="{% static 'img/leave_a_heart.png' %}" alt="Heart" class="oh_icon">
-                    {% endif %}
-                </a>
-            </td>
-            <td>
-                <a href="{% url 'accounts:login' %}"><img src="{% static 'img/chat.png' %}" alt="login" class="oh_icon"></a>
-            </td>
-        </tr>
-    {% endfor %}
+    <tr>
+        <td>{{ order.id }}</td>
+        <td>{{ order.ProductID.ProductName }}</td>
+        <td>{{ order.QuantityPerProduct }}</td>
+        <td>{{ order.TransactionID.TotalPrice }}</td>
+        <td>{{ order.DatePurchased }}</td>
+        <td id="status-{{ order.id }}" class="{{ order.TransactionID.get_status_display|slugify }}">
+            {% if order.TransactionID.get_status_display == "Delivered" %}
+                <h4 class="status-delivered delivered">Delivered</h4>
+            {% elif order.TransactionID.get_status_display == "About to Deliver" %}
+                <h4 class="status-about-to-deliver about-to-deliver">About to Deliver</h4>
+            {% elif order.TransactionID.get_status_display == "Departed from Sort Center" %}
+                <h4 class="status-departed departed-from-sort-center">Departed from Sort Center</h4>
+            {% elif order.TransactionID.get_status_display == "Arrived at Sort Center" %}
+                <h4 class="status-arrived arrived-at-sort-center">Arrived at Sort Center</h4>
+            {% elif order.TransactionID.get_status_display == "Package Picked Up" %}
+                <h4 class="status-picked-up package-picked-up">Package Picked Up</h4>
+            {% else %}
+                <h4 class="status-packed packed-and-ready-to-ship">Packed and Ready to Ship</h4>
+            {% endif %}
+        </td>
+        <td>
+            <a href="{% url 'products:review_product' order.ProductID.ProductID %}">
+                {% if order.has_rated %}
+                    <img src="{% static 'img/heart.png' %}" alt="Heart" class="oh_icon">
+                {% else %}
+                    <img src="{% static 'img/leave_a_heart.png' %}" alt="Heart" class="oh_icon">
+                {% endif %}
+            </a>
+        </td>
+        <td>
+            <a href="{% url 'accounts:login' %}"><img src="{% static 'img/chat.png' %}" alt="login" class="oh_icon"></a>
+        </td>
+    </tr>
+{% endfor %}
     </table>
 </div>
 </body>

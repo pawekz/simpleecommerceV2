@@ -162,25 +162,31 @@ th {
         }
 
 .packed-and-ready-to-ship {
-    color: blue;
+    background-color: blue;
+    color: white; /* You might want to change the text color to ensure it's readable on the new background */
 }
 
 .package-picked-up {
-    color: orange;
+    background-color: orange;
+    color: white;
 }
 
 .arrived-at-sort-center {
-    color: orange;
+    background-color: orange;
+    color: white;
 }
 
 .departed-from-sort-center {
-    color: orange;
+    background-color: orange;
+    color: white;
 }
 
 .about-to-deliver {
-    color: yellow;
+    background-color: yellow;
+    color: black; /* Black text might be more readable on a yellow background */
 }
 
 .delivered {
-    color: green;
+    background-color: green;
+    color: white;
 }
