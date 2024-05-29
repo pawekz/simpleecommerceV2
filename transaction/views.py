@@ -18,6 +18,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render
+from .models import OrderHistory
+from products.models import Product
+
 
 import logging
 
@@ -282,48 +286,12 @@ def customer_trackdelivery(request, transaction_id):  # Use transaction_id inste
     return render(request, 'transaction/customer_trackdelivery.html',
                   {'status': transactions.status})  # Use transaction.status instead of order.status
 
-
-
-def order_history(request):
-    # Get the Customer object for the current user
-    customer = Customer.objects.get(customuser_ptr=request.user)
-
-    # Fetch the Cart instances for the current customer
-    carts = Cart.objects.filter(customer=customer)
-
-    # Fetch the OrderHistory instances for the current customer
-    order_history = OrderHistory.objects.filter(CartID__in=carts)
-
-    context = {
-        'order_history': order_history,
-    }
-
-    return render(request, 'transaction/order_history.html', context)
-
-
-def customer_order_history(request, customer_id):
-    order_histories = OrderHistory.objects.filter(CustomerID=customer_id)
-    order_statuses = [get_object_or_404(Transaction, pk=order_history.TransactionID.pk).status for order_history in
-                      order_histories]
-    total_prices = [get_object_or_404(Transaction, pk=order_history.TransactionID.pk).TotalPrice for order_history in
-                    order_histories]
-    return render(request, 'transaction/order_history.html',
-                  {'order_histories': order_histories, 'order_statuses': order_statuses, 'total_prices': total_prices})
-
-
-
-
-
-
-from django.shortcuts import render
-from .models import OrderHistory
-from products.models import Product
-
+@seller_required
 def seller_order_history(request):
     # Check if the user is a seller
     if hasattr(request.user, 'seller'):
         # Get all OrderHistory instances that belong to the logged in seller
-        order_history = OrderHistory.objects.filter(ProductID__SellerID=request.user.seller)
+        order_history = OrderHistory.objects.filter(ProductID__SellerID=request.user.seller).order_by('-DatePurchased')
     else:
         # If the user is not a seller, return an empty QuerySet
         order_history = OrderHistory.objects.none()
@@ -333,6 +301,33 @@ def seller_order_history(request):
     }
 
     return render(request, 'transaction/seller_order_history.html', context)
+
+@customer_required
+def order_history(request):
+    # Get the Customer object for the current user
+    customer = Customer.objects.get(customuser_ptr=request.user)
+
+    # Fetch the Cart instances for the current customer
+    carts = Cart.objects.filter(customer=customer)
+
+    # Fetch the OrderHistory instances for the current customer
+    order_history = OrderHistory.objects.filter(CartID__in=carts).order_by('-DatePurchased')
+
+    context = {
+        'order_history': order_history,
+    }
+
+    return render(request, 'transaction/order_history.html', context)
+
+@customer_required
+def customer_order_history(request, customer_id):
+    order_histories = OrderHistory.objects.filter(CustomerID=customer_id).order_by('-DatePurchased')
+    order_statuses = [get_object_or_404(Transaction, pk=order_history.TransactionID.pk).status for order_history in
+                      order_histories]
+    total_prices = [get_object_or_404(Transaction, pk=order_history.TransactionID.pk).TotalPrice for order_history in
+                    order_histories]
+    return render(request, 'transaction/order_history.html',
+                  {'order_histories': order_histories, 'order_statuses': order_statuses, 'total_prices': total_prices})
 
 
 @csrf_exempt
