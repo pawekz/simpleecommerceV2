@@ -17,7 +17,8 @@ from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django import forms
 from django.contrib.auth.backends import ModelBackend
-
+from transaction.models import OrderHistory
+from django.db.models import Count
 
 
 
@@ -146,6 +147,8 @@ def logout_view(request):
     return redirect('accounts:login')
 
 
+
+
 def customer_profile(request):
     # Get the Customer object for the current user
     customer = Customer.objects.get(customuser_ptr=request.user)
@@ -158,12 +161,18 @@ def customer_profile(request):
     # Fetch the recent 2 items added to the cart
     recent_cart_items = CartItem.objects.filter(cart=cart).order_by('-id')[:2]
 
+    # Fetch the 2 most recent order history of the customer
+    recent_orders = OrderHistory.objects.filter(TransactionID__CustomerID=customer).order_by('-DatePurchased')[:2]
+
     context = {
         'customer': customer,
         'recent_cart_items': recent_cart_items,
+        'recent_orders': recent_orders,
     }
 
     return render(request, 'accounts/customer_profile.html', context)
+
+
 
 def customer_updateregpage(request):
     if not request.user.is_authenticated:
@@ -208,6 +217,8 @@ def customer_updateregpage(request):
 
     return render(request, 'accounts/customer_updateregpage.html', context)
 
+
+
 def seller_profile(request):
     if not request.user.is_authenticated:
         return redirect('accounts:login')  # Redirect non-authenticated users
@@ -217,12 +228,19 @@ def seller_profile(request):
     # Fetch the two most recent products added by the current seller
     recent_products = Product.objects.filter(SellerID=seller).order_by('-date_added')[:2]
 
+    # Fetch the best selling products of the current seller
+    best_selling_products = Product.objects.filter(SellerID=seller) \
+        .annotate(order_count=Count('orderhistory')) \
+        .order_by('-order_count')[:2]
+
     context = {
         'seller': seller,
         'recent_products': recent_products,
+        'best_selling_products': best_selling_products,
     }
 
     return render(request, 'accounts/seller_profile.html', context)
+
 
 def seller_updateregpage(request):
     if not request.user.is_authenticated:

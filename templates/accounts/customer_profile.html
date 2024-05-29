@@ -68,12 +68,12 @@
                     <div>
                         <p style="font-size:20px">Recently Bought:</p>
                         <div class="gallery-container">
-                            {% for item in recent_orders_items %}
+                            {% for order in recent_orders %}
                                 <div class="gallery-item">
-                                    <img src="{{ item.product.image.url }}" alt="{{ item.product.ProductName }}" style="height: 200px;">
+                                    <img src="{{ order.ProductID.image.url }}" alt="{{ order.ProductID.ProductName }}" style="height: 200px;">
                                     <div class="item-details">
-                                        <p>{{ item.product.ProductName }}</p>
-                                        <p>Price: ${{ item.product.PricePerUnit }}</p>
+                                        <p>{{ order.ProductID.ProductName }}</p>
+                                        <p>Price: ${{ order.ProductID.PricePerUnit }}</p>
                                     </div>
                                 </div>
                             {% endfor %}

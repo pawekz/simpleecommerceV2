@@ -34,28 +34,39 @@
             <th>OPINION?</th>
             <th>CHAT SELLER</th>
         </tr>
+    
+    
+    <div id="statusModal" class="modal">
+          <div class="modal-content">
+            <span class="close">&times;</span>
+            <img id="statusImage" src="" alt="Status Image">
+          </div>
+        </div>
+    
+    
        {% for order in order_history %}
-    <tr>
-        <td>{{ order.id }}</td>
-        <td>{{ order.ProductID.ProductName }}</td>
-        <td>{{ order.QuantityPerProduct }}</td>
-        <td>{{ order.TransactionID.TotalPrice }}</td>
-        <td>{{ order.DatePurchased }}</td>
-        <td id="status-{{ order.id }}" class="{{ order.TransactionID.get_status_display|slugify }}">
-            {% if order.TransactionID.get_status_display == "Delivered" %}
-                <h4 class="status-delivered delivered">Delivered</h4>
-            {% elif order.TransactionID.get_status_display == "About to Deliver" %}
-                <h4 class="status-about-to-deliver about-to-deliver">About to Deliver</h4>
-            {% elif order.TransactionID.get_status_display == "Departed from Sort Center" %}
-                <h4 class="status-departed departed-from-sort-center">Departed from Sort Center</h4>
-            {% elif order.TransactionID.get_status_display == "Arrived at Sort Center" %}
-                <h4 class="status-arrived arrived-at-sort-center">Arrived at Sort Center</h4>
-            {% elif order.TransactionID.get_status_display == "Package Picked Up" %}
-                <h4 class="status-picked-up package-picked-up">Package Picked Up</h4>
-            {% else %}
-                <h4 class="status-packed packed-and-ready-to-ship">Packed and Ready to Ship</h4>
-            {% endif %}
-        </td>
+        <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.ProductID.ProductName }}</td>
+            <td>{{ order.QuantityPerProduct }}</td>
+            <td>{{ order.TransactionID.TotalPrice }}</td>
+            <td>{{ order.DatePurchased }}</td>
+            <td id="status-{{ order.id }}" class="{{ order.TransactionID.get_status_display|slugify }}">
+                {% if order.TransactionID.get_status_display == "Delivered" %}
+                    <h4 class="status-text status-delivered delivered" onclick="showModal('Delivered')">Delivered</h4>
+                {% elif order.TransactionID.get_status_display == "About to Deliver" %}
+                    <h4 class="status-text status-about-to-deliver about-to-deliver" onclick="showModal('About to Deliver')">About to Deliver</h4>
+                {% elif order.TransactionID.get_status_display == "Departed from Sort Center" %}
+                    <h4 class="status-text status-departed departed-from-sort-center" onclick="showModal('Departed from Sort Center')">Departed from Sort Center</h4>
+                {% elif order.TransactionID.get_status_display == "Arrived at Sort Center" %}
+                    <h4 class="status-text status-arrived arrived-at-sort-center" onclick="showModal('Arrived at Sort Center')">Arrived at Sort Center</h4>
+                {% elif order.TransactionID.get_status_display == "Package Picked Up" %}
+                    <h4 class="status-text status-picked-up package-picked-up" onclick="showModal('Package Picked Up')">Package Picked Up</h4>
+                {% else %}
+                    <h4 class="status-text status-packed packed-and-ready-to-ship" onclick="showModal('Packed and Ready to Ship')">Packed and Ready to Ship</h4>
+                {% endif %}
+            </td>
+    
         <td>
             <a href="{% url 'products:review_product' order.ProductID.ProductID %}">
                 {% if order.has_rated %}
@@ -72,5 +83,38 @@
 {% endfor %}
     </table>
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+function showModal(status) {
+    var imgSrc = '';
+
+    switch(status) {
+        case 'Packed and Ready to Ship':
+            imgSrc = '{% static "img/img1.png" %}';
+            break;
+        case 'Package Picked Up':
+            imgSrc = '{% static "img/img2.png" %}';
+            break;
+        case 'Arrived at Sort Center':
+            imgSrc = '{% static "img/img3.png" %}';
+            break;
+        case 'Departed from Sort Center':
+            imgSrc = '{% static "img/img4.png" %}';
+            break;
+        case 'About to Deliver':
+            imgSrc = '{% static "img/img5.png" %}';
+            break;
+        case 'Delivered':
+            imgSrc = '{% static "img/img6.png" %}';
+            break;
+    }
+
+    $('#statusImage').attr('src', imgSrc);
+    $('#statusModal').modal('show');
+}
+    
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>

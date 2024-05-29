@@ -68,27 +68,22 @@
                    <a href="{% url 'transaction:seller_order_history' %}" class="action-link2">Update Order Status (Delivery)</a>
                     </div>
 
-
-                    <div>
-                        <p class="activity-title">Best Seller:</p>
-                        <div class="gallery-container">
+                <div>
+                    <p class="activity-title">Best Seller:</p>
+                    <div class="gallery-container">
+                        {% for product in best_selling_products %}
                             <div class="gallery-item">
-                                <img src="https://mydiamond.com.ph/cdn/shop/products/MD02228_MD02926_600x.jpg?v=1589514281" alt="item-image" class="item-image">
+                                <img src="{{ product.image.url }}" alt="item-image" class="item-image">
                                 <div class="item-details">
-                                    <p>Diamond Bracelet</p>
-                                    <p>Price: $299</p>
+                                    <p>{{ product.ProductName }}</p>
+                                    <p>Price: ${{ product.PricePerUnit }}</p>
                                 </div>
                             </div>
-                            <div class="gallery-item">
-                                <img src="https://www.thewatchcompany.com/media/tm_blog/p/o/7/1322/post_7_1322.jpg" alt="item-image" class="item-image">
-                                <div class="item-details">
-                                    <p>Chronograph Watch</p>
-                                    <p>Price: $199</p>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="{% url 'products:inventory' %}" class="more-link">From Cart to Checkout (Inventory)</a>
+                        {% endfor %}
                     </div>
+                    <a href="{% url 'products:inventory' %}" class="more-link">From Cart to Checkout (Inventory)</a>
+                </div>
+                    
                 </div>
             </div>
         </div>
