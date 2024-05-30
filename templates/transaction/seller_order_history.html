@@ -49,6 +49,7 @@
             <th>BUYER</th>
             <th>STATUS</th>
             <th>ACTION</th>
+            <th>CHAT BUYER</th>
         </tr>
        {% for order in order_history %}
     <tr>
@@ -84,6 +85,11 @@
                 <option value="Delivered">Delivered</option>
             </select>
         </td>
+    <td>
+<a href="{% url 'chat:create_chat_room' seller_id=order.ProductID.SellerID.seller_id customer_id=order.TransactionID.CustomerID.customer_id %}">
+    <img src="{% static 'img/chat.png' %}" alt="Chat with Seller" class="oh_icon">
+</a>
+</td>
     </tr>
 {% endfor %}
     </table>

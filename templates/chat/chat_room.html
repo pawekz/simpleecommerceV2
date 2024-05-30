@@ -1,0 +1,31 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+  <h2>Chat Room: {{ chat_room.id }}</h2>
+
+  <div id="chat-log">
+    {% for message in messages %}
+      <div class="message">
+        <p>
+          <strong>
+            {% if message.seller %}
+              {{ message.seller.seller_name }} (Seller):
+            {% else %}
+              {{ message.customer.customer_name }} (Customer):
+            {% endif %}
+          </strong>
+          {{ message.content }}
+        </p>
+        <p><small>{{ message.timestamp }}</small></p>
+      </div>
+    {% empty %}
+      <p>No messages yet.</p>
+    {% endfor %}
+  </div>
+
+  <form method="post" action="{% url 'chat:send_message' chat_room.id %}">
+    {% csrf_token %}
+    <textarea name="content" required></textarea>
+    <button type="submit">Send</button>
+  </form>
+{% endblock %}

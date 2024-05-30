@@ -77,7 +77,9 @@
             </a>
         </td>
         <td>
-            <a href="{% url 'accounts:login' %}"><img src="{% static 'img/chat.png' %}" alt="login" class="oh_icon"></a>
+            <a href="{% url 'chat:create_chat_room' seller_id=order.ProductID.SellerID.seller_id customer_id=request.user.customer.customer_id %}">
+        <img src="{% static 'img/chat.png' %}" alt="Chat with Seller" class="oh_icon">
+    </a>
         </td>
     </tr>
 {% endfor %}
